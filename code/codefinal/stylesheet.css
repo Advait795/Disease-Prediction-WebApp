@@ -1,0 +1,44 @@
+nav{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lightgray;
+    padding: 0.5, 1, 0.5, 1;
+    height: 60px;
+}
+b{
+    margin-left: 10px;
+}
+
+.tabcontent{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.form-container{
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+}
+.form-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+
+}
+fieldset{
+    width: 250px;
+}
+
+input{
+    margin-top: 5px;
+}
+button{
+    margin-bottom: 5px;
+    width: 170px;
+    height: 25px;
+    cursor: pointer;    
+}
+
