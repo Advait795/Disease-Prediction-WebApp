@@ -33,7 +33,7 @@ public class NaiveBayes {
 
             // Calculate the prior probability of the class
             double classPriorProb = (double) classCounts.get(label) / totalExamples;
-            System.out.println("Prior probability of class " + label + ": " + classPriorProb);
+           // System.out.println("Prior probability of class " + label + ": " + classPriorProb);
     
             // Calculate the product of conditional probabilities of features given the class
             double featureProductProb = 1.0;
@@ -53,7 +53,7 @@ public class NaiveBayes {
             // Calculate the final probability for the class
             double classProb = classPriorProb * featureProductProb;
             System.out.println();
-            System.out.println("Probability of class " + label + ": " + classProb);
+            //System.out.println("Probability of class " + label + ": " + classProb);
             System.out.println();
     
             // Check if the current class has a higher probability than the current best class
