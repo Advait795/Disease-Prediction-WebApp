@@ -9,9 +9,9 @@ public class NB {
     private int totalExamples= 0;
 
     //bins
-    private Map<Integer, Integer> age_bin = new HashMap<>();
-    // // private int[] age_bin ={18, 35, 65};
-    // private int[] trestbps_bin ={1, 2, 3, 4};
+    // // private Map<Integer, Integer> age_bin = new HashMap<>();
+    // //private Map<Integer, Integer> trestbps_bin = new HashMap<>();
+    // private int[] age_bin ={1, 2, 3, 4};
     // private int[] chol_bin = {1, 2, 3};
     // private int[] thal_bin = {1, 2, 3};
     // private int[] oldpeak_bin = {1,2,3};
@@ -80,19 +80,64 @@ public class NB {
     }
 
     public String categories_age(String value){
-        age_bin.put(18, 1);
-        age_bin.put(35,2);
-        age_bin.put(65, 3);
+       
+        int ip =  Integer.valueOf(value);
+        if( ip < 19){
+            return String.valueOf(1);
+        }else if(ip < 36){
+            return String.valueOf(2);
 
+        }else if(ip < 66){
+            return String.valueOf(3);
+        }
 
-        for (int key : age_bin.keySet()) {
-            
-            if (Integer.valueOf(value) <= key) {
-                return String.valueOf(age_bin.get(key));
-            }
+        return String.valueOf(4);
+
+    }
+
+    public String categories_trestbps(String value){
+        
+        int ip = Integer.valueOf(value);
+        if(ip < 121){
+            return String.valueOf(1);
+        }else if(ip < 130){
+            return String.valueOf(2);
+        }else if(ip < 140){
+            return String.valueOf(3);
         }
         return String.valueOf(4);
 
+    }
+
+    public String categories_chol(String value){
+        int ip = Integer.valueOf(value);
+        if(ip < 200){
+            return String.valueOf(1);
+        }else if (ip < 240){
+            return String.valueOf(2);
+        }
+        return String.valueOf(3);
+        
+    }
+
+    public String catergories_thalach(String value){
+        int ip = Integer.valueOf(value);
+        if(ip < 100){
+            return String.valueOf(1);
+        }else if(ip < 151){
+            return String.valueOf(2);
+        }
+        return String.valueOf(3);
+    }
+
+    public String categories_oldpeak(String value){
+        double ip = Double.valueOf(value);
+        if(ip < 0.6){
+            return String.valueOf(1);
+        }else if(ip < 1.6){
+            return String.valueOf(2);
+        }
+        return String.valueOf(3);
     }
 
 }

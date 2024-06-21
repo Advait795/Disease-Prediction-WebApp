@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Final Year Project\\main\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data - Copy.csv";
+        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Final Year Project\\main\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
         NB nb = new NB();
-
+        int[] numclm = {0, 3, 4, 7};
         // Read data
         List<String[]> data = CSVReaderExample.readCSV(fileName);
 
@@ -23,28 +23,40 @@ public class Main {
             String[] features = new String[row.length - 1];
             System.arraycopy(row, 0, features, 0, row.length - 1);
 
-           
-            if(features[0].endsWith(".0")){
-                features[0]= features[0].substring(0, features[0].length() - 2);
+            for(int x : numclm) {
+                if(features[x].endsWith(".0")){
+                    features[x]= features[x].substring(0, features[x].length() - 2);
+                }
             }
-        
-            //System.out.println(features[0]);
+            // System.out.println(features[0]);
+            // System.out.println(features[3]);
+            // System.out.println(features[4]);
+            // System.out.println(features[7]);
+            // System.out.println(features[9]);
+            features[0]= nb.categories_age(features[0]);    
+            features[3]= nb.categories_trestbps(features[3]);
+            features[4]= nb.categories_chol(features[4]);
+            features[7]= nb.catergories_thalach(features[7]);
+            features[9]= nb.categories_oldpeak(features[9]);
+            // System.out.println(features[0]);
+            // System.out.println(features[3]);
+            // System.out.println(features[4]);
+            // System.out.println(features[7]);
+            // System.out.println(features[9]);
             
-            features[0]= nb.categories_age(features[0]);
-            System.out.println(features[0]);
             nb.train(features, label);
         }
 
         // Classify new example
         String[] newExample = {
-            "2", "0", "1", 
-            "1", "2", "2",
-            "0", "3", "1", 
-            "2", "2", "1", 
-            "2"
+            "3", "0", "0", 
+            "4", "3", "0",
+            "0", "2", "1", 
+            "2", "1", "0", 
+            "3"
         }; // replace with actual feature values
-        // String predictedClass = nb.predict(newExample);
-        // System.out.println("Predicted class: " + predictedClass);
-        // System.out.println();
+        String predictedClass = nb.predict(newExample);
+        System.out.println("Predicted class: " + predictedClass);
+        System.out.println();
     }
 }
