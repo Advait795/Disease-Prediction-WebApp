@@ -24,6 +24,10 @@ public class NaiveBayes {
     
         String bestClass = null;
         double bestProb = Double.NEGATIVE_INFINITY;
+        double zero_label = 0;
+        double one_label = 0;
+        double zero_final =0;
+        double one_final = 0;
     
         // Iterate through each class label in classCounts
         for (String label : classCounts.keySet()) {
@@ -33,7 +37,7 @@ public class NaiveBayes {
 
             // Calculate the prior probability of the class
             double classPriorProb = (double) classCounts.get(label) / totalExamples;
-           // System.out.println("Prior probability of class " + label + ": " + classPriorProb);
+           System.out.println("Prior probability of class " + label + ": " + classPriorProb);
     
             // Calculate the product of conditional probabilities of features given the class
             double featureProductProb = 1.0;
@@ -48,21 +52,39 @@ public class NaiveBayes {
     
                 // Multiply the probabilities of all features together
                 featureProductProb *= featureProb;
+
+
+
             }
     
             // Calculate the final probability for the class
+            
             double classProb = classPriorProb * featureProductProb;
             System.out.println();
-            //System.out.println("Probability of class " + label + ": " + classProb);
+            System.out.println("Probability of class " + label + ": " + classProb);
             System.out.println();
-    
-            // Check if the current class has a higher probability than the current best class
-            if (classProb > bestProb) {
-                bestProb = classProb;
-                bestClass = label;
+            if(label == "0"){
+                zero_label = classProb;
+            }else{
+                one_label = classProb;
             }
+    
+            // // Check if the current class has a higher probability than the current best class
+            // if (classProb > bestProb) {
+            //     bestProb = classProb;
+            //     bestClass = label;
+            // }
            
         }
+
+        zero_final = (zero_label)/(zero_label + one_label);
+
+        one_final = (one_label)/(zero_label + one_label);
+
+        System.out.println("zero final: "+zero_final);
+
+        System.out.println("one final: "+one_final);
+
         
     
         // Return the class label with the highest probability

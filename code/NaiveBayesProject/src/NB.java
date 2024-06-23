@@ -7,6 +7,7 @@ public class NB {
     private Map<String, Integer> classCounts = new HashMap<>();
     private Map<String, Map<String, Integer>> featureCounts = new HashMap<>();
     private int totalExamples= 0;
+    
 
     //bins
     // // private Map<Integer, Integer> age_bin = new HashMap<>();
@@ -35,11 +36,12 @@ public class NB {
     public String predict(String[] features){
         String bestClass = null;       
         double bestProb = Double.NEGATIVE_INFINITY;
+        double one_label = 0.0;
+        double zero_label = 0.0;
+       
 
         // Iterate through each calss label in classCounts 
         for (String label : classCounts.keySet()){
-           
-            
             
             //calculate the prior probablitites
             double classPriorProb = (double) classCounts.get(label) / totalExamples;
@@ -64,10 +66,15 @@ public class NB {
 
             //final probablity for class
             double classProb = classPriorProb * featureProductProb;
-
             System.out.println();
             System.out.println("Probablity of class " +label+ " for given equation is : " + classProb);
             System.out.println();
+
+            if(Integer.valueOf(label) == 0){
+                zero_label = classProb; 
+            }else{
+                one_label = classProb;     
+            }
 
             if(classProb > bestProb){
                 bestProb = classProb;
@@ -75,6 +82,14 @@ public class NB {
             }
             
         }
+
+        double total = zero_label + one_label;
+        double zero_final = (double) zero_label/total;
+        double one_final = (double) one_label/total;
+        System.out.println("0 label final value: "+ zero_final);
+        System.out.println("1 label final value " + one_final);
+        System.out.println();
+        
 
         return bestClass;
     }

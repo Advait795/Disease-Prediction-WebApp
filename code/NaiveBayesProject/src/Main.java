@@ -28,21 +28,13 @@ public class Main {
                     features[x]= features[x].substring(0, features[x].length() - 2);
                 }
             }
-            // System.out.println(features[0]);
-            // System.out.println(features[3]);
-            // System.out.println(features[4]);
-            // System.out.println(features[7]);
-            // System.out.println(features[9]);
+
             features[0]= nb.categories_age(features[0]);    
             features[3]= nb.categories_trestbps(features[3]);
             features[4]= nb.categories_chol(features[4]);
             features[7]= nb.catergories_thalach(features[7]);
             features[9]= nb.categories_oldpeak(features[9]);
-            // System.out.println(features[0]);
-            // System.out.println(features[3]);
-            // System.out.println(features[4]);
-            // System.out.println(features[7]);
-            // System.out.println(features[9]);
+           
             
             nb.train(features, label);
         }
