@@ -12,7 +12,6 @@ nav{
     z-index: 2;
 }
 nav .menu{
-    
     max-width: 1250px;
     margin: auto;
     display: flex;
