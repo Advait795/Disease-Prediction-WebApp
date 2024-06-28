@@ -7,6 +7,7 @@ public class Main {
         String fileName = "C:\\Users\\ADWAIT\\Desktop\\Final Year Project\\main\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
         NB nb = new NB();
         int[] numclm = {0, 3, 4, 7};
+        
         // Read data
         List<String[]> data = CSVReaderExample.readCSV(fileName);
 
@@ -29,24 +30,17 @@ public class Main {
                 }
             }
 
-            features[0]= nb.categories_age(features[0]);    
-            features[3]= nb.categories_trestbps(features[3]);
-            features[4]= nb.categories_chol(features[4]);
-            features[7]= nb.catergories_thalach(features[7]);
-            features[9]= nb.categories_oldpeak(features[9]);
-           
-            
             nb.train(features, label);
         }
 
-        // Classify new example
+        
         String[] newExample = {
-            "3", "0", "0", 
+            "3", "NA", "0", 
             "4", "3", "0",
-            "0", "2", "1", 
+            "NA", "2", "1", 
             "2", "1", "0", 
             "3"
-        }; // replace with actual feature values
+        }; 
         String predictedClass = nb.predict(newExample);
         System.out.println("Predicted class: " + predictedClass);
         System.out.println();
