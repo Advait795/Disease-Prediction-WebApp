@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Final Year Project\\main\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
+        String fileName = "code\\Test\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv";
         NB nb = new NB();
         int[] numclm = {0, 3, 4, 7};
         
@@ -35,11 +35,11 @@ public class Main {
 
         
         String[] newExample = {
-            "3", "NA", "0", 
-            "4", "3", "0",
-            "NA", "2", "1", 
-            "2", "1", "0", 
-            "3"
+            "57", "1", "3", 
+            "145", "233", "1",
+            "0", "150", "0", 
+            "2", "0", "0", 
+            "1"
         }; 
         String predictedClass = nb.predict(newExample);
         System.out.println("Predicted class: " + predictedClass);

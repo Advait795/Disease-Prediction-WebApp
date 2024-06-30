@@ -43,11 +43,17 @@
             double bestProb = Double.NEGATIVE_INFINITY;
             double one_label = 0.0;
             double zero_label = 0.0;
-        
+            
+            //categorising test data
+             for(int i = 0; i < features.length; i++ ){
+                if(i == 0 || i == 3 || i==4 || i==7 || i==9){
+                    features[i]= category(features[i], i);
+                }
+            }
 
             // Iterate through each calss label in classCounts 
             for (String label : classCounts.keySet()){
-                
+  
                 //calculate the prior probablitites
                 double classPriorProb = (double) classCounts.get(label) / totalExamples;
                 
@@ -99,7 +105,7 @@
             System.out.println();
             
 
-            return bestClass;
+            return String.valueOf(Math.round(one_final * 100));
         }
 
         public String category(String value, int x){

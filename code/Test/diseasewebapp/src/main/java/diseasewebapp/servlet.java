@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-// import javax.servlet.ServletException;
-// import javax.servlet.http.*;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +13,7 @@ public class servlet extends HttpServlet {
 
     @Override
     public void init(){
-        String filename = "code\\Test\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv";
+        String filename = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Test\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv";
         nb = new NB();
         int[] numclm = {0, 3, 4, 7};
 
@@ -41,7 +38,7 @@ public class servlet extends HttpServlet {
                 }
             }
 
-            nb.train(features, label);
+           nb.train(features, label);
 
         }
     }
@@ -72,8 +69,7 @@ public class servlet extends HttpServlet {
 
             out.println("<html>");
             out.println("<h2>Disease Prediction Results</h2>");
-            out.println("<h2>"+newExample+"</h2>");
-            out.println("<h3>Predicted Class " + predictedClass + "</h3>");
+            out.println("<h3>Predicted possiblity of having the disease is " + predictedClass + " % </h3>");
             out.println("</html>");
 
         } catch (Exception e) {
