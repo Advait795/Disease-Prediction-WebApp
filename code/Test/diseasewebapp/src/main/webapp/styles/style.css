@@ -14,7 +14,7 @@ body{
 .container{
     width: 100%;
     height: 100vh;
-    background-image: url('flat-lay-medical-desk-arrangement-with-copy-space.jpg');
+    background-image: url('../images/flat-lay-medical-desk-arrangement-with-copy-space.jpg');
     background-position: center;
     background-size: cover;
     padding-top: 20px;
@@ -128,7 +128,7 @@ nav ul li a:hover{
     margin-top: 1.5%;
     width: 100%;
     height: 100vh;
-    background-image: url("top-view-medical-desk-arrangement-with-copy-space.jpg");
+    background-image: url("../images/top-view-medical-desk-arrangement-with-copy-space.jpg");
     background-size: cover;
     background-position: center;
     display: flex;
@@ -193,7 +193,7 @@ p{
     margin-top: 1.5%;
     width: 100%;
     height: 100vh;
-    background-image: url("top-view-arrangement-medical-desk-with-copy-space.jpg");
+    background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg");
     background-size: cover;
     background-position: center;    
 }

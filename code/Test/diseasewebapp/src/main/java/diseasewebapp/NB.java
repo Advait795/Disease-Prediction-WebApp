@@ -21,16 +21,8 @@
 
             classCounts.put(label, classCounts.getOrDefault(label, 0)+1);
 
-            for(int i = 0; i <= features.length; i++ ){
-                if(i == 0){
-                    features[i]= category(features[i], i);
-                }else if(i == 3){
-                    features[i]= category(features[i], i);
-                }else if(i == 4){
-                    features[i]= category(features[i], i);
-                }else if(i == 7){
-                    features[i]= category(features[i], i);
-                }else if(i == 9){
+            for(int i = 0; i < features.length; i++ ){
+                if(i == 0 || i == 3 || i==4 || i==7 || i==9){
                     features[i]= category(features[i], i);
                 }
             }
@@ -72,7 +64,7 @@
                         count = featureCounts.get(feature).get(label);
                     }
                     
-                    //for smoothing we can add + featureCounts.size()
+              
                     double featureProb = (count + 1.0)/(classCounts.get(label));
                     System.out.println("Probablity of feature " + feature + " where class " +label+ ": " + featureProb );
                     
@@ -148,7 +140,7 @@
                     }
                 }
             }        
-            return null;
+            return String.valueOf(2);
         }
 
     }
