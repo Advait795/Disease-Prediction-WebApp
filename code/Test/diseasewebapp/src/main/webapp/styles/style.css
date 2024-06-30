@@ -17,6 +17,7 @@ body{
     background-image: url('../images/flat-lay-medical-desk-arrangement-with-copy-space.jpg');
     background-position: center;
     background-size: cover;
+    border: 1px solid #1b1b1b;
     padding-top: 20px;
     padding-left: 8%;
     padding-right: 8%;
@@ -123,32 +124,56 @@ nav ul li a:hover{
 }
 
 
-
 #about{
     width: 100%;
     height: 100vh;
-    background-image: url("../images/top-view-medical-desk-arrangement-with-copy-space.jpg");
+    /* background-image: url("../images/top-view-medical-desk-arrangement-with-copy-space.jpg"); */
+    background-color: #fff;
     background-size: cover;
+    border: 1px solid #1b1b1b;
     background-position: center;
     display: flex;
-    justify-content: right;
-    align-items:right;
+    justify-content: center;
+    align-items:center;
+
     
+}
+.container1{
+    height: 90vh;
+    width: 90%;
+    /* background-color: #1b1b1b; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20;
+}
+.image{
+    height: 370px;
+    width: 320px;
+    margin-left: 20px;
+    background-color: lightcoral;
+    background-image: url(../images/18134.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 300px;
+    border: 3px solid #065206;
 }
 .about-text{
     font-size: 15px; 
     /* background-color: lightblue; */
-    margin-top: 120px;
-    margin-right: 25px;
+    margin-top: 40px;
+    margin-bottom: 90px;
     max-width: 650px;
+    box-shadow: #1b1b1b;
     
 }
 .about-text h2{
-    margin-left: 60%;
+    margin-left: 70%;
     display: inline;
-    /* background-color: green; */
+    color: #1b1b1b;
     cursor: pointer;
-    font-size: 38px;
+    font-size: 32px;
+    font-weight: bold;
     transition: 0.5s ease;
 }
 .about-text h2:hover{
@@ -159,7 +184,7 @@ nav ul li a:hover{
     color: #065206;
 }
 p{
-    color: #fff;
+    color: #1b1b1b;
     max-width: 800px;
     margin-top: 35px;
     line-height: 23px;
@@ -168,24 +193,23 @@ p{
 
 #imp{
     color: #065206;
-    font-weight: 500;
+    font-weight: bold;
     text-decoration: none;
 }
 #imp:hover{
     text-decoration:underline #065206 1px;
     text-underline-offset: 2px;
-    color: #fff;
 }
 
 #alg{
-    font-weight: 500;
+    font-weight: bold;
     text-decoration: none;
     color: #065206;
 }
 #alg:hover{
     text-decoration:underline #065206 1px;
     text-underline-offset: 2px;
-    color: #fff;
+    
 }
 
 section{
@@ -195,13 +219,23 @@ section{
 #service{
     width: 100%;
     height: 100vh;
-    background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg");
+    background: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg");
+    background-color: #fff;
     background-size: cover;
     background-position: center;
+    /* background-position:bottom; */
+    background-repeat: no-repeat;
+    border: 1px solid #1b1b1b;
+}
+
+#background{
+    background-color: lightcoral;
+    height: 50vh;
 }
 .header{
     /* background-color: lightpink ; */
     /* display: flex; */
+    color: #fff;
     align-items: center; 
     padding-left: 5%; 
     padding-top:1.5%;  
@@ -209,6 +243,7 @@ section{
 
 .header p{
     margin-top: auto;
+    color: #fff;
  /* background-color: lightblue; */
 }
 .service-title{
@@ -216,7 +251,7 @@ section{
     /* background-color: aqua; */
     height: auto;
     width: auto;
-    font-size: 38px;
+    font-size: 32px;
     transition:all 0.5s ease;
     cursor: pointer;
 }
@@ -230,10 +265,14 @@ section{
     color: #065206;
 }
 
+.header p{
+    margin-top: 1%;
+}
+
 .disease-mod{
     border:1px solid #fff;
-    border-radius: 5px;
-    background-color: #ffffff92;
+    border-radius: 15px;
+    background-color: #6d6a6a17;
     display: flex;
     gap: 12%;
     height: 450px;
