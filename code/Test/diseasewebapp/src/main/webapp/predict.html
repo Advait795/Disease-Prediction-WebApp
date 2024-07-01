@@ -7,18 +7,10 @@
     <title>Prediction</title>
 </head>
 <body>
-    <!-- <header>
-        <nav>
-           <a>
-            <b>Disease Prediction</b>
-           </a> 
-           action="./api"
-        </nav>
-    </header> -->
-    
+   
     <div class="container">
         <div class="title">Patient Details</div>
-        <form id="patient-details"   method="GET, POST">
+        <form id="patient-details" action="./api"  method="POST">
             <div class="user-details">
                 <div class="input-box">
                     <span class="details"> 
@@ -114,6 +106,10 @@
             event.preventDefault();
 
             validate();
+
+            if(validate()){
+                this.submit();
+            }
         })
 
         function validate() {
@@ -134,7 +130,12 @@
             if ( count > 8) {
                     alert("please provide atleast 5 details.." + count);
                     window.location.reload();
+
+                    return false;
                 }
+             
+            return true;
+            
         }
 
         function notEmpty(value) {

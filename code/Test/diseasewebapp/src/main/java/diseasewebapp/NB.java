@@ -46,7 +46,12 @@
             
             //categorising test data
              for(int i = 0; i < features.length; i++ ){
+
                 if(i == 0 || i == 3 || i==4 || i==7 || i==9){
+                    if(features[i] == ""){
+                        continue;
+                    }
+
                     features[i]= category(features[i], i);
                 }
             }
@@ -61,8 +66,9 @@
                 double featureProductProb = 1.0;
                 for(String feature : features){
                     int count = 0;
+                    
 
-                    if(feature == "NA"){
+                    if(feature == ""){
                         continue;
                     }
 

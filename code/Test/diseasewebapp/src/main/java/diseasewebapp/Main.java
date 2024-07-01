@@ -35,10 +35,10 @@ public class Main {
 
         
         String[] newExample = {
-            "57", "1", "3", 
-            "145", "233", "1",
-            "0", "150", "0", 
-            "2", "0", "0", 
+            "65", "1", "3", 
+            "", "", "1",
+            "2", "1", "0", 
+            "2", "3", "1", 
             "1"
         }; 
         String predictedClass = nb.predict(newExample);
