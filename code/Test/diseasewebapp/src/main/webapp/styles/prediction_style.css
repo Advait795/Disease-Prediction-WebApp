@@ -17,7 +17,7 @@ body{
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background: linear-gradient(135deg, #1b1b1b, #fff );
+    background: linear-gradient(135deg,#065206 , #fff );
 }
 .container{
     max-width: 700px;
@@ -41,7 +41,7 @@ body{
     bottom: 0;
     height: 3px;
     width: 30px;
-    background: linear-gradient(135deg, #1b1b1b, #fff );
+    background: linear-gradient(135deg, #065206, #fff );
 }
 .container form .user-details{
     display: flex;
@@ -75,7 +75,7 @@ form .user-details .input-box{
 }
 .user-details .input-box input :focus,
 .user-details .input-box input :valid{
-    border-color: #1b1b1b;
+    border-color: #065206;
 }
 
 form .button{
@@ -93,12 +93,12 @@ form .button input{
     border-radius: 5px;
     font-size: 18px;
     font-weight: 500;
-    background:linear-gradient(135deg, #1b1b1b, #fff );
+    background:linear-gradient(135deg, #065206, #fff );
     cursor: pointer;
 }
 form .button input:hover{
     transition: 0.5s ease;
-    background:linear-gradient(-135deg, #1b1b1b, #fff );
+    background:linear-gradient(-135deg, #065206, #fff );
 }
 @media(max-width: 584px) {
     .container{
