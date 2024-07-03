@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction Result</title>
+</head>
+<body>
+    <h2>Disease Prediction Result</h2>
+
+    <div>
+        <h3 id="prediction"></h3>
+    </div>
+
+    <div>
+        <h4 >feature prediction</h4>
+        <div id="featurePrediction"></div>
+    </div>
+
+    <script>
+
+       
+
+        function clearUrl() {
+            const url = new URL(window.location.href);
+            url.search = '';
+            window.history.replaceState(null, '', url);
+        }
+
+        window.onload =function(){
+            const url = new URLSearchParams(window.location.search);
+            const prediction = url.get('predictedClass');
+            document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
+
+            const featurePred = {};
+            const featureName = {
+                1: 'age',
+                2: 'sex',
+                3: 'cp',
+                4: 'trestbps',
+                5: 'chol',
+                6: 'fbs',
+                7: 'restecg',
+                8: 'thalach',
+                9: 'exang',
+                10: 'oldpeak',
+                11: 'slop',
+                12: 'ca',
+                13: 'thal'
+            };
+
+            url.forEach((value, key) => {
+                if (key !== 'predictedClass') {
+                    featurePred[key] = value;
+                }
+
+            });
+
+            const featurePrediction = document.getElementById('featurePrediction');
+            featurePrediction.innerHTML = "";
+
+
+            for (const [key, value] of Object.entries(featurePred)) {
+
+                const featureKey = featureName[key] || key;
+                const valueElement = document.createElement("p");
+                valueElement.textContent = `Feature ${featureKey}: ${value}`;
+                featurePrediction.appendChild(valueElement);
+            }
+
+            clearUrl();
+
+        };
+
+        
+    </script>
+</body>
+</html>
