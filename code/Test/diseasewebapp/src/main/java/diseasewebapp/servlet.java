@@ -6,6 +6,8 @@
     import java.sql.Connection;
     import java.util.*;
 
+    import java.util.stream.*;
+
     import jakarta.servlet.http.HttpServlet;
     import jakarta.servlet.http.HttpServletRequest;
     import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@
     public class servlet extends HttpServlet {
         private NB nb;
         private Connection connect;
+        private Map<Integer, Double> featurePred = new HashMap<>();
 
         @Override
         public void init(){
@@ -69,17 +72,29 @@
                 
                 //predict class
                 String predictedClass = nb.predict(newExample);
+                featurePred = nb.featuresPredictions();
+
+                
 
                 //Connect to database
                 connect = connectDB.getConnection();
 
-                response.sendRedirect( "result.html?predictedClass=" + predictedClass);
+                StringBuilder featurePredUrl = new StringBuilder(); 
 
+                if(!featurePred.isEmpty()){
+                    featurePredUrl.append(featurePred.entrySet().stream()
+                        .map(entry -> entry.getKey() + "=" + entry.getValue())
+                        .collect(Collectors.joining("&")));         
+                }
 
-                // out.println("<html>");
-                // out.println("<h2>Disease Prediction Results</h2>");
-                // out.println("<h3>Predicted possiblity of having the disease is " + predictedClass + " % </h3>");
-                // out.println("</html>");
+                // response.sendRedirect( "result.html?predictedClass=" + predictedClass);
+
+                String redirectUrl = "result.html?predictedClass=" + predictedClass;
+                if(featurePredUrl.length() > 0){
+                    redirectUrl += "&" + featurePredUrl.toString();
+                }
+                response.sendRedirect(redirectUrl);
+
 
             } catch (Exception e) {
                 e.printStackTrace();

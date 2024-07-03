@@ -15,7 +15,14 @@
         private int[] chol= {200, 240, 500};
         private int[] thalach= {100, 151, 500};
         private double[] oldpeak={0.6, 1.6, 5.0};
+        private int fCount = 0; 
+        private HashMap<Integer, Double> featurePred = new HashMap<>();
 
+        public NB(){
+            this.fCount = 0;
+            this.featurePred.clear();
+
+        }
 
         public void train(String[] features, String label){
 
@@ -43,6 +50,8 @@
             double bestProb = Double.NEGATIVE_INFINITY;
             double one_label = 0.0;
             double zero_label = 0.0;
+            this.fCount = 0;
+            this.featurePred.clear();
             
             //categorising test data
              for(int i = 0; i < features.length; i++ ){
@@ -69,6 +78,10 @@
                     
 
                     if(feature == ""){
+                        if(label.trim().equals("1")){
+                            fCount++;
+                        }
+                            
                         continue;
                     }
 
@@ -81,7 +94,18 @@
                     System.out.println("Probablity of feature " + feature + " where class " +label+ ": " + featureProb );
                     
                     //multipling all probablities
-                    featureProductProb *= featureProb;          
+                    featureProductProb *= featureProb;
+
+                    
+
+                    if( label.trim().equals("1") ){
+        
+                        fCount++;
+                        featurePred.put(fCount, featureProb);
+                        
+                    }
+                    
+                    
                 }
 
                 //final probablity for class
@@ -102,6 +126,8 @@
                 }
                 
             }
+
+            System.out.println(featurePred);
 
             double total = zero_label + one_label;
             double zero_final = (double) zero_label/total;
@@ -153,6 +179,10 @@
                 }
             }        
             return String.valueOf(2);
+        }
+
+        public Map featuresPredictions(){
+            return featurePred;
         }
 
     }
