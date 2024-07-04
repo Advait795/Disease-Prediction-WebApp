@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/result.css">
     <title>Disease Prediction Result</title>
 </head>
 <body>
-    <h2>Disease Prediction Result</h2>
+    <div id="container">
+        <div id="result">
+            <h2 id="header">Disease Prediction Result</h2>
+            <h3 id="prediction">Predicted possiblity of having the disease is</h3>
+        </div>
 
-    <div>
-        <h3 id="prediction"></h3>
+        <div id="charts">
+            <div id="featurePrediction">
+                <div id="polar-area"></div>
+                <div id="bar-chart"></div>
+            </div>
+        </div> 
     </div>
-
-    <div>
-        <h4 >feature prediction</h4>
-        <div id="featurePrediction"></div>
-    </div>
+    
 
     <script>
 
        
 
-        function clearUrl() {
+        // function clearUrl() {
             const url = new URL(window.location.href);
             url.search = '';
             window.history.replaceState(null, '', url);
-        }
+        // }
 
-        window.onload =function(){
+        // window.onload =function(){
             const url = new URLSearchParams(window.location.search);
             const prediction = url.get('predictedClass');
             document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
@@ -70,7 +75,7 @@
 
             clearUrl();
 
-        };
+        // };
 
         
     </script>
