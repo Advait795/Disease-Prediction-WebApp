@@ -1,23 +1,21 @@
+html{
+    scroll-behavior: smooth;
+}
 *{
     margin:0;
     padding:0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-/* nav{
-    position: fixed;
-    background: #1b1b1b;
-    width: 100%;
-    padding: 10px 0;
-    z-index: 2;
-} */
 body{
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background: linear-gradient(135deg,#065206 , #fff );
+    background-position: center;
+    background-size: cover;
+    background-image: url('../images/top-view-arrangement-medical-desk-with-copy-space.jpg');
 }
 .container{
     max-width: 700px;
@@ -41,7 +39,6 @@ body{
     bottom: 0;
     height: 3px;
     width: 30px;
-    background: linear-gradient(135deg, #065206, #fff );
 }
 .container form .user-details{
     display: flex;
@@ -75,7 +72,7 @@ form .user-details .input-box{
 }
 .user-details .input-box input :focus,
 .user-details .input-box input :valid{
-    border-color: #065206;
+    border-color: #CCEADC;
 }
 
 form .button{
@@ -88,17 +85,17 @@ form .button input{
     height: 100%;
     width: 100%;
     outline: none;
-    color: #fff;
+    color: #233f32;
     border: none;
     border-radius: 5px;
     font-size: 18px;
-    font-weight: 500;
-    background:linear-gradient(135deg, #065206, #fff );
+    font-weight: bold;
+    background:linear-gradient(135deg, #83ccaa, #fff );
     cursor: pointer;
 }
 form .button input:hover{
     transition: 0.5s ease;
-    background:linear-gradient(-135deg, #065206, #fff );
+    background:linear-gradient(-135deg, #83ccaa, #fff );
 }
 @media(max-width: 584px) {
     .container{
