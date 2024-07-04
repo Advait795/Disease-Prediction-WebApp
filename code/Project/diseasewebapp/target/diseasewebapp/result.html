@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/result.css">
     <title>Disease Prediction Result</title>
 </head>
 <body>
-    <h2>Disease Prediction Result</h2>
+    <div id="container">
+        <div id="result">
+            <h2 id="header">Disease Prediction Result</h2>
+            <h3 id="prediction">Predicted possiblity of having the disease is</h3>
+        </div>
 
-    <div>
-        <h3 id="prediction"></h3>
+        <div id="charts">
+            <div id="featurePrediction">
+                <div id="polar-area"></div>
+                <div id="bar-chart"></div>
+            </div>
+        </div> 
     </div>
-
-    <div>
-        <h4 >feature prediction</h4>
-        <div id="featurePrediction"></div>
-    </div>
+    
 
     <script>
-
-       
-
         function clearUrl() {
             const url = new URL(window.location.href);
             url.search = '';
@@ -63,12 +65,65 @@
             for (const [key, value] of Object.entries(featurePred)) {
 
                 const featureKey = featureName[key] || key;
-                const valueElement = document.createElement("p");
-                valueElement.textContent = `Feature ${featureKey}: ${value}`;
-                featurePrediction.appendChild(valueElement);
+                // const valueElement = document.createElement("p");
+                // valueElement.textContent = `Feature ${featureKey}: ${value}`;
+                // featurePrediction.appendChild(valueElement);
             }
 
-            clearUrl();
+             clearUrl();
+
+            //preapare data for the polar area chart
+            const polarData = {
+                labels: Object.values(featureName),
+                datasets: [{
+                    label: 'Feature Prediction',
+                    data: Object.values(featurePred),
+                    backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                }]
+            };
+
+            const ctx = document.getElementById('polar-area-cahrt').getContext('2d');
+            const polarChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: polarData,
+                options:{
+                    responsive: true,
+                    scales : {
+                        r : {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
         };
 

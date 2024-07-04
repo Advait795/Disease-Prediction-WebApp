@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/result.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <title>Disease Prediction Result</title>
 </head>
 <body>
@@ -14,66 +16,128 @@
         </div>
 
         <div id="charts">
-            <div id="featurePrediction">
-                <div id="polar-area"></div>
-                <div id="bar-chart"></div>
+            <div class="featurePrediction">
+                <canvas class="chart" id="polar-area"></canvas>
+                <canvas class="chart" id="bar-chart"></canvas>
             </div>
         </div> 
     </div>
     
 
     <script>
+                   const polarData = {
+                // labels: Object.values(feature),
+                labels: ['Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5','Cat6', 'Cat7', 'Cat8', 'Cat9', 'Cat10', 'Cat11', 'Cat12','Cat13'],
+                datasets: [{
+                    label: 'Feature Predictions',
+                    data: [10,20,10,5,10,5,5,7,3,6,4,5,4],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
 
-       
+                    borderWidth:1
+                }]
+            };
+
+            let ctx = document.getElementById('polar-area').getContext('2d');
+            var polarChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: polarData,
+                options:{
+                    responsive: true,
+                    scales : {
+                        r : {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            let ctx1 = document.getElementById('bar-chart').getContext('2d');
+            var polarChart = new Chart(ctx1, {
+                type: 'bar',
+                data: polarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    title: {
+                        display: true,
+                        text: 'Bar Chart'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+
+            });  
+
+
 
         // function clearUrl() {
-            const url = new URL(window.location.href);
-            url.search = '';
-            window.history.replaceState(null, '', url);
+        //     const url = new URL(window.location.href);
+        //     url.search = '';
+        //     window.history.replaceState(null, '', url);
         // }
 
         // window.onload =function(){
-            const url = new URLSearchParams(window.location.search);
-            const prediction = url.get('predictedClass');
-            document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
+        //     const url = new URLSearchParams(window.location.search);
+        //     const prediction = url.get('predictedClass');
+        //     document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
 
-            const featurePred = {};
-            const featureName = {
-                1: 'age',
-                2: 'sex',
-                3: 'cp',
-                4: 'trestbps',
-                5: 'chol',
-                6: 'fbs',
-                7: 'restecg',
-                8: 'thalach',
-                9: 'exang',
-                10: 'oldpeak',
-                11: 'slop',
-                12: 'ca',
-                13: 'thal'
-            };
+        //     const featurePred ={}
+        //     const featureName = {
+        //         1: 'age',
+        //         2: 'sex',
+        //         3: 'cp',
+        //         4: 'trestbps',
+        //         5: 'chol',
+        //         6: 'fbs',
+        //         7: 'restecg',
+        //         8: 'thalach',
+        //         9: 'exang',
+        //         10: 'oldpeak',
+        //         11: 'slop',
+        //         12: 'ca',
+        //         13: 'thal'
+        //     };
 
-            url.forEach((value, key) => {
-                if (key !== 'predictedClass') {
-                    featurePred[key] = value;
-                }
+        //     // url.forEach((value, key) => {
+        //     //     if (key !== 'predictedClass') {
+        //     //         featurePred[key] = value;
+        //     //     }
 
-            });
+        //     // });
 
-            const featurePrediction = document.getElementById('featurePrediction');
-            featurePrediction.innerHTML = "";
+        //     const featurePrediction = document.getElementById('featurePrediction');
+        //     featurePrediction.innerHTML = "";
 
 
-            for (const [key, value] of Object.entries(featurePred)) {
+        //     // for (const [key, value] of Object.entries(featurePred)) {
 
-                const featureKey = featureName[key] || key;
-                const valueElement = document.createElement("p");
-                valueElement.textContent = `Feature ${featureKey}: ${value}`;
-                featurePrediction.appendChild(valueElement);
-            }
+        //     //     const featureKey = featureName[key] || key;
+        //     //     // const valueElement = document.createElement("p");
+        //     //     // valueElement.textContent = `Feature ${featureKey}: ${value}`;
+        //     //     // featurePrediction.appendChild(valueElement);
+        //     // }
 
-            clearUrl();
+        //     //clearUrl();
 
         // };
 
