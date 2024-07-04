@@ -25,29 +25,65 @@
     
 
     <script>
-                   const polarData = {
-                // labels: Object.values(feature),
-                labels: ['Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5','Cat6', 'Cat7', 'Cat8', 'Cat9', 'Cat10', 'Cat11', 'Cat12','Cat13'],
+            
+
+
+        function clearUrl() {
+            const url = new URL(window.location.href);
+            url.search = '';
+            window.history.replaceState(null, '', url);
+        }
+
+        window.onload =function(){
+            const url = new URLSearchParams(window.location.search);
+            const prediction = url.get('predictedClass');
+            document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
+
+            let featurePred ={};
+            const featureName = {
+                1: 'age',
+                2: 'sex',
+                3: 'cp',
+                4: 'trestbps',
+                5: 'chol',
+                6: 'fbs',
+                7: 'restecg',
+                8: 'thalach',
+                9: 'exang',
+                10: 'oldpeak',
+                11: 'slop',
+                12: 'ca',
+                13: 'thal'
+            };
+
+            url.forEach((value, key) => {
+                if (key !== 'predictedClass') {
+                    featurePred[key] = value;
+                }
+            });
+
+            let dataList = {};
+            for (const [key, value] of Object.entries(featurePred)) {
+                const featureKey = featureName[key] || key;
+                dataList[featureKey]= parseFloat(value);
+            };
+
+            const labels = Object.keys(dataList);
+            const data = Object.values(dataList);
+
+            console.log(dataList);
+
+
+            const backgroundColor = generateColor(labels.length);
+            const borderColor = generateColor(labels.length);
+
+            const polarData = {
+                labels: labels,
                 datasets: [{
                     label: 'Feature Predictions',
-                    data: [10,20,10,5,10,5,5,7,3,6,4,5,4],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)',
-                        'rgba(255, 159, 64, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-
+                    data: data,
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
                     borderWidth:1
                 }]
             };
@@ -89,59 +125,26 @@
             });  
 
 
+            function generateColor(count){
+                const colors = [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(54, 162, 235, 0.6)'
+                ];
 
-        // function clearUrl() {
-        //     const url = new URL(window.location.href);
-        //     url.search = '';
-        //     window.history.replaceState(null, '', url);
-        // }
-
-        // window.onload =function(){
-        //     const url = new URLSearchParams(window.location.search);
-        //     const prediction = url.get('predictedClass');
-        //     document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
-
-        //     const featurePred ={}
-        //     const featureName = {
-        //         1: 'age',
-        //         2: 'sex',
-        //         3: 'cp',
-        //         4: 'trestbps',
-        //         5: 'chol',
-        //         6: 'fbs',
-        //         7: 'restecg',
-        //         8: 'thalach',
-        //         9: 'exang',
-        //         10: 'oldpeak',
-        //         11: 'slop',
-        //         12: 'ca',
-        //         13: 'thal'
-        //     };
-
-        //     // url.forEach((value, key) => {
-        //     //     if (key !== 'predictedClass') {
-        //     //         featurePred[key] = value;
-        //     //     }
-
-        //     // });
-
-        //     const featurePrediction = document.getElementById('featurePrediction');
-        //     featurePrediction.innerHTML = "";
-
-
-        //     // for (const [key, value] of Object.entries(featurePred)) {
-
-        //     //     const featureKey = featureName[key] || key;
-        //     //     // const valueElement = document.createElement("p");
-        //     //     // valueElement.textContent = `Feature ${featureKey}: ${value}`;
-        //     //     // featurePrediction.appendChild(valueElement);
-        //     // }
-
-        //     //clearUrl();
-
-        // };
-
-        
+                return colors.slice(0,count);
+            }
+        };    
     </script>
 </body>
 </html>

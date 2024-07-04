@@ -18,11 +18,11 @@
         private int fCount = 0; 
         private HashMap<Integer, Double> featurePred = new HashMap<>();
 
-        public NB(){
-            this.fCount = 0;
-            this.featurePred.clear();
+        // public NB(){
+        //     this.fCount = 0;
+        //     this.featurePred.clear();
 
-        }
+        // }
 
         public void train(String[] features, String label){
 

@@ -15,7 +15,7 @@ html{
     color: #000;
 }
 #result{
-    padding: 19px 35px;
+    padding: 19px 55px;
 }
 #result h3{
     margin-top: 20px;
@@ -28,34 +28,29 @@ html{
     /* background-color: lightpink; */
 }
 #charts{
-    margin:8px auto;
-    width: 95%;
-    height: 75%;
-    background-color: lightgrey;
-    padding: 10px;
-    /* display: flex;
-    justify-content: center;
-    align-items: flex-start ; */
-}
-#featurePrediction{
-    background-color: lightblue;
-    height: 100%;
+    height: 100vh;
     width: 100%;
+    padding: 20px;
+    /* background-color: lightpink; */
+}
+.featurePrediction{
+    height: 100%;  
+    width: 100%;
+    /* background-color: lightblue; */
+    padding: 0px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    
+    align-content: center;
 }   
-#polar-area, #bar-chart{
-    height: 100%;
-    width: 50%;
-    color: #000;
+.featurePrediction .chart{
+    max-height: 90%;
+    max-width: 50%;
+    /* background-color: #000 ; */
     
-   
 }
-#polar-area{
-    border-right: 1px solid #000;
+#bar-chart{
+    padding-left:10px;
+    border-left:1px solid #000;
 }
 
 

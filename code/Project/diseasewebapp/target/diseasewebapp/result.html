@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/result.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <title>Disease Prediction Result</title>
 </head>
 <body>
@@ -14,15 +16,18 @@
         </div>
 
         <div id="charts">
-            <div id="featurePrediction">
-                <div id="polar-area"></div>
-                <div id="bar-chart"></div>
+            <div class="featurePrediction">
+                <canvas class="chart" id="polar-area"></canvas>
+                <canvas class="chart" id="bar-chart"></canvas>
             </div>
         </div> 
     </div>
     
 
     <script>
+            
+
+
         function clearUrl() {
             const url = new URL(window.location.href);
             url.search = '';
@@ -34,7 +39,7 @@
             const prediction = url.get('predictedClass');
             document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
 
-            const featurePred = {};
+            let featurePred ={};
             const featureName = {
                 1: 'age',
                 2: 'sex',
@@ -55,64 +60,36 @@
                 if (key !== 'predictedClass') {
                     featurePred[key] = value;
                 }
-
             });
 
-            const featurePrediction = document.getElementById('featurePrediction');
-            featurePrediction.innerHTML = "";
-
-
+            let dataList = {};
             for (const [key, value] of Object.entries(featurePred)) {
-
                 const featureKey = featureName[key] || key;
-                // const valueElement = document.createElement("p");
-                // valueElement.textContent = `Feature ${featureKey}: ${value}`;
-                // featurePrediction.appendChild(valueElement);
-            }
+                dataList[featureKey]= parseFloat(value);
+            };
 
-             clearUrl();
+            const labels = Object.keys(dataList);
+            const data = Object.values(dataList);
 
-            //preapare data for the polar area chart
+            console.log(dataList);
+
+
+            const backgroundColor = generateColor(labels.length);
+            const borderColor = generateColor(labels.length);
+
             const polarData = {
-                labels: Object.values(featureName),
+                labels: labels,
                 datasets: [{
-                    label: 'Feature Prediction',
-                    data: Object.values(featurePred),
-                    backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
+                    label: 'Feature Predictions',
+                    data: data,
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
+                    borderWidth:1
                 }]
             };
 
-            const ctx = document.getElementById('polar-area-cahrt').getContext('2d');
-            const polarChart = new Chart(ctx, {
+            let ctx = document.getElementById('polar-area').getContext('2d');
+            var polarChart = new Chart(ctx, {
                 type: 'polarArea',
                 data: polarData,
                 options:{
@@ -125,9 +102,49 @@
                 }
             });
 
-        };
+            let ctx1 = document.getElementById('bar-chart').getContext('2d');
+            var polarChart = new Chart(ctx1, {
+                type: 'bar',
+                data: polarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    title: {
+                        display: true,
+                        text: 'Bar Chart'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
 
-        
+            });  
+
+
+            function generateColor(count){
+                const colors = [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(54, 162, 235, 0.6)'
+                ];
+
+                return colors.slice(0,count);
+            }
+        };    
     </script>
 </body>
 </html>
