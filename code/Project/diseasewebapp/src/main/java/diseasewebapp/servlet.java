@@ -77,7 +77,7 @@
                 
 
                 //Connect to database
-                // connect = connectDB.getConnection();
+                //connect = connectDB.getConnection();
 
                 StringBuilder featurePredUrl = new StringBuilder(); 
 

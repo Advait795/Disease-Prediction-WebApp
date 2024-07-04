@@ -15,10 +15,11 @@ html{
     color: #000;
 }
 #result{
-    padding: 19px 55px;
+    padding: 10px 55px;
+    /* background-color: lightseagreen; */
 }
 #result h3{
-    margin-top: 20px;
+    margin-top: 5px;
 }
 #header{
     /* background-color: lightblue; */
@@ -30,22 +31,24 @@ html{
 #charts{
     height: 100vh;
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     /* background-color: lightpink; */
 }
 .featurePrediction{
     height: 100%;  
     width: 100%;
-    /* background-color: lightblue; */
-    padding: 0px;
+    background-color: rgba(253, 254, 255, 0.479);
+    border-radius: 10px;
+    border: 2px solid #000;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-content: center;
 }   
 .featurePrediction .chart{
     max-height: 90%;
-    max-width: 50%;
-    /* background-color: #000 ; */
+    max-width: 49%;
+    /* background-color: lightgoldenrodyellow ; */
     
 }
 #bar-chart{
