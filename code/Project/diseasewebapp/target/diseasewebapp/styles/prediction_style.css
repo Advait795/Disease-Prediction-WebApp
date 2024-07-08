@@ -1,5 +1,6 @@
 html{
     scroll-behavior: smooth;
+    
 }
 *{
     margin:0;
@@ -23,6 +24,7 @@ body{
     background:#fff;
     padding: 25px 30px;
     border-radius: 5px;
+    box-shadow: 23px 15px 20px #5b9573;
 }
 
 .container .title{
@@ -47,6 +49,9 @@ body{
     max-height: 450px;
     overflow-y: scroll;
 }
+.user-details::-webkit-scrollbar {
+    display: none; 
+}
 form .user-details .input-box{
     margin-bottom: 5px;
     width: calc(100% / 2 - 20px);
@@ -70,8 +75,22 @@ form .user-details .input-box{
     border-bottom-width: 4px;
     transition: all 0.3s ease;
 }
-.user-details .input-box input :focus,
-.user-details .input-box input :valid{
+
+.select{
+    margin-left: 2px;
+    color: rgb(135, 135, 135);
+    height: 45px;
+    width: 94%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #CCEADC;
+    padding-left: 8px;
+    font-size: 15px;
+    border-bottom-width: 4px;
+    transition: all 0.3s ease;
+}
+
+.user-details .input-box input, select{
     border-color: #CCEADC;
 }
 

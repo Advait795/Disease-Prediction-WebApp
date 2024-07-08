@@ -21,18 +21,30 @@
                 <div class="input-box">
                     <span class="details"> 
                         <label for="sex">Sex</label>
-                        <input type="number" name="sex" placeholder="ex. 1 for male">
+                        <!-- <input type="number" name="sex" placeholder="ex. 1 for male" min="0" max="1"> -->
+                         <select  class="select" name="sex">
+                            <option value="">Select an Option</option>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="age">CP</label>
-                        <input type="number" name="cp" placeholder="CP">
+                        <label for="CP">Chest Pain</label>
+                        <!-- <input type="number" name="cp" placeholder="Chest"> -->
+                        <select class="select" name="cp">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Pain</option>
+                            <option value="1">Mild Pain</option>
+                            <option value="2">Moderate Pain</option>
+                            <option value="3">Severe Pain</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="age">Trest BPS</label>
+                        <label for="Trest BPS">Trest BPS</label>
                         <input type="number" name="trestbps" placeholder="trestbps">
                     </span>
                 </div>
@@ -44,50 +56,87 @@
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="age">FBS</label>
-                        <input type="number" name="fbs" placeholder="fbs">
+                        <label for="afbsge">Fasting Blood Sugar</label>
+                        <!-- <input type="number" name="fbs" placeholder="fbs"> -->
+                        <select class="select" name="fbs">
+                            <option value="">Select an Option</option>
+                            <option value="0">Less than 100 mg/dL</option>
+                            <option value="1">100 mg/dL (5.6 mmol/L) or higher</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
                         <label for="restecg">Rest ECG</label>
-                        <input type="number" name="restecg" placeholder="restecg">
+                        <!-- <input type="number" name="restecg" placeholder="restecg"> -->
+                        <select class="select" name="restecg">
+                            <option value="">Select an Option</option>
+                            <option value="0">Normal</option>
+                            <option value="1">Having ST-T Wave Abnormality</option>
+                            <option value="2">Showing Probable or Definite Left Ventricular Hypertrophy</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="thalach">thalach</label>
+                        <label for="thalach">Thalach (Maximum Heart Rate)</label>
                         <input type="number" name="thalach" placeholder="thalach">
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="age">exang</label>
-                        <input type="number" name="exang" placeholder="exang">
+                        <label for="exang">Exercise-induced Angina</label>
+                        <!-- <input type="number" name="exang" placeholder="exang"> -->
+                        <select class="select" name="exang">
+                            <option value="">Select an Option</option>
+                            <option value="0">Have experienced</option>
+                            <option value="1">Have NOT experienced</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="age">oldpeak</label>
-                        <input type="number" name="oldpeak" placeholder="oldpeak">
+                        <label for="age">Oldpeak (ST Depression)</label>
+                        <input type="double" name="oldpeak" placeholder="oldpeak">
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="slope">slope</label>
-                        <input type="number" name="slope" placeholder="slope">
+                        <label for="slope">ST Segment Slope</label>
+                        <!-- <input type="number" name="slope" placeholder="slope"> -->
+                        <select class="select" name="slope">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Abnormality</option>
+                            <option value="1">Moderate Abnormality</option>
+                            <option value="2">Severe Abnormality</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="ca">ca</label>
-                        <input type="number" name="ca" placeholder="ca">
+                        <label for="ca">Cardiac Arrhythmia</label>
+                        <!-- <input type="number" name="ca" placeholder="ca"> -->
+                        <select class="select" name="ca">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Arrhythmia</option>
+                            <option value="1">Occasional Premature Beats </option>
+                            <option value="2">Mild Arrhythmia</option>
+                            <option value="3">Moderate Arrhythmia</option>
+                            <option value="4">Severe Arrhythmia</option>
+                         </select>
                     </span>
                 </div>
                 <div class="input-box">
                     <span class="details"> 
-                        <label for="thal">thal</label>
-                        <input type="number" name="thal" placeholder="thal">
+                        <label for="thal">Thalassemia</label>      
+                        <!-- <input type="number" name="thal" placeholder="thal"> -->
+                        <select class="select" name="thal">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Thalassemia</option>
+                            <option value="1">Carrier</option>
+                            <option value="2">Thalassemia Minor</option>
+                            <option value="3">Thalassemia Major</option>
+                         </select>
                     </span>
                 </div>   
             </div>
