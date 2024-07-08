@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Project\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv";
+        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
         NB nb = new NB();
         int[] numclm = { 0, 3, 4, 7 };
         Connection connect;
@@ -18,6 +18,7 @@ public class Main {
         // Train model
         for (String[] row : data) {
             if (isFirstRow) {
+
                 isFirstRow = false;
                 continue;
             }
@@ -38,14 +39,14 @@ public class Main {
         // connect = connectDB.getConnection();
 
         String[] newExample = {
-                "65", "1", "3",
-                "", "", "1",
-                "2", "1", "0",
-                "2.3", "3", "1",
-                "1"
+                "56", "0", "1",
+                "120", "236", "0",
+                "", "178", "",
+                "0.8", "", "0",
+                "2"
         };
         String predictedClass = nb.predict(newExample);
-        System.out.println("Predicted class: " + predictedClass);
+        System.out.println("Possiblity of having a disease " + predictedClass + "%");
         System.out.println();
     }
 }
