@@ -56,6 +56,23 @@
                 13: 'thal'
             };
 
+            const fileDownload = {
+
+                'age':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'sex':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'cp':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'trestbps':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'chol':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'fbs':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'restecg':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'thalach':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'exang':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'oldpeak':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'slop':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'ca':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
+                'thal':'http://localhost:8080/diseasewebapp/hypertension_data.csv'            
+            }   
+
             url.forEach((value, key) => {
                 if (key !== 'predictedClass') {
                     featurePred[key] = value;
@@ -98,6 +115,24 @@
                         r : {
                             beginAtZero: true
                         }
+                    },
+
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const chartElement = elements[0];
+                            const datasetIndex = chartElement.datasetIndex;
+                            const dataIndex = chartElement.index;
+                            const label = polarData.labels[dataIndex];
+                            const url = fileDownload[label];
+                            if(url){
+                                const x = document.createElement('a');
+                                x.href = url;
+                                x.download = url.split('http://localhost:8080/').pop();
+                                document.body.appendChild(x);
+                                x.click();
+                                document.body.removeChild(x);
+                            }
+                        }
                     }
                 }
             });
@@ -119,6 +154,23 @@
                                 beginAtZero: true
                             }
                         }]
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const chartElement = elements[0];
+                            const datasetIndex = chartElement.datasetIndex;
+                            const dataIndex = chartElement.index;
+                            const label = polarData.labels[dataIndex];
+                            const url = fileDownload[label];
+                            if(url){
+                                const x = document.createElement('a');
+                                x.href = url;
+                                x.download = url.split('http://localhost:8080/').pop();
+                                document.body.appendChild(x);
+                                x.click();
+                                document.body.removeChild(x);
+                            }
+                        }
                     }
                 }
 
