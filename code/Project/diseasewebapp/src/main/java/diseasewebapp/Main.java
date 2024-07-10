@@ -1,14 +1,17 @@
 package diseasewebapp;
 
-import java.sql.Connection;
+//import java.sql.Connection;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\Data\\disease Prediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
+
+        String fileName = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\Data\\diseasePrediction\\Hypertension Stroke Diabetes\\hypertension_data.csv";
         NB nb = new NB();
         int[] numclm = { 0, 3, 4, 7 };
-        Connection connect;
+
+        // Connection connect;
+        // not to add all the disease
 
         // Read data
         List<String[]> data = CSVReaderExample.readCSV(fileName);
