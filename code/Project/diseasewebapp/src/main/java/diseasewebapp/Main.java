@@ -1,5 +1,6 @@
 package diseasewebapp;
 
+import java.util.ArrayList;
 //import java.sql.Connection;
 import java.util.List;
 
@@ -7,9 +8,9 @@ public class Main {
     public static void main(String[] args) {
 
         String[] fileNames = {
-                "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Project\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv",
-                "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Project\\diseasewebapp\\src\\main\\resources\\stroke_data.csv",
-                "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Project\\diseasewebapp\\src\\main\\resources\\diabetes_data.csv"
+                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
+                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
+                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
         };
 
         String label;
@@ -19,7 +20,7 @@ public class Main {
         NB nb = new NB();
         int[] hyperclm = { 0, 3, 4, 7 };
         int[] stokeClm = { 1 };
-        int[] diabeClm = { 0, 4, 12, 13 };
+        int[] diabeClm = { 1, 7 };
 
         // Connection connect;
         // not to add all the disease
@@ -98,54 +99,137 @@ public class Main {
                 }
             }
 
-            if (filename.contains("stroke")) {
+            // predict class
+            // if (filename.contains("stroke")) {
+
+            // name = "stroke";
+
+            // String[] strokeExample = {
+            // "0", "55", "0",
+            // "0", "1", "4",
+            // "1", "104.51", "27.3",
+            // "1"
+            // };
+            // String predictedClass = nb.predict(strokeExample, name);
+            // System.out.println();
+            // System.out.println("Possiblity of having a stroke " + predictedClass + "%");
+            // System.out.println();
+
+            // } else if (filename.contains("hypertension")) {
+            // // System.out.println(filename);
+
+            // name = "hypertension";
+
+            // String[] newExample = {
+            // "41", "1", "3",
+            // "150", "283", "1",
+            // "0", "162", "0",
+            // "1", "2", "0",
+            // "2"
+            // };
+            // String predictedClass = nb.predict(newExample, name);
+            // System.out.println();
+            // System.out.println("Possiblity of having hypertension " + predictedClass +
+            // "%");
+            // System.out.println();
+            // } else {
+
+            // name = "diabetes";
+            // String[] newExample = {
+            // "0", "53", "0",
+            // "0", "1", "27.32",
+            // "7", "159"
+            // };
+            // String predictedClass = nb.predict(newExample, name);
+            // System.out.println();
+            // System.out.println("Possiblity of having diabetes " + predictedClass + "%");
+            // System.out.println();
+            // }
+
+        }
+        String[] examples = {
+                "41", "1", "3",
+                "150", "283", "1",
+                "0", "162", "0",
+                "1", "2", "0",
+                "2", // hypertension
+                "0",
+                "0", "1", "4",
+                "1", "104.51", "27.3",
+                "1", // stroke
+                "0",
+                "0", "1", "27.32",
+                "7", "159"
+
+        };
+
+        for (String filename : fileNames) {
+
+            if (filename.contains("hypertension"))
+
+            {
+                name = "hypertension";
+
+                String[] input = new String[13];
+
+                input[0] = (examples[0]); // age
+                input[1] = (examples[1]); // sex
+                input[2] = (examples[2]); // cp
+                input[3] = (examples[3]); // trestbps
+                input[4] = (examples[4]); // chol
+                input[5] = (examples[5]); // fbs
+                input[6] = (examples[6]); // restecg
+                input[7] = (examples[7]); // thalach
+                input[8] = (examples[8]); // exang
+                input[9] = (examples[9]); // oldpeak
+                input[10] = (examples[10]); // slope
+                input[11] = (examples[11]); // ca
+                input[12] = (examples[12]); // thal
+
+                String predictedClass = nb.predict(input, name);
+                System.out.println("Possiblity of having hypertension " + predictedClass + "%");
+                System.out.println();
+
+            } else if (filename.contains("stroke")) {
 
                 name = "stroke";
 
-                String[] strokeExample = {
-                        "1", "63", "0",
-                        "1", "", "4",
-                        "1", "228.69", "36.6",
-                        "1"
-                };
-                String predictedClass = nb.predict(strokeExample, name);
+                String[] input = new String[10];
+
+                input[0] = (examples[1]); // sex
+                input[1] = (examples[0]); // age
+                input[2] = (examples[13]); // hypertension
+                input[3] = (examples[14]); // heart_disease
+                input[4] = (examples[15]); // ever_married
+                input[5] = (examples[16]); // work_type
+                input[6] = (examples[17]); // Residence_type
+                input[7] = (examples[18]); // avg_glucose_level
+                input[8] = (examples[19]); // bmi
+                input[9] = (examples[20]); // smoking_status
+
+                String predictedClass = nb.predict(input, name);
                 System.out.println("Possiblity of having a stroke " + predictedClass + "%");
                 System.out.println();
-                continue;
-
-            } else if (filename.contains("hypertension")) {
-                // System.out.println(filename);
-
-                name = "hypertension";
-
-                String[] newExample = {
-                        "57", "1", "3",
-                        "145", "233", "1",
-                        "1", "123", "0",
-                        "2.1", "2", "1",
-                        "0"
-                };
-                String predictedClass = nb.predict(
-                        newExample, name);
-                System.out.println("Possiblity of having hypertension " + predictedClass + "%");
-                System.out.println();
             } else {
-
                 name = "diabetes";
 
-                String[] newExample = {
-                        "56", "0", "1",
-                        "120", "236", "0",
-                        "", "178", "",
-                        "0.8", "", "0",
-                        "2"
-                };
-                String predictedClass = nb.predict(
-                        newExample, name);
-                System.out.println("Possiblity of having diabetes " + predictedClass + "%");
+                String[] input = new String[8];
+
+                input[0] = (examples[1]); // sex
+                input[1] = (examples[0]); // age
+                input[2] = (examples[21]); // hypertension
+                input[3] = (examples[22]); // heart_disease
+                input[4] = (examples[23]); // ever_married
+                input[5] = (examples[24]); // work_type
+                input[6] = (examples[25]); // Residence_type
+                input[7] = (examples[26]); // avg_glucose_level
+
+                String predictedClass = nb.predict(input, name);
+                System.out.println("Possiblity of having a diabetes " + predictedClass + "%");
                 System.out.println();
             }
 
         }
+
     }
 }
