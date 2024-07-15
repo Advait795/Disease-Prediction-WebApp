@@ -97,7 +97,9 @@ public class NB {
         this.fCount = 0;
         this.featurePred.clear();
 
-        System.out.println(features[0]);
+        // for (String f : features) {
+        // System.out.println(f);
+        // }
 
         // categorising test data`
         if (name == "stroke") {
@@ -134,8 +136,6 @@ public class NB {
         featureKey.clear();
         featureKey(features.length);
 
-        System.out.println(features[0]);
-
         // Iterate through each calss label in classCounts
         for (String label : classCounts.keySet()) {
 
@@ -171,7 +171,7 @@ public class NB {
                     count = featureCounts.get(keyMap).get(label);
                 }
 
-                double featureProb = (count + 1.0) / classCounts.get(label);
+                double featureProb = Math.round(((count + 1.0) / classCounts.get(label)) * 100);
                 System.out.println("Probability of feature " + feature + " where class " +
                         label + ": " + featureProb);
 
@@ -186,10 +186,16 @@ public class NB {
             }
 
             // final probablity for class
-            double classProb = (featureProductProb) * (classPriorProb);
+            double logFeatureProb = Math.log(featureProductProb);
+            double logClassPriorProb = Math.log(classPriorProb);
+
+            double logClassProb = logClassPriorProb + logFeatureProb;
+            double classProb = Math.exp(logClassProb);
+            // double classProb = (featureProductProb) * (classPriorProb);
+
             System.out.println();
-            System.out.println(
-                    "classProb: " + featureProductProb + " * " + classPriorProb + " = " + classProb);
+            System.out.println("classProb: " + logFeatureProb + " + " + logClassPriorProb + " = " + logClassProb
+                    + " after coverting to:" + classProb);
             System.out.println();
 
             if (Double.valueOf(label) == 0) {
@@ -199,6 +205,7 @@ public class NB {
             }
 
         }
+
         BigDecimal zero_bigdeci = new BigDecimal(zero_label);
         BigDecimal one_bigdeci = new BigDecimal(one_label);
 
@@ -208,6 +215,7 @@ public class NB {
 
         System.out.println();
         System.out.println("Total: " + zero_label + " + " + one_label + " = " + total);
+        System.out.println();
 
         return String.valueOf((one_final.multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP)));
     }

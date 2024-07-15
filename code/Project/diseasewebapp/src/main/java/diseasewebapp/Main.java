@@ -98,57 +98,11 @@ public class Main {
                     nb.train(features, label, name);
                 }
             }
-
-            // predict class
-            // if (filename.contains("stroke")) {
-
-            // name = "stroke";
-
-            // String[] strokeExample = {
-            // "0", "55", "0",
-            // "0", "1", "4",
-            // "1", "104.51", "27.3",
-            // "1"
-            // };
-            // String predictedClass = nb.predict(strokeExample, name);
-            // System.out.println();
-            // System.out.println("Possiblity of having a stroke " + predictedClass + "%");
-            // System.out.println();
-
-            // } else if (filename.contains("hypertension")) {
-            // // System.out.println(filename);
-
-            // name = "hypertension";
-
-            // String[] newExample = {
-            // "41", "1", "3",
-            // "150", "283", "1",
-            // "0", "162", "0",
-            // "1", "2", "0",
-            // "2"
-            // };
-            // String predictedClass = nb.predict(newExample, name);
-            // System.out.println();
-            // System.out.println("Possiblity of having hypertension " + predictedClass +
-            // "%");
-            // System.out.println();
-            // } else {
-
-            // name = "diabetes";
-            // String[] newExample = {
-            // "0", "53", "0",
-            // "0", "1", "27.32",
-            // "7", "159"
-            // };
-            // String predictedClass = nb.predict(newExample, name);
-            // System.out.println();
-            // System.out.println("Possiblity of having diabetes " + predictedClass + "%");
-            // System.out.println();
-            // }
-
         }
+
+        // Prediction
         String[] examples = {
-                "41", "1", "3",
+                "41", "0", "3",
                 "150", "283", "1",
                 "0", "162", "0",
                 "1", "2", "0",
