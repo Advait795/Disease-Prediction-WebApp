@@ -3,6 +3,7 @@ package diseasewebapp;
 import java.util.ArrayList;
 //import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -102,18 +103,16 @@ public class Main {
 
         // Prediction
         String[] examples = {
-                "41", "0", "3",
-                "150", "283", "1",
-                "0", "162", "0",
-                "1", "2", "0",
+                "29", "1", "1",
+                "", "", "0",
+                "0", "", "0",
+                "", "2", "0",
                 "2", // hypertension
                 "0",
                 "0", "1", "4",
                 "1", "104.51", "27.3",
                 "1", // stroke
-                "0",
-                "0", "1", "27.32",
-                "7", "159"
+                "1", "7" // diabetes
 
         };
 
@@ -144,6 +143,8 @@ public class Main {
                 System.out.println("Possiblity of having hypertension " + predictedClass + "%");
                 System.out.println();
 
+                Map<String, Double> featurePred = nb.featuresPredictions();
+
             } else if (filename.contains("stroke")) {
 
                 name = "stroke";
@@ -164,6 +165,9 @@ public class Main {
                 String predictedClass = nb.predict(input, name);
                 System.out.println("Possiblity of having a stroke " + predictedClass + "%");
                 System.out.println();
+
+                Map<String, Double> featurePred = nb.featuresPredictions();
+
             } else {
                 name = "diabetes";
 
@@ -171,16 +175,19 @@ public class Main {
 
                 input[0] = (examples[1]); // sex
                 input[1] = (examples[0]); // age
-                input[2] = (examples[21]); // hypertension
-                input[3] = (examples[22]); // heart_disease
-                input[4] = (examples[23]); // ever_married
-                input[5] = (examples[24]); // work_type
-                input[6] = (examples[25]); // Residence_type
-                input[7] = (examples[26]); // avg_glucose_level
+                input[2] = (examples[13]); // hypertension
+                input[3] = (examples[14]); // heart_disease
+                input[4] = (examples[21]); // smoking_history
+                input[5] = (examples[19]); // bmi
+                input[6] = (examples[22]); // HbA1c_level
+                input[7] = (examples[18]); // avg_glucose_level
 
                 String predictedClass = nb.predict(input, name);
                 System.out.println("Possiblity of having a diabetes " + predictedClass + "%");
                 System.out.println();
+
+                Map<String, Double> featurePred = nb.featuresPredictions();
+
             }
 
         }

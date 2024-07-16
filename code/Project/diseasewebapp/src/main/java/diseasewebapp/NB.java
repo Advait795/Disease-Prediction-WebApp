@@ -93,7 +93,6 @@ public class NB {
     public String predict(String[] features, String name) {
         double one_label = 0;
         double zero_label = 0;
-
         this.fCount = 0;
         this.featurePred.clear();
 
@@ -147,7 +146,9 @@ public class NB {
             System.out.println();
 
             // calculate the product of conditional probablitites
-            double featureProductProb = 1.0;
+            // double featureProductProb = 1.0;
+
+            double logFeatureProductProb = Math.log(classPriorProb);
 
             // System.out.println("Featuers length: " + features.length);
             for (int i = 0; i < features.length; i++) {
@@ -171,13 +172,18 @@ public class NB {
                     count = featureCounts.get(keyMap).get(label);
                 }
 
-                double featureProb = Math.round(((count + 1.0) / classCounts.get(label)) * 100);
+                count += 1.0;
+                double smthClassCount = classCounts.get(label) + featureKey.size();
+
+                double featureProb = (double) count / smthClassCount;
+
+                System.out.println((count) + "/" + classCounts.get(label));
                 System.out.println("Probability of feature " + feature + " where class " +
                         label + ": " + featureProb);
 
                 // Multiply all probabilities
-                featureProductProb *= featureProb;
-                // System.out.println(featureProductProb + "*=" + featureProb);
+                // featureProductProb *= featureProb;
+                logFeatureProductProb += Math.log(featureProb);
 
                 if (label.trim().equals("1")) {
                     fCount++;
@@ -186,17 +192,8 @@ public class NB {
             }
 
             // final probablity for class
-            double logFeatureProb = Math.log(featureProductProb);
-            double logClassPriorProb = Math.log(classPriorProb);
-
-            double logClassProb = logClassPriorProb + logFeatureProb;
-            double classProb = Math.exp(logClassProb);
+            double classProb = Math.exp(logFeatureProductProb);
             // double classProb = (featureProductProb) * (classPriorProb);
-
-            System.out.println();
-            System.out.println("classProb: " + logFeatureProb + " + " + logClassPriorProb + " = " + logClassProb
-                    + " after coverting to:" + classProb);
-            System.out.println();
 
             if (Double.valueOf(label) == 0) {
                 zero_label = classProb;
@@ -206,18 +203,14 @@ public class NB {
 
         }
 
-        BigDecimal zero_bigdeci = new BigDecimal(zero_label);
-        BigDecimal one_bigdeci = new BigDecimal(one_label);
-
-        BigDecimal total = zero_bigdeci.add(one_bigdeci);
-        // BigDecimal zero_final =
-        BigDecimal one_final = one_bigdeci.divide(total, 10, RoundingMode.HALF_UP);
+        double total = zero_label + one_label;
+        double zero_final = zero_label / total;
+        double one_final = one_label / total;
 
         System.out.println();
         System.out.println("Total: " + zero_label + " + " + one_label + " = " + total);
         System.out.println();
-
-        return String.valueOf((one_final.multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP)));
+        return String.valueOf(Math.round((one_final * 100)));
     }
 
     public String diabetesCategory(String value, int y) {
@@ -321,6 +314,7 @@ public class NB {
     }
 
     public Map featuresPredictions() {
+        System.out.println(featurePred);
         return featurePred;
     }
 
