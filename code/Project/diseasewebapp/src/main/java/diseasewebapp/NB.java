@@ -187,7 +187,7 @@ public class NB {
 
                 if (label.trim().equals("1")) {
                     fCount++;
-                    featurePred.put(fCount, featureProb);
+                    featurePred.put(fCount, (featureProb * 100));
                 }
             }
 
@@ -314,7 +314,6 @@ public class NB {
     }
 
     public Map featuresPredictions() {
-        System.out.println(featurePred);
         return featurePred;
     }
 
