@@ -1,12 +1,27 @@
 package diseasewebapp;
 
 import java.util.ArrayList;
-//import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.*;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
 public class Main {
     public static void main(String[] args) {
+
+        // Connecting to the database
+        String connectionString = "mongodb://localhost:27017";
+        MongoClient mongoClient = MongoClients.create(connectionString);
+        MongoDatabase database = mongoClient.getDatabase("AllDisease");
 
         String[] fileNames = {
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
@@ -16,15 +31,15 @@ public class Main {
 
         String label;
         String[] features;
-        String name;
+        String name = "";
+        int totalExamples = 0;
+        double classCountZero;
+        double classCountOne;
 
         NB nb = new NB();
         int[] hyperclm = { 0, 3, 4, 7 };
         int[] stokeClm = { 1 };
         int[] diabeClm = { 1, 7 };
-
-        // Connection connect;
-        // not to add all the disease
 
         for (String filename : fileNames) {
 
@@ -50,11 +65,27 @@ public class Main {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "stroke";
+                    name = "Stroke";
 
                     nb.train(features, label, name);
 
                 }
+
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Stroke");
+
+                collection.updateOne(filter, updateValue);
 
             } else if (filename.contains("hypertension")) {
                 for (String[] row : data) {
@@ -73,10 +104,25 @@ public class Main {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "hypertension";
+                    name = "Hypertension";
 
                     nb.train(features, label, name);
                 }
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Hypertension");
+                collection.updateOne(filter, updateValue);
+
             } else {
                 for (String[] row : data) {
                     if (isFirstRow) {
@@ -94,11 +140,29 @@ public class Main {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "diabetes";
+                    name = "Diabetes";
 
                     nb.train(features, label, name);
                 }
+
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Diabetes");
+                collection.updateOne(filter, updateValue);
             }
+
+            // nb.clearFeatureCounts();
+
         }
 
         // Prediction
@@ -143,7 +207,8 @@ public class Main {
                 System.out.println("Possiblity of having hypertension " + predictedClass + "%");
                 System.out.println();
 
-                Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<Integer, Map<Integer, Double>> fetureTotals = nb.totalFeatureValues();
 
             } else if (filename.contains("stroke")) {
 
@@ -166,7 +231,8 @@ public class Main {
                 System.out.println("Possiblity of having a stroke " + predictedClass + "%");
                 System.out.println();
 
-                Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<Integer, Map<Integer, Double>> fetureTotals = nb.totalFeatureValues();
 
             } else {
                 name = "diabetes";
@@ -186,7 +252,9 @@ public class Main {
                 System.out.println("Possiblity of having a diabetes " + predictedClass + "%");
                 System.out.println();
 
-                Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<String, Double> featurePred = nb.featuresPredictions();
+                // Map<Integer, Integer> fetureTotals = nb.totalFeatureValues();
+                // double classCount = nb.classCount();
 
             }
 
