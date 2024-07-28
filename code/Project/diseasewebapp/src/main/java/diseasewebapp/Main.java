@@ -25,8 +25,8 @@ public class Main {
 
         String[] fileNames = {
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
-                // "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
-                // "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
+                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
+                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
         };
 
         String label;
@@ -165,7 +165,7 @@ public class Main {
 
         // Prediction
         String[] examples = {
-                "26", "0", "0",
+                "26", "", "0",
                 "110", "206", "0",
                 "0", "", "1",
                 "1.2", "", "1",
@@ -174,7 +174,7 @@ public class Main {
                 "0", "1", "4",
                 "1", "104.51", "27.3",
                 "1", // stroke
-                "1", "7" // diabetes
+                "0", "5.8" // diabetes
 
         };
 
@@ -225,9 +225,9 @@ public class Main {
                 input[8] = (examples[19]); // bmi
                 input[9] = (examples[20]); // smoking_status
 
-                // String predictedClass = nb.predict(input, name);
-                // System.out.println("Possiblity of having a stroke " + predictedClass + "%");
-                // System.out.println();
+                String predictedClass = nb.predict(input, name);
+                System.out.println("Possiblity of having a stroke " + predictedClass + "%");
+                System.out.println();
 
                 // Map<String, Double> featurePred = nb.featuresPredictions();
                 // Map<Integer, Map<Integer, Double>> fetureTotals = nb.totalFeatureValues();
@@ -246,10 +246,10 @@ public class Main {
                 input[6] = (examples[22]); // HbA1c_level
                 input[7] = (examples[18]); // avg_glucose_level
 
-                // String predictedClass = nb.predict(input, name);
-                // System.out.println("Possiblity of having a diabetes " + predictedClass +
-                // "%");
-                // System.out.println();
+                String predictedClass = nb.predict(input, name);
+                System.out.println("Possiblity of having a diabetes " + predictedClass +
+                        "%");
+                System.out.println();
 
                 // Map<String, Double> featurePred = nb.featuresPredictions();
                 // Map<Integer, Integer> fetureTotals = nb.totalFeatureValues();

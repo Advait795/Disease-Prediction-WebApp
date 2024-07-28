@@ -32,7 +32,7 @@ public class NB {
     private int[] chol = { 200, 240, 500 };
     private int[] thalach = { 100, 151, 500 };
     private double[] oldpeak = { 0.6, 1.6, 5.0 };
-    private double[] avgGlucose = { 99, 125, 300 };
+    private double[] avgGlucose = { 99, 125, 500 };
     private double[] bmi = { 18.5, 25, 30, 200 };
     private double[] HbA1c = { 5.7, 6.5, 10.0 };
 
@@ -96,12 +96,12 @@ public class NB {
 
             // collection.updateOne(filter, update);
 
-            Map<Integer, String> keyMap = new HashMap<>();
-            keyMap.put(key, feature);
+            // Map<Integer, String> keyMap = new HashMap<>();
+            // keyMap.put(key, feature);
 
-            featureCounts.putIfAbsent(keyMap, new HashMap<>());
-            Map<String, Integer> nestedMap = featureCounts.get(keyMap);
-            nestedMap.put(label, nestedMap.getOrDefault(label, 0) + 1);
+            // featureCounts.putIfAbsent(keyMap, new HashMap<>());
+            // Map<String, Integer> nestedMap = featureCounts.get(keyMap);
+            // nestedMap.put(label, nestedMap.getOrDefault(label, 0) + 1);
 
         }
 
@@ -180,8 +180,9 @@ public class NB {
 
             double classPriorProb = ClassCount / TotalExamples;
 
-            System.out.println(
-                    "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= " + classPriorProb);
+            // System.out.println(
+            // "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
+            // + classPriorProb);
 
             // System.out.println(
             // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
@@ -233,7 +234,7 @@ public class NB {
 
                 double featureProb = (Count + 1) / ClassCount;
 
-                System.out.println((Count + 1) + "/" + ClassCount);
+                // System.out.println((Count + 1) + "/" + ClassCount);
                 System.out.println("Probability of feature " + feature + " where class " +
                         label + ": " + featureProb);
 
@@ -246,6 +247,17 @@ public class NB {
                     featureTotals.put(fCount, count);
                     featurePred.put(fCount, (featureProb * 100));
                 }
+
+                // System.out.println("key " + key + " label: " + label + " featurePred: " +
+                // featureProb);
+
+                // db.Hypertension.updateOne({name:"testing"}, {$set:{"0.featurePred.1": 0}})
+
+                Bson filterTest = Filters.eq("name", "testing");
+
+                Document update = new Document("$set", new Document(label + ".featurePred." + key, featureProb));
+
+                collection.updateOne(filterTest, update);
 
             }
 
