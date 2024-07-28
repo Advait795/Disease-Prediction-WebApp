@@ -94,18 +94,20 @@ public class NB {
 
             // System.out.println(label + ".featureCount." + key + "." + feature);
 
-            collection.updateOne(filter, update);
+            // collection.updateOne(filter, update);
 
-            // Map<Integer, String> keyMap = new HashMap<>();
-            // keyMap.put(key, feature);
+            Map<Integer, String> keyMap = new HashMap<>();
+            keyMap.put(key, feature);
 
-            // featureCounts.putIfAbsent(keyMap, new HashMap<>());
-            // Map<String, Integer> nestedMap = featureCounts.get(keyMap);
-            // nestedMap.put(label, nestedMap.getOrDefault(label, 0) + 1);
+            featureCounts.putIfAbsent(keyMap, new HashMap<>());
+            Map<String, Integer> nestedMap = featureCounts.get(keyMap);
+            nestedMap.put(label, nestedMap.getOrDefault(label, 0) + 1);
 
         }
 
         totalExamples.put(name, totalExamples.getOrDefault(name, 0) + 1);
+
+        // System.out.println(classCounts.get(name).get(label));
 
     }
 
@@ -156,8 +158,30 @@ public class NB {
         // Iterate through each calss label in classCounts
         for (String label : labels.keySet()) {
 
+            // db.Hypertension.findOne({name:"training"}, {'1.classCount':true, _id:false});
+            MongoCollection<Document> collection = database.getCollection(name);
+
+            Bson filter = Filters.eq("name", "training");
+
+            Bson projection = new Document(label + ".classCount", true).append("TotalExamples", true).append("_id",
+                    false);
+
+            // db.Hypertension.findOne({name:"training"}, {TotalExamples:true,_id:false})
+            Document result = collection.find(filter).projection(projection).first();
+
+            Document classCountDocument = (result).get(label, Document.class);
+            Double ClassCount = classCountDocument.getDouble("classCount");
+
+            Integer TotalExamples = result.getInteger("TotalExamples");
+
             // calculate the prior probablitites
-            double classPriorProb = (double) classCounts.get(name).get(label) / totalExamples.get(name);
+            // double classPriorProb = (double) classCounts.get(name).get(label) /
+            // totalExamples.get(name);
+
+            double classPriorProb = ClassCount / TotalExamples;
+
+            System.out.println(
+                    "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= " + classPriorProb);
 
             // System.out.println(
             // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
@@ -181,21 +205,35 @@ public class NB {
                     continue;
                 }
 
+                String projectionField = String.format("%s.featureCount.%s.%s", label, key, feature);
+
+                Bson projectionFeat = new Document(projectionField, true).append("_id", false);
+
+                Document resultFeat = collection.find(filter).projection(projectionFeat).first();
+
+                Document labelDoc = resultFeat.get(label, Document.class);
+                Document featureCountDoc = labelDoc.get("featureCount", Document.class);
+                Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
+                Integer Count = keyDoc.getInteger(feature);
+
                 // Create the key map for the outer map
-                Map<Integer, String> keyMap = new HashMap<>();
-                keyMap.put(key, feature);
+                // Map<Integer, String> keyMap = new HashMap<>();
+                // keyMap.put(key, feature);
 
-                // Check if featureCounts contains the keyMap and label
-                if (featureCounts.containsKey(keyMap) && featureCounts.get(keyMap).containsKey(label)) {
-                    count = featureCounts.get(keyMap).get(label);
-                }
+                // // Check if featureCounts contains the keyMap and label
+                // if (featureCounts.containsKey(keyMap) &&
+                // featureCounts.get(keyMap).containsKey(label)) {
+                // count = featureCounts.get(keyMap).get(label);
+                // }
 
-                count += 1.0;
-                double smthClassCount = classCounts.get(name).get(label) + featureKey.size();
+                // count += 1.0;
+                // double smthClassCount = classCounts.get(name).get(label) + featureKey.size();
 
-                double featureProb = (double) count / smthClassCount;
+                // double featureProb = (double) count / smthClassCount;
 
-                System.out.println((count) + "/" + smthClassCount);
+                double featureProb = (Count + 1) / ClassCount;
+
+                System.out.println((Count + 1) + "/" + ClassCount);
                 System.out.println("Probability of feature " + feature + " where class " +
                         label + ": " + featureProb);
 
@@ -229,10 +267,10 @@ public class NB {
         double zero_final = zero_label / total;
         double one_final = one_label / total;
 
-        // System.out.println();
-        // System.out.println("Total: " + zero_label + " + " + one_label + " = " +
-        // total);
-        // System.out.println();
+        System.out.println();
+        System.out.println("Total: " + zero_label + " + " + one_label + " = " +
+                total);
+        System.out.println();
 
         return String.valueOf(Math.round((one_final * 100)));
     }

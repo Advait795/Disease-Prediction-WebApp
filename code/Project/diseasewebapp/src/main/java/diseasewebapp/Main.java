@@ -25,8 +25,8 @@ public class Main {
 
         String[] fileNames = {
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
-                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
-                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
+                // "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
+                // "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
         };
 
         String label;
@@ -161,16 +161,14 @@ public class Main {
                 collection.updateOne(filter, updateValue);
             }
 
-            // nb.clearFeatureCounts();
-
         }
 
         // Prediction
         String[] examples = {
-                "29", "1", "1",
-                "", "", "0",
-                "0", "", "0",
-                "", "2", "0",
+                "26", "0", "0",
+                "110", "206", "0",
+                "0", "", "1",
+                "1.2", "", "1",
                 "2", // hypertension
                 "0",
                 "0", "1", "4",
@@ -185,7 +183,7 @@ public class Main {
             if (filename.contains("hypertension"))
 
             {
-                name = "hypertension";
+                name = "Hypertension";
 
                 String[] input = new String[13];
 
@@ -212,7 +210,7 @@ public class Main {
 
             } else if (filename.contains("stroke")) {
 
-                name = "stroke";
+                name = "Stroke";
 
                 String[] input = new String[10];
 
@@ -227,15 +225,15 @@ public class Main {
                 input[8] = (examples[19]); // bmi
                 input[9] = (examples[20]); // smoking_status
 
-                String predictedClass = nb.predict(input, name);
-                System.out.println("Possiblity of having a stroke " + predictedClass + "%");
-                System.out.println();
+                // String predictedClass = nb.predict(input, name);
+                // System.out.println("Possiblity of having a stroke " + predictedClass + "%");
+                // System.out.println();
 
                 // Map<String, Double> featurePred = nb.featuresPredictions();
                 // Map<Integer, Map<Integer, Double>> fetureTotals = nb.totalFeatureValues();
 
             } else {
-                name = "diabetes";
+                name = "Diabetes";
 
                 String[] input = new String[8];
 
@@ -248,9 +246,10 @@ public class Main {
                 input[6] = (examples[22]); // HbA1c_level
                 input[7] = (examples[18]); // avg_glucose_level
 
-                String predictedClass = nb.predict(input, name);
-                System.out.println("Possiblity of having a diabetes " + predictedClass + "%");
-                System.out.println();
+                // String predictedClass = nb.predict(input, name);
+                // System.out.println("Possiblity of having a diabetes " + predictedClass +
+                // "%");
+                // System.out.println();
 
                 // Map<String, Double> featurePred = nb.featuresPredictions();
                 // Map<Integer, Integer> fetureTotals = nb.totalFeatureValues();
