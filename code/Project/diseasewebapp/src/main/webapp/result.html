@@ -4,29 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/result.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <title>Disease Prediction Result</title>
 </head>
 <body>
-    <div id="container">
-        <div id="result">
-            <h2 id="header">Disease Prediction Result</h2>
-            <h3 id="prediction">Predicted possiblity of having the disease is</h3>
+    <div class="container">
+        <div class="header">
+            <h2>Test <span>Report</span></h2>
         </div>
-
-        <div id="charts">
-            <div class="featurePrediction">
-                <canvas class="chart" id="polar-area"></canvas>
-                <canvas class="chart" id="bar-chart"></canvas>
+        <div class="wrapper">
+            <div class="collapsible">
+                <input type="checkbox" id="collapsible-head-1">
+                <label for="collapsible-head-1">Hypertension Report</label>
+                <div class="collapsible-text" id="result-1"></div>
             </div>
-        </div> 
+            <div class="collapsible">
+                <input type="checkbox" id="collapsible-head-2">
+                <label for="collapsible-head-2">Stroke Report</label>
+                <div class="collapsible-text" id="result-2"></div>
+            </div>
+            <div class="collapsible">
+                <input type="checkbox" id="collapsible-head-3">
+                <label for="collapsible-head-3">Diabetes Report</label>
+                <div class="collapsible-text" id="result-3"></div>
+            </div>
+        </div>
     </div>
-    
 
     <script>
-            
-
 
         function clearUrl() {
             const url = new URL(window.location.href);
@@ -34,169 +41,219 @@
             window.history.replaceState(null, '', url);
         }
 
-        window.onload =function(){
+        
+      window.onload = function() {
             const url = new URLSearchParams(window.location.search);
-            const prediction = url.get('predictedClass');
-            document.getElementById('prediction').innerHTML = "Predicted possiblity of having the disease is " + prediction +"%";
-
-            let featurePred ={};
-            const featureName = {
-                1: 'age',
-                2: 'sex',
-                3: 'cp',
-                4: 'trestbps',
-                5: 'chol',
-                6: 'fbs',
-                7: 'restecg',
-                8: 'thalach',
-                9: 'exang',
-                10: 'oldpeak',
-                11: 'slop',
-                12: 'ca',
-                13: 'thal'
-            };
-
-            const fileDownload = {
-
-                'age':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'sex':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'cp':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'trestbps':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'chol':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'fbs':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'restecg':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'thalach':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'exang':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'oldpeak':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'slop':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'ca':'http://localhost:8080/diseasewebapp/hypertension_data.csv',
-                'thal':'http://localhost:8080/diseasewebapp/hypertension_data.csv'            
-            }   
-
-            url.forEach((value, key) => {
-                if (key !== 'predictedClass') {
-                    featurePred[key] = value;
-                }
-            });
-
-            let dataList = {};
-            for (const [key, value] of Object.entries(featurePred)) {
-                const featureKey = featureName[key] || key;
-                dataList[featureKey]= parseFloat(value);
-            };
-
-            const labels = Object.keys(dataList);
-            const data = Object.values(dataList);
-
-            console.log(dataList);
+            const predictedClasses = JSON.parse(decodeURIComponent(url.get('predictedClasses')));
+            const featuresPred = JSON.parse(decodeURIComponent(url.get('featuresPred')));
+            
 
 
-            const backgroundColor = generateColor(labels.length);
-            const borderColor = generateColor(labels.length);
-
-            const polarData = {
-                labels: labels,
-                datasets: [{
-                    label: 'Feature Predictions',
-                    data: data,
-                    backgroundColor: backgroundColor,
-                    borderColor: borderColor,
-                    borderWidth:1
-                }]
-            };
-
-            let ctx = document.getElementById('polar-area').getContext('2d');
-            var polarChart = new Chart(ctx, {
-                type: 'polarArea',
-                data: polarData,
-                options:{
-                    responsive: true,
-                    scales : {
-                        r : {
-                            beginAtZero: true
-                        }
-                    },
-
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const chartElement = elements[0];
-                            const datasetIndex = chartElement.datasetIndex;
-                            const dataIndex = chartElement.index;
-                            const label = polarData.labels[dataIndex];
-                            const url = fileDownload[label];
-                            if(url){
-                                const x = document.createElement('a');
-                                x.href = url;
-                                x.download = url.split('http://localhost:8080/').pop();
-                                document.body.appendChild(x);
-                                x.click();
-                                document.body.removeChild(x);
-                            }
-                        }
-                    }
-                }
-            });
-
-            let ctx1 = document.getElementById('bar-chart').getContext('2d');
-            var polarChart = new Chart(ctx1, {
-                type: 'bar',
-                data: polarData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    title: {
-                        display: true,
-                        text: 'Bar Chart'
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    },
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const chartElement = elements[0];
-                            const datasetIndex = chartElement.datasetIndex;
-                            const dataIndex = chartElement.index;
-                            const label = polarData.labels[dataIndex];
-                            const url = fileDownload[label];
-                            if(url){
-                                const x = document.createElement('a');
-                                x.href = url;
-                                x.download = url.split('http://localhost:8080/').pop();
-                                document.body.appendChild(x);
-                                x.click();
-                                document.body.removeChild(x);
-                            }
-                        }
-                    }
-                }
-
-            });  
-
-
-            function generateColor(count){
-                const colors = [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(153, 102, 255, 0.6)',
-                    'rgba(255, 159, 64, 0.6)',
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(153, 102, 255, 0.6)',
-                    'rgba(255, 159, 64, 0.6)',
-                    'rgba(54, 162, 235, 0.6)'
-                ];
-
-                return colors.slice(0,count);
+            hypertension_features = {
+                'age': 1,
+                'sex': 2,
+                'cp': 3,
+                'trestbps': 4,
+                'chol': 5,
+                'fbs': 6,
+                'restecg': 7,
+                'thalach': 8,
+                'exang': 9,
+                'oldpeak': 10,
+                'slope': 11,
+                'ca': 12,
+                'thal': 13,
             }
-        };    
+
+            stroke_features = {
+                'sex': 1,
+                'age': 2,
+                'hypertension':3,
+                'heart_disease':4,
+                'ever_married':5,
+                'work_type':6,
+                'Residence_type':7,
+                'avg_glucose_level':8,
+                'bmi':9,
+                'smoking_status':10
+            }
+
+            diabetes_features = {
+                'sex':1,
+                'age':2,
+                'hypertension':3,
+                'heart_disease':4,
+                'smoking_history':5,
+                'bmi':6,
+                'HbA1c_level':7,
+                'blood_glucose_level':8
+            }
+
+            const diseases = Object.keys(predictedClasses);
+            diseases.forEach((disease, index) => {     
+                const prediction = predictedClasses[disease];
+                const featureData = featuresPred[disease];
+
+                console.log(disease);
+
+                let mappingKey = {};
+
+                if(disease == 'Hypertension'){
+                    for (let key in hypertension_features) {
+                        console.log(key)
+
+                        value = hypertension_features[key];
+
+                        if (featureData[value] !== undefined) {
+                            mappingKey[key] = featureData[value];
+                        }
+                    }
+                }else if(disease == 'Stroke'){
+                    for (let key in stroke_features) {
+                        console.log(key)
+
+                        value = stroke_features[key];
+
+                        if (featureData[value] !== undefined) {
+                            mappingKey[key] = featureData[value];
+                        }
+                    }
+                }else{
+                    for (let key in diabetes_features) {
+                        console.log(key)
+
+                        value = diabetes_features[key];
+
+                        if (featureData[value] !== undefined) {
+                            mappingKey[key] = featureData[value];
+                        }
+                    }
+                }
+
+                //sort mapping 
+                // const sortedInstaces = Object.entries(mappingKey).sort((a,b) => b[1] - a[1]);
+                // const sortedMappingKey = Object.values(sortedInstaces);
+
+                const collapsibleText = document.getElementById(`result-${index +1}`);
+
+                collapsibleText.innerHTML = 
+                    `<h2>${disease.charAt(0).toUpperCase() + disease.slice(1)}</h2>
+                    <h3>Predicted possibility: ${prediction}%</h3>
+                    <div class="chart-container">
+                        <canvas class="chart" id="polar-area-${index + 1}"></canvas>
+                        <canvas class="chart" id="bar-chart-${index + 1}"></canvas>
+                    </div>`;
+
+                const labels = Object.keys(mappingKey).map(key => `${key}: ${Math.round(mappingKey[key])}%`);
+                const data = Object.values(mappingKey);
+                const backgroundColor = generateColor(labels.length);
+                const borderColor = generateColor(labels.length);
+
+                
+
+                const polarData = {
+                    labels: labels,
+                    datasets: [{
+                        label: "Systoms Probablity",
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                };
+
+                let polarCtx = document.getElementById(`polar-area-${index + 1}`).getContext('2d');
+                new Chart(polarCtx, {
+                    type: 'polarArea',
+                    data: polarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) { 
+                                        let label = context.dataset.label || '';
+
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += Math.round((context.raw)) + "%";
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                let barCtx = document.getElementById(`bar-chart-${index + 1}`).getContext('2d');
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: polarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) { 
+                                        let label = context.dataset.label || '';
+
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label +=  Math.round((context.raw)) + "%";
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        };
+
+        function generateColor(count) {
+            const colors = [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(54, 162, 235, 0.6)'
+            ];
+            return colors.slice(0, count);
+        }
+    
     </script>
 </body>
 </html>
