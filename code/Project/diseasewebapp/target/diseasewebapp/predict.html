@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/prediction_style.css">
+    <title>Prediction</title>
+</head>
+<body>
+   
+    <div class="container">
+        <div class="title">Patient Details</div>
+        <form id="patient-details" action="./api"  method="POST">
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="age">Age in years</label>
+                        <input type="number" id="age"  name="age" placeholder="ex.20">
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="sex">Sex</label>
+                        <!-- <input type="number" name="sex" placeholder="ex. 1 for male" min="0" max="1"> -->
+                        <select  class="select" name="MF">
+                            <option value="">Select an Option</option>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="CP">Chest Pain</label>
+                        <!-- <input type="number" name="cp" placeholder="Chest"> -->
+                        <select class="select" name="cp">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Pain</option>
+                            <option value="1">Mild Pain</option>
+                            <option value="2">Moderate Pain</option>
+                            <option value="3">Severe Pain</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="Trest BPS">Trest BPS</label>
+                        <input type="number" name="trestbps" placeholder="trestbps">
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="cholesterol">Cholesterol</label>
+                        <input type="number" name="cholesterol" placeholder="Chol">
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="afbsge">Fasting Blood Sugar</label>
+                        <!-- <input type="number" name="fbs" placeholder="fbs"> -->
+                        <select class="select" name="fbs">
+                            <option value="">Select an Option</option>
+                            <option value="0">Less than 100 mg/dL</option>
+                            <option value="1">100 mg/dL (5.6 mmol/L) or higher</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="restecg">Rest ECG</label>
+                        <!-- <input type="number" name="restecg" placeholder="restecg"> -->
+                        <select class="select" name="restecg">
+                            <option value="">Select an Option</option>
+                            <option value="0">Normal</option>
+                            <option value="1">Having ST-T Wave Abnormality</option>
+                            <option value="2">Showing Probable or Definite Left Ventricular Hypertrophy</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="thalach">Thalach (Maximum Heart Rate)</label>
+                        <input type="number" name="thalach" placeholder="thalach">
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="exang">Exercise-induced Angina</label>
+                        <!-- <input type="number" name="exang" placeholder="exang"> -->
+                        <select class="select" name="exang">
+                            <option value="">Select an Option</option>
+                            <option value="0">Have NOT experienced</option>
+                            <option value="1">Have experienced</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="age">Oldpeak (ST Depression)</label>
+                        <input type="double" name="oldpeak" placeholder="oldpeak">
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="slope">ST Segment Slope</label>
+                        <!-- <input type="number" name="slope" placeholder="slope"> -->
+                        <select class="select" name="slope">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Abnormality</option>
+                            <option value="1">Moderate Abnormality</option>
+                            <option value="2">Severe Abnormality</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="ca">Cardiac Arrhythmia</label>
+                        <!-- <input type="number" name="ca" placeholder="ca"> -->
+                        <select class="select" name="ca">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Arrhythmia</option>
+                            <option value="1">Occasional Premature Beats </option>
+                            <option value="2">Mild Arrhythmia</option>
+                            <option value="3">Moderate Arrhythmia</option>
+                            <option value="4">Severe Arrhythmia</option>
+                         </select>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="details"> 
+                        <label for="thal">Thalassemia</label>      
+                        <!-- <input type="number" name="thal" placeholder="thal"> -->
+                        <select class="select" name="thal">
+                            <option value="">Select an Option</option>
+                            <option value="0">No Thalassemia</option>
+                            <option value="1">Carrier</option>
+                            <option value="2">Thalassemia Minor</option>
+                            <option value="3">Thalassemia Major</option>
+                         </select>
+                    </span>
+                </div>   
+            </div>
+            <div class="button">
+                <input type="submit">
+            </div>
+           
+        </form>
+    </div>
+    
+</body>
+
+<script>
+
+        document.getElementById("patient-details").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            validate();
+
+            if(validate()){
+                this.submit();
+            }
+        })
+
+        function validate() {
+
+            const allElements = document.getElementById("patient-details").elements;
+
+            let count = 0;
+
+            for (let x of allElements) {
+
+                if (x.tagName === "INPUT" && x.type === 'number') {
+
+                    if (!notEmpty(x.value)) {
+                        count++;
+                    }
+                }
+            }
+            if ( count > 8) {
+                    alert("please provide atleast 5 details.." + count);
+                    window.location.reload();
+
+                    return false;
+                }
+             
+            return true;
+            
+        }
+
+        function notEmpty(value) {
+            return value.trim() !== "";
+        }
+</script>
+</html>
