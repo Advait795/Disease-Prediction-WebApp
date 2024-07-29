@@ -42,58 +42,12 @@
         }
 
         
-
-        
       window.onload = function() {
             const url = new URLSearchParams(window.location.search);
             const predictedClasses = JSON.parse(decodeURIComponent(url.get('predictedClasses')));
             const featuresPred = JSON.parse(decodeURIComponent(url.get('featuresPred')));
             
 
-        //   const predictedClasses = {
-        //       hypertension: 100,
-        //       stroke: 94,
-        //       diabetes: 46
-        //   };  
-
-
-        //   const featuresPred = {
-        //       hypertension: {
-        //           '1': 4.0,
-        //           '2': 21.0,
-        //           '3': 28.0,
-        //           '4': 25.0,
-        //           '5': 14.0,
-        //           '6': 28.0,
-        //           '7': 44.0,
-        //           '8': 16.0,
-        //           '9': 28.0,
-        //           '10': 4.0,
-        //           '11': 2.0,
-        //           '13': 1.0
-        //       },
-        //       stroke: {
-        //           '1': 33.0,
-        //           '2': 9.0,
-        //           '3': 28.0,
-        //           '4': 25.0,
-        //           '5': 52.0,
-        //           '6': 8.0,
-        //           '7': 36.0,
-        //           '8': 20.0,
-        //           '9': 5.0,
-        //           '10': 45.0
-        //       },
-        //       diabetes: {
-        //           '1': 33.0,
-        //           '2': 9.0,
-        //           '3': 28.0,
-        //           '4': 25.0,
-        //           '6': 5.0,
-        //           '7': 44.0,
-        //           '8': 20.0
-        //       }
-        //   };
 
             hypertension_features = {
                 'age': 1,
@@ -144,7 +98,7 @@
 
                 let mappingKey = {};
 
-                if(disease == 'hypertension'){
+                if(disease == 'Hypertension'){
                     for (let key in hypertension_features) {
                         console.log(key)
 
@@ -154,7 +108,7 @@
                             mappingKey[key] = featureData[value];
                         }
                     }
-                }else if(disease == 'stroke'){
+                }else if(disease == 'Stroke'){
                     for (let key in stroke_features) {
                         console.log(key)
 
@@ -176,6 +130,10 @@
                     }
                 }
 
+                //sort mapping 
+                // const sortedInstaces = Object.entries(mappingKey).sort((a,b) => b[1] - a[1]);
+                // const sortedMappingKey = Object.values(sortedInstaces);
+
                 const collapsibleText = document.getElementById(`result-${index +1}`);
 
                 collapsibleText.innerHTML = 
@@ -186,15 +144,17 @@
                         <canvas class="chart" id="bar-chart-${index + 1}"></canvas>
                     </div>`;
 
-                const labels = Object.keys(mappingKey);
+                const labels = Object.keys(mappingKey).map(key => `${key}: ${Math.round(mappingKey[key])}%`);
                 const data = Object.values(mappingKey);
                 const backgroundColor = generateColor(labels.length);
                 const borderColor = generateColor(labels.length);
 
+                
+
                 const polarData = {
                     labels: labels,
                     datasets: [{
-                        label: 'Probablity of having ' + disease + " for feature is ",
+                        label: "Systoms Probablity",
                         data: data,
                         backgroundColor: backgroundColor,
                         borderColor: borderColor,

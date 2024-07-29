@@ -9,7 +9,16 @@ import java.util.*;
 
 import java.util.stream.*;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import com.google.gson.Gson;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +32,11 @@ public class servlet extends HttpServlet {
     @Override
     public void init() {
 
+        // Connecting to the database
+        String connectionString = "mongodb://localhost:27017";
+        MongoClient mongoClient = MongoClients.create(connectionString);
+        MongoDatabase database = mongoClient.getDatabase("AllDisease");
+
         String[] fileNames = {
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
@@ -32,7 +46,10 @@ public class servlet extends HttpServlet {
 
         String label;
         String[] features;
-        String name;
+        String name = "";
+        int totalExamples = 0;
+        double classCountZero;
+        double classCountOne;
 
         nb = new NB();
         int[] hyperclm = { 0, 3, 4, 7 };
@@ -62,11 +79,27 @@ public class servlet extends HttpServlet {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "stroke";
+                    name = "Stroke";
 
                     nb.train(features, label, name);
 
                 }
+
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Stroke");
+
+                collection.updateOne(filter, updateValue);
 
             } else if (filename.contains("hypertension")) {
                 for (String[] row : data) {
@@ -85,10 +118,26 @@ public class servlet extends HttpServlet {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "hypertension";
+                    name = "Hypertension";
 
                     nb.train(features, label, name);
                 }
+
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Hypertension");
+
+                collection.updateOne(filter, updateValue);
             } else {
                 for (String[] row : data) {
                     if (isFirstRow) {
@@ -106,10 +155,26 @@ public class servlet extends HttpServlet {
                             features[x] = features[x].substring(0, features[x].length() - 2);
                         }
                     }
-                    name = "diabetes";
+                    name = "Diabetes";
 
                     nb.train(features, label, name);
                 }
+
+                totalExamples = nb.totalInstance(name);
+                classCountZero = nb.classCountZero(name, "0");
+                classCountOne = nb.classCountOne(name, "1");
+
+                Bson filter = Filters.eq("name", "training");
+
+                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                MongoCollection<Document> collection = database.getCollection("Diabetes");
+
+                collection.updateOne(filter, updateValue);
             }
         }
 
@@ -120,7 +185,7 @@ public class servlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
 
-            String[] diseases = { "hypertension", "stroke", "diabetes" };
+            String[] diseases = { "Hypertension", "Stroke", "Diabetes" };
 
             // Reatrieve from input
             String[] newExample = {
@@ -155,12 +220,12 @@ public class servlet extends HttpServlet {
             String[] input = null;
 
             for (String d : diseases) {
-                if ("hypertension".equals(d)) {
+                if ("Hypertension".equals(d)) {
                     input = Arrays.copyOfRange(newExample, 0, 13);
-                } else if ("stroke".equals(d)) {
+                } else if ("Stroke".equals(d)) {
                     input = new String[] { newExample[1], newExample[0], newExample[13], newExample[14], newExample[15],
                             newExample[16], newExample[17], newExample[18], newExample[19], newExample[20] };
-                } else if ("diabetes".equals(d)) {
+                } else if ("Diabetes".equals(d)) {
                     input = new String[] { newExample[1], newExample[0], newExample[13], newExample[14], newExample[21],
                             newExample[19], newExample[22], newExample[18] };
                 }
