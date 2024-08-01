@@ -3,38 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles/result.css" />
+    <link rel="stylesheet" href="styles/report.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <title>Disease Prediction Result</title>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <h2>Test <span>Report</span></h2>
-      </div>
-      <div class="wrapper">
-        <div class="collapsible">
-          <input type="checkbox" id="collapsible-head-1" />
-          <label for="collapsible-head-1">Hypertension Report</label>
-          <div class="collapsible-text" id="result-1"></div>
+    <section>
+      <div class="container">
+        <div class="header">
+          <h2>Test <span>Report</span></h2>
         </div>
-        <div class="collapsible">
-          <input type="checkbox" id="collapsible-head-2" />
-          <label for="collapsible-head-2">Stroke Report</label>
-          <div class="collapsible-text" id="result-2"></div>
-        </div>
-        <div class="collapsible">
-          <input type="checkbox" id="collapsible-head-3" />
-          <label for="collapsible-head-3">Diabetes Report</label>
-          <div class="collapsible-text" id="result-3"></div>
+        <div class="wrapper">
+          <div class="calc" id="cal"></div>
+          <div class="chart-div" id="chart"></div>
         </div>
       </div>
-    </div>
+      <button id="download-pdf">Download Report</button>
+    </section>
 
     <script>
       function clearUrl() {
@@ -45,40 +35,13 @@
 
       window.onload = function () {
         const url = new URLSearchParams(window.location.search);
-        // const predictedClasses = JSON.parse(decodeURIComponent(url.get('predictedClasses')));
-        // const featuresPred = JSON.parse(decodeURIComponent(url.get('featuresPred')));
 
-        const predictedClasses = {
-          Hypertension: 85,
-          Stroke: 60,
-          Diabetes: 75,
-        };
-
+        const predictedClasses = { Hypertension: 85 };
         const featuresPred = {
-          Hypertension: {
-            1: 25,
-            2: 60,
-            3: 45,
-            4: 30,
-            5: 70,
-          },
-          Stroke: {
-            1: 50,
-            2: 65,
-            3: 55,
-            4: 40,
-            5: 80,
-          },
-          Diabetes: {
-            1: 30,
-            2: 75,
-            3: 60,
-            4: 50,
-            5: 70,
-          },
+          Hypertension: { 1: 25, 2: 60, 3: 45, 4: 30, 5: 70 },
         };
 
-        hypertension_features = {
+        const hypertension_features = {
           age: 1,
           sex: 2,
           cp: 3,
@@ -94,91 +57,29 @@
           thal: 13,
         };
 
-        stroke_features = {
-          sex: 1,
-          age: 2,
-          hypertension: 3,
-          heart_disease: 4,
-          ever_married: 5,
-          work_type: 6,
-          Residence_type: 7,
-          avg_glucose_level: 8,
-          bmi: 9,
-          smoking_status: 10,
-        };
-
-        diabetes_features = {
-          sex: 1,
-          age: 2,
-          hypertension: 3,
-          heart_disease: 4,
-          smoking_history: 5,
-          bmi: 6,
-          HbA1c_level: 7,
-          blood_glucose_level: 8,
-        };
-
         const diseases = Object.keys(predictedClasses);
         diseases.forEach((disease, index) => {
           const prediction = predictedClasses[disease];
           const featureData = featuresPred[disease];
-
-          console.log(disease);
-
           let mappingKey = {};
 
           if (disease == "Hypertension") {
             for (let key in hypertension_features) {
-              console.log(key);
-
-              value = hypertension_features[key];
-
-              if (featureData[value] !== undefined) {
-                mappingKey[key] = featureData[value];
-              }
-            }
-          } else if (disease == "Stroke") {
-            for (let key in stroke_features) {
-              console.log(key);
-
-              value = stroke_features[key];
-
-              if (featureData[value] !== undefined) {
-                mappingKey[key] = featureData[value];
-              }
-            }
-          } else {
-            for (let key in diabetes_features) {
-              console.log(key);
-
-              value = diabetes_features[key];
-
+              const value = hypertension_features[key];
               if (featureData[value] !== undefined) {
                 mappingKey[key] = featureData[value];
               }
             }
           }
+          const claculations = document.getElementById("cal");
+          const collapsibleText = document.getElementById(`chart`);
+          collapsibleText.innerHTML += `
+          <div class="chart-container">
+            <canvas class="chart" id="polar-area-${index + 1}"></canvas>
+            <canvas class="chart" id="bar-chart-${index + 1}"></canvas>
+          </div>`;
 
-          const collapsibleText = document.getElementById(
-            `result-${index + 1}`
-          );
-
-          collapsibleText.innerHTML = `<h2>${
-            disease.charAt(0).toUpperCase() + disease.slice(1)
-          }</h2>
-                    <div id="reportBtn-div">
-                        <h3>Predicted possibility: ${prediction}%</h3>
-                        <button onclick="analyzeReport('${disease}')">Analyze Report</button>
-                    </div>
-                  
-                    <div class="chart-container">
-                        <canvas class="chart" id="polar-area-${
-                          index + 1
-                        }"></canvas>
-                        <canvas class="chart" id="bar-chart-${
-                          index + 1
-                        }"></canvas>
-                    </div>`;
+          claculations.innerHTML += `sex: 128/204 = 40 <br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34`;
 
           const labels = Object.keys(mappingKey).map(
             (key) => `${key}: ${Math.round(mappingKey[key])}%`
@@ -191,7 +92,7 @@
             labels: labels,
             datasets: [
               {
-                label: "Systoms Probablity",
+                label: "Symptoms Probability",
                 data: data,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
@@ -200,7 +101,7 @@
             ],
           };
 
-          let polarCtx = document
+          const polarCtx = document
             .getElementById(`polar-area-${index + 1}`)
             .getContext("2d");
           new Chart(polarCtx, {
@@ -222,11 +123,10 @@
                   callbacks: {
                     label: function (context) {
                       let label = context.dataset.label || "";
-
                       if (label) {
                         label += ": ";
                       }
-                      if (context.parsed.y !== null) {
+                      if (context.raw !== null) {
                         label += Math.round(context.raw) + "%";
                       }
                       return label;
@@ -237,7 +137,7 @@
             },
           });
 
-          let barCtx = document
+          const barCtx = document
             .getElementById(`bar-chart-${index + 1}`)
             .getContext("2d");
           new Chart(barCtx, {
@@ -259,11 +159,10 @@
                   callbacks: {
                     label: function (context) {
                       let label = context.dataset.label || "";
-
                       if (label) {
                         label += ": ";
                       }
-                      if (context.parsed.y !== null) {
+                      if (context.raw !== null) {
                         label += Math.round(context.raw) + "%";
                       }
                       return label;
@@ -276,11 +175,27 @@
         });
       };
 
-      function analyzeReport(disease) {
-        window.location.href = `report.html?disease=${encodeURIComponent(
-          disease
-        )}`;
-      }
+      document
+        .getElementById("download-pdf")
+        .addEventListener("click", function () {
+          setTimeout(() => {
+            const element = document.querySelector(".container");
+            html2pdf()
+              .from(element)
+              .set({
+                margin: 0.125,
+                filename: "report.pdf",
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: {
+                  unit: "in",
+                  format: "a4",
+                  orientation: "p",
+                },
+              })
+              .save();
+          }, 1000);
+        });
 
       function generateColor(count) {
         const colors = [

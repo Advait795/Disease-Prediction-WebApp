@@ -117,6 +117,7 @@ public class NB {
         this.fCount = 0;
         this.featurePred.clear();
         this.featureTotals.clear();
+        double featureProductProb = 1;
 
         // categorising test data`
         if (name == "Stroke") {
@@ -180,9 +181,9 @@ public class NB {
 
             double classPriorProb = ClassCount / TotalExamples;
 
-            // System.out.println(
-            // "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
-            // + classPriorProb);
+            System.out.println(
+                    "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
+                            + classPriorProb);
 
             // System.out.println(
             // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
@@ -232,7 +233,8 @@ public class NB {
 
                 // double featureProb = (double) count / smthClassCount;
 
-                double featureProb = (Count + 1) / ClassCount;
+                Count += 1;
+                double featureProb = (Count) / ClassCount;
 
                 // System.out.println((Count + 1) + "/" + ClassCount);
                 System.out.println("Probability of feature " + feature + " where class " +
@@ -242,14 +244,13 @@ public class NB {
                 // featureProductProb *= featureProb;
                 logFeatureProductProb += Math.log(featureProb);
 
+                // System.out.println(featureProductProb + " featureProdctProb");
+
                 if (label.trim().equals("1")) {
                     fCount++;
                     featureTotals.put(fCount, count);
                     featurePred.put(fCount, (featureProb * 100));
                 }
-
-                // System.out.println("key " + key + " label: " + label + " featurePred: " +
-                // featureProb);
 
                 // db.Hypertension.updateOne({name:"testing"}, {$set:{"0.featurePred.1": 0}})
 
@@ -266,6 +267,9 @@ public class NB {
             // final probablity for class
             double classProb = Math.exp(logFeatureProductProb);
             // double classProb = (featureProductProb) * (classPriorProb);
+
+            // System.out.println(featureProductProb + " * " + classPriorProb + "=" +
+            // classProb);
 
             if (Double.valueOf(label) == 0) {
                 zero_label = classProb;
