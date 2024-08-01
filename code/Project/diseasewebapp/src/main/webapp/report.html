@@ -15,18 +15,27 @@
   <body>
     <section>
       <div class="container">
-        <div class="header">
-          <h2>Test <span>Report</span></h2>
-        </div>
-        <div class="wrapper">
-          <div class="calc" id="cal"></div>
-          <div class="chart-div" id="chart"></div>
+        <div class="box">
+          <div class="header">
+            <h2>Test <span>Report</span></h2>
+          </div>
+          <div class="wrapper">
+            <div class="calc" id="cal">
+              <p>
+                Naive Bayes formula: <br />
+                P(Disease|Symptoms) = P(Disease) * P(Symptoms|Disease) /
+                P(Symptoms)
+              </p>
+            </div>
+            <div class="chart-div" id="chart"></div>
+          </div>
         </div>
       </div>
       <button id="download-pdf">Download Report</button>
     </section>
 
     <script>
+      let d = "";
       function clearUrl() {
         const url = new URL(window.location.href);
         url.search = "";
@@ -35,11 +44,14 @@
 
       window.onload = function () {
         const url = new URLSearchParams(window.location.search);
-
-        const predictedClasses = { Hypertension: 85 };
-        const featuresPred = {
-          Hypertension: { 1: 25, 2: 60, 3: 45, 4: 30, 5: 70 },
-        };
+        const disease = url.get("disease");
+        d = disease;
+        const predictedClasses = JSON.parse(
+          decodeURIComponent(url.get("prediction"))
+        );
+        const featuresPred = JSON.parse(
+          decodeURIComponent(url.get("features"))
+        );
 
         const hypertension_features = {
           age: 1,
@@ -57,121 +69,176 @@
           thal: 13,
         };
 
-        const diseases = Object.keys(predictedClasses);
-        diseases.forEach((disease, index) => {
-          const prediction = predictedClasses[disease];
-          const featureData = featuresPred[disease];
-          let mappingKey = {};
+        stroke_features = {
+          sex: 1,
+          age: 2,
+          hypertension: 3,
+          heart_disease: 4,
+          ever_married: 5,
+          work_type: 6,
+          Residence_type: 7,
+          avg_glucose_level: 8,
+          bmi: 9,
+          smoking_status: 10,
+        };
 
-          if (disease == "Hypertension") {
-            for (let key in hypertension_features) {
-              const value = hypertension_features[key];
-              if (featureData[value] !== undefined) {
-                mappingKey[key] = featureData[value];
-              }
+        diabetes_features = {
+          sex: 1,
+          age: 2,
+          hypertension: 3,
+          heart_disease: 4,
+          smoking_history: 5,
+          bmi: 6,
+          HbA1c_level: 7,
+          blood_glucose_level: 8,
+        };
+
+        const featureData = featuresPred;
+        const featuresKeys = Object.keys(featuresPred);
+
+        console.log(featuresKeys);
+        let mappingKey = {};
+
+        if (disease == "Hypertension") {
+          for (let key in hypertension_features) {
+            console.log(key);
+
+            value = hypertension_features[key];
+
+            if (featureData[value] !== undefined) {
+              mappingKey[key] = featureData[value];
             }
           }
-          const claculations = document.getElementById("cal");
-          const collapsibleText = document.getElementById(`chart`);
-          collapsibleText.innerHTML += `
+        } else if (disease == "Stroke") {
+          for (let key in stroke_features) {
+            console.log(key);
+
+            value = stroke_features[key];
+
+            if (featureData[value] !== undefined) {
+              mappingKey[key] = featureData[value];
+            }
+          }
+        } else {
+          for (let key in diabetes_features) {
+            console.log(key);
+
+            value = diabetes_features[key];
+
+            if (featureData[value] !== undefined) {
+              mappingKey[key] = featureData[value];
+            }
+          }
+        }
+
+        console.log("mapping key :" + Object.keys(mappingKey));
+
+        const calculations = document.getElementById("cal");
+        const collapsibleText = document.getElementById(`chart`);
+
+        collapsibleText.innerHTML += `
           <div class="chart-container">
-            <canvas class="chart" id="polar-area-${index + 1}"></canvas>
-            <canvas class="chart" id="bar-chart-${index + 1}"></canvas>
+            <canvas class="chart" id="polar-area-1"></canvas>
+            <canvas class="chart" id="bar-chart-1"></canvas>
           </div>`;
 
-          claculations.innerHTML += `sex: 128/204 = 40 <br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34<br> age: 120/204 = 34`;
+        let probabilities = [];
+        for (let symptom in mappingKey) {
+          let probability = mappingKey[symptom];
+          probabilities.push(probability);
+          calculations.innerHTML += `<p>P(Symtom: ${symptom} | Disease) = ${Math.round(
+            probability
+          )}%</p>`;
+        }
 
-          const labels = Object.keys(mappingKey).map(
-            (key) => `${key}: ${Math.round(mappingKey[key])}%`
-          );
-          const data = Object.values(mappingKey);
-          const backgroundColor = generateColor(labels.length);
-          const borderColor = generateColor(labels.length);
+        const labels = Object.keys(mappingKey).map(
+          (key) => `${key}: ${Math.round(mappingKey[key])}%`
+        );
+        const data = Object.values(mappingKey);
+        const backgroundColor = generateColor(labels.length);
+        const borderColor = generateColor(labels.length);
 
-          const polarData = {
-            labels: labels,
-            datasets: [
-              {
-                label: "Symptoms Probability",
-                data: data,
-                backgroundColor: backgroundColor,
-                borderColor: borderColor,
-                borderWidth: 1,
-              },
-            ],
-          };
+        const polarData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Symptoms Probability",
+              data: data,
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              borderWidth: 1,
+            },
+          ],
+        };
 
-          const polarCtx = document
-            .getElementById(`polar-area-${index + 1}`)
-            .getContext("2d");
-          new Chart(polarCtx, {
-            type: "polarArea",
-            data: polarData,
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                r: {
-                  beginAtZero: true,
-                  callback: function (value) {
-                    return value + "%";
-                  },
+        const polarCtx = document
+          .getElementById(`polar-area-1`)
+          .getContext("2d");
+        new Chart(polarCtx, {
+          type: "polarArea",
+          data: polarData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                beginAtZero: true,
+                callback: function (value) {
+                  return value + "%";
                 },
               },
-              plugins: {
-                tooltip: {
-                  callbacks: {
-                    label: function (context) {
-                      let label = context.dataset.label || "";
-                      if (label) {
-                        label += ": ";
-                      }
-                      if (context.raw !== null) {
-                        label += Math.round(context.raw) + "%";
-                      }
-                      return label;
-                    },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    let label = context.dataset.label || "";
+                    if (label) {
+                      label += ": ";
+                    }
+                    if (context.raw !== null) {
+                      label += Math.round(context.raw) + "%";
+                    }
+                    return label;
                   },
                 },
               },
             },
-          });
+          },
+        });
 
-          const barCtx = document
-            .getElementById(`bar-chart-${index + 1}`)
-            .getContext("2d");
-          new Chart(barCtx, {
-            type: "bar",
-            data: polarData,
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  callback: function (value) {
-                    return value + "%";
-                  },
+        const barCtx = document.getElementById(`bar-chart-1`).getContext("2d");
+        new Chart(barCtx, {
+          type: "bar",
+          data: polarData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                callback: function (value) {
+                  return value + "%";
                 },
               },
-              plugins: {
-                tooltip: {
-                  callbacks: {
-                    label: function (context) {
-                      let label = context.dataset.label || "";
-                      if (label) {
-                        label += ": ";
-                      }
-                      if (context.raw !== null) {
-                        label += Math.round(context.raw) + "%";
-                      }
-                      return label;
-                    },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    let label = context.dataset.label || "";
+                    if (label) {
+                      label += ": ";
+                    }
+                    if (context.raw !== null) {
+                      label += Math.round(context.raw) + "%";
+                    }
+                    return label;
                   },
                 },
               },
             },
-          });
+          },
         });
       };
 
@@ -183,9 +250,9 @@
             html2pdf()
               .from(element)
               .set({
-                margin: 0.125,
-                filename: "report.pdf",
-                image: { type: "jpeg", quality: 0.98 },
+                margin: 0.12,
+                filename: `${d}_report.pdf`,
+                image: { type: "png", quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: {
                   unit: "in",
