@@ -52,36 +52,6 @@
           decodeURIComponent(url.get("featuresPred"))
         );
 
-        // const predictedClasses = {
-        //   Hypertension: 85,
-        //   Stroke: 60,
-        //   Diabetes: 75,
-        // };
-
-        // const featuresPred = {
-        //   Hypertension: {
-        //     1: 25,
-        //     2: 60,
-        //     3: 45,
-        //     4: 30,
-        //     5: 70,
-        //   },
-        //   Stroke: {
-        //     1: 50,
-        //     2: 65,
-        //     3: 55,
-        //     4: 40,
-        //     5: 80,
-        //   },
-        //   Diabetes: {
-        //     1: 30,
-        //     2: 75,
-        //     3: 60,
-        //     4: 50,
-        //     5: 70,
-        //   },
-        // };
-
         hypertension_features = {
           age: 1,
           sex: 2,
@@ -127,14 +97,10 @@
           const prediction = predictedClasses[disease];
           const featureData = featuresPred[disease];
 
-          console.log(disease);
-
           let mappingKey = {};
 
           if (disease == "Hypertension") {
             for (let key in hypertension_features) {
-              console.log(key);
-
               value = hypertension_features[key];
 
               if (featureData[value] !== undefined) {
@@ -143,8 +109,6 @@
             }
           } else if (disease == "Stroke") {
             for (let key in stroke_features) {
-              console.log(key);
-
               value = stroke_features[key];
 
               if (featureData[value] !== undefined) {
@@ -153,8 +117,6 @@
             }
           } else {
             for (let key in diabetes_features) {
-              console.log(key);
-
               value = diabetes_features[key];
 
               if (featureData[value] !== undefined) {
@@ -174,7 +136,7 @@
                         <h3>Predicted possibility: ${prediction}%</h3>
                         <button onclick="analyzeReport('${disease}')">Analyze Report</button>
                     </div>
-                  
+
                     <div class="chart-container">
                         <canvas class="chart" id="polar-area-${
                           index + 1
@@ -288,18 +250,27 @@
         const featuresPred = JSON.parse(
           decodeURIComponent(url.get("featuresPred"))
         );
+        const totalExamples = JSON.parse(
+          decodeURIComponent(url.get("totalCount"))
+        );
+        const classCountOne = JSON.parse(
+          decodeURIComponent(url.get("ClassCountOne"))
+        );
 
         const diseasePrediction = JSON.stringify({
           [disease]: predictedClasses[disease],
         });
 
         const diseaseFeatures = JSON.stringify(featuresPred[disease]);
+        const diseaseTotalCount = JSON.stringify(totalExamples[disease]);
+        const diseaseClassCount = JSON.stringify(classCountOne[disease]);
 
         window.location.href = `report.html?disease=${encodeURIComponent(
           disease
-        )}&prediction=${encodeURIComponent(
-          diseasePrediction
-        )}&features=${encodeURIComponent(diseaseFeatures)}`;
+        )}&prediction=${encodeURIComponent(diseasePrediction)}
+        &features=${encodeURIComponent(diseaseFeatures)}
+        &totalExamples=${encodeURIComponent(diseaseTotalCount)}
+        &classCountOne=${encodeURIComponent(diseaseClassCount)}`;
       }
 
       function generateColor(count) {

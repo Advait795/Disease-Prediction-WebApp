@@ -259,5 +259,7 @@ public class Main {
 
         }
 
+        nb.destroy();
+
     }
 }

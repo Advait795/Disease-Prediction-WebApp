@@ -289,6 +289,11 @@ public class NB {
         System.out.println();
 
         return String.valueOf(Math.round((one_final * 100)));
+
+    }
+
+    public void destroy() {
+        mongoClient.close();
     }
 
     public String diabetesCategory(String value, int y) {

@@ -28,13 +28,16 @@ public class servlet extends HttpServlet {
     private NB nb;
     // private Connection connect;
     private Map<Integer, Double> featurePred = new HashMap<>();
+    Map<String, Integer> totalCount = new HashMap<>();
+    Map<String, Double> ClassCountOne = new HashMap<>();
+    MongoClient mongoClient;
 
     @Override
     public void init() {
 
         // Connecting to the database
         String connectionString = "mongodb://localhost:27017";
-        MongoClient mongoClient = MongoClients.create(connectionString);
+        mongoClient = MongoClients.create(connectionString);
         MongoDatabase database = mongoClient.getDatabase("AllDisease");
 
         String[] fileNames = {
@@ -86,8 +89,10 @@ public class servlet extends HttpServlet {
                 }
 
                 totalExamples = nb.totalInstance(name);
+                totalCount.put(name, totalExamples);
                 classCountZero = nb.classCountZero(name, "0");
                 classCountOne = nb.classCountOne(name, "1");
+                ClassCountOne.put(name, classCountOne);
 
                 Bson filter = Filters.eq("name", "training");
 
@@ -124,8 +129,10 @@ public class servlet extends HttpServlet {
                 }
 
                 totalExamples = nb.totalInstance(name);
+                totalCount.put(name, totalExamples);
                 classCountZero = nb.classCountZero(name, "0");
                 classCountOne = nb.classCountOne(name, "1");
+                ClassCountOne.put(name, classCountOne);
 
                 Bson filter = Filters.eq("name", "training");
 
@@ -161,8 +168,10 @@ public class servlet extends HttpServlet {
                 }
 
                 totalExamples = nb.totalInstance(name);
+                totalCount.put(name, totalExamples);
                 classCountZero = nb.classCountZero(name, "0");
                 classCountOne = nb.classCountOne(name, "1");
+                ClassCountOne.put(name, classCountOne);
 
                 Bson filter = Filters.eq("name", "training");
 
@@ -242,11 +251,19 @@ public class servlet extends HttpServlet {
 
             }
 
+            nb.destroy();
+            mongoClient.close();
+
             String predictedClassesJson = new Gson().toJson(predictions);
             String featuresPredJson = new Gson().toJson(featuresPred);
+            String totalCountJson = new Gson().toJson(totalCount);
+            String classCountOne = new Gson().toJson(ClassCountOne);
 
             String redirectUrl = "result.html?predictedClasses=" + URLEncoder.encode(predictedClassesJson, "UTF-8") +
-                    "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8");
+                    "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8") + "&totalCount="
+                    + URLEncoder.encode(totalCountJson, "UTF-8") + "&ClassCountOne="
+                    + URLEncoder.encode(classCountOne, "UTF-8");
+            ;
             response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
