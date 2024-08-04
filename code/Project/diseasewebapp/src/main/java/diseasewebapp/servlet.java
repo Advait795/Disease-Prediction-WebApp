@@ -225,6 +225,7 @@ public class servlet extends HttpServlet {
 
             Map<String, String> predictions = new HashMap<>();
             Map<String, Map<String, Double>> featuresPred = new HashMap<>();
+            Map<String, Map<Integer, Integer>> featureCounts = new HashMap<>();
 
             String[] input = null;
 
@@ -254,15 +255,21 @@ public class servlet extends HttpServlet {
             nb.destroy();
             mongoClient.close();
 
+            featureCounts = nb.featureCounts();
+
+            System.out.println(featureCounts);
+
             String predictedClassesJson = new Gson().toJson(predictions);
             String featuresPredJson = new Gson().toJson(featuresPred);
             String totalCountJson = new Gson().toJson(totalCount);
             String classCountOne = new Gson().toJson(ClassCountOne);
+            String FeatureCounts = new Gson().toJson(featureCounts);
 
             String redirectUrl = "result.html?predictedClasses=" + URLEncoder.encode(predictedClassesJson, "UTF-8") +
                     "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8") + "&totalCount="
                     + URLEncoder.encode(totalCountJson, "UTF-8") + "&ClassCountOne="
-                    + URLEncoder.encode(classCountOne, "UTF-8");
+                    + URLEncoder.encode(classCountOne, "UTF-8") + "&featureCounts="
+                    + URLEncoder.encode(FeatureCounts, "UTF-8");
             ;
             response.sendRedirect(redirectUrl);
 

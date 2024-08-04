@@ -259,7 +259,10 @@ public class Main {
 
         }
 
+        System.out.println(nb.featureCounts());
+
         nb.destroy();
 
     }
+
 }

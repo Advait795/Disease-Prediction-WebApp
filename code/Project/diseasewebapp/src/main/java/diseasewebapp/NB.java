@@ -23,7 +23,7 @@ public class NB {
     private Map<Integer, Integer> featureTotals = new HashMap<>();
     private Map<String, Integer> totalExamples = new HashMap<>();
     private Map<String, Map<String, Integer>> classCounts = new HashMap<>();
-    private Map<Map<Integer, String>, Map<String, Integer>> featureCounts = new HashMap<>();
+    private Map<String, Map<Integer, Integer>> featureCounts = new HashMap<>();
 
     // categorising bins
     private int[] categories = { 1, 2, 3, 4 };
@@ -181,9 +181,9 @@ public class NB {
 
             double classPriorProb = ClassCount / TotalExamples;
 
-            System.out.println(
-                    "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
-                            + classPriorProb);
+            // System.out.println(
+            // "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
+            // + classPriorProb);
 
             // System.out.println(
             // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
@@ -218,6 +218,10 @@ public class NB {
                 Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
                 Integer Count = keyDoc.getInteger(feature);
 
+                featureCounts.putIfAbsent(name, new HashMap<>());
+                Map<Integer, Integer> nestedMap = featureCounts.get(name);
+                nestedMap.put(key, Count);
+
                 // Create the key map for the outer map
                 // Map<Integer, String> keyMap = new HashMap<>();
                 // keyMap.put(key, feature);
@@ -237,8 +241,8 @@ public class NB {
                 double featureProb = (Count) / ClassCount;
 
                 // System.out.println((Count + 1) + "/" + ClassCount);
-                System.out.println("Probability of feature " + feature + " where class " +
-                        label + ": " + featureProb);
+                // System.out.println("Probability of feature " + feature + " where class " +
+                // label + ": " + featureProb);
 
                 // Multiply all probabilities
                 // featureProductProb *= featureProb;
@@ -283,10 +287,10 @@ public class NB {
         double zero_final = zero_label / total;
         double one_final = one_label / total;
 
-        System.out.println();
-        System.out.println("Total: " + zero_label + " + " + one_label + " = " +
-                total);
-        System.out.println();
+        // System.out.println();
+        // System.out.println("Total: " + zero_label + " + " + one_label + " = " +
+        // total);
+        // System.out.println();
 
         return String.valueOf(Math.round((one_final * 100)));
 
@@ -426,5 +430,9 @@ public class NB {
 
     public Integer totalInstance(String name) {
         return totalExamples.get(name);
+    }
+
+    public Map featureCounts() {
+        return featureCounts;
     }
 }

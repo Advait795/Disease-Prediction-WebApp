@@ -257,8 +257,18 @@
           decodeURIComponent(url.get("ClassCountOne"))
         );
 
+        const FeatureCounts = JSON.parse(
+          decodeURIComponent(url.get("featureCounts"))
+        );
+
+        console.log(FeatureCounts);
+
         const diseasePrediction = JSON.stringify({
           [disease]: predictedClasses[disease],
+        });
+
+        const diseaseFeatureCounts = JSON.stringify({
+          [disease]: FeatureCounts[disease],
         });
 
         const diseaseFeatures = JSON.stringify(featuresPred[disease]);
@@ -270,7 +280,8 @@
         )}&prediction=${encodeURIComponent(diseasePrediction)}
         &features=${encodeURIComponent(diseaseFeatures)}
         &totalExamples=${encodeURIComponent(diseaseTotalCount)}
-        &classCountOne=${encodeURIComponent(diseaseClassCount)}`;
+        &classCountOne=${encodeURIComponent(diseaseClassCount)}
+        &featureCounts=${encodeURIComponent(diseaseFeatureCounts)}`;
       }
 
       function generateColor(count) {

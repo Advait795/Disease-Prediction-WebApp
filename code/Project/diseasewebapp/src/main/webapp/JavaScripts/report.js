@@ -19,6 +19,14 @@ window.onload = function () {
     const totalCount = JSON.parse(decodeURIComponent(url.get("totalExamples")));
     const classCountOne = JSON.parse(decodeURIComponent(url.get("classCountOne")));
 
+    const featureCounts = JSON.parse(decodeURIComponent(url.get("featureCounts")))
+
+    console.log(featureCounts);
+
+    const hypertensionFeatures = featureCounts.Hypertension;
+
+    console.log(hypertensionFeatures);
+
     let Pdisease = classCountOne / totalCount;
 
     const hypertension_features = {
@@ -64,22 +72,25 @@ window.onload = function () {
     const featureData = featuresPred;
     const featuresKeys = Object.keys(featuresPred);
 
-    console.log(featuresKeys);
+    // console.log(featuresKeys);
     let mappingKey = {};
+    let mappingFeaturesCounts = {};
 
     if (disease == "Hypertension") {
         for (let key in hypertension_features) {
-            console.log(key);
+            // console.log(key);
 
             value = hypertension_features[key];
+            x = hypertension_features[key]
 
             if (featureData[value] !== undefined) {
                 mappingKey[key] = featureData[value];
+                mappingFeaturesCounts[key] = hypertensionFeatures[value];
             }
         }
     } else if (disease == "Stroke") {
         for (let key in stroke_features) {
-            console.log(key);
+            // console.log(key);
 
             value = stroke_features[key];
 
@@ -89,7 +100,7 @@ window.onload = function () {
         }
     } else {
         for (let key in diabetes_features) {
-            console.log(key);
+            // console.log(key);
 
             value = diabetes_features[key];
 
@@ -99,7 +110,9 @@ window.onload = function () {
         }
     }
 
-    console.log("mapping key :" + Object.keys(mappingKey));
+    console.log(mappingFeaturesCounts);
+
+    // console.log("mapping key :" + Object.keys(mappingKey));
 
     const calculations = document.getElementById("cal");
     const collapsibleText = document.getElementById(`chart`);
@@ -108,7 +121,7 @@ window.onload = function () {
         P(Disease|Symptoms) = P(Disease) * P(Symptoms|Disease) /
         P(Symptoms)<br/><br/>
 
-        P(Disease) = ${classCountOne}/${totalCount} = ${Math.round(Pdisease * 100)}%<br/>
+        P(Disease): ${classCountOne}/${totalCount} = ${Math.round(Pdisease * 100)}%<br/>
         </p>
         `
 
@@ -123,7 +136,7 @@ window.onload = function () {
     for (let symptom in mappingKey) {
         let probability = mappingKey[symptom];
         probabilities.push(probability);
-        calculations.innerHTML += `<p>P(Symtom: ${symptom} | Disease) = ${Math.round(
+        calculations.innerHTML += `<p>P(Symtom: ${symptom} | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = ${Math.round(
             probability
         )}%</p>`;
     }
