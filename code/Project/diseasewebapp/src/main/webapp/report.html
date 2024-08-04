@@ -17,12 +17,31 @@
     <section>
       <div class="container">
         <div class="box">
-          <div class="header">
-            <h2>Test <span>Report</span></h2>
+          <div class="header" id="head">
           </div>
           <div class="wrapper">
             <div class="calc" id="cal"></div>
             <div class="chart-div" id="chart"></div>
+            <div class="tip">
+              <p>
+                Tip: <br />
+                <span>P(Disease|Symptoms)</span> : The chance of having the disease given that you're showing specific symptoms. <br>
+                <span>P(Disease)</span> : The chance of having the disease without considering any symptoms.<br />
+                <span>P(Symptoms|Disease)</span> : The chance of showing specific symptoms if you already have the disease.<br /><br />
+
+               <span>Naive Bayes Bias/Assumption</span> : <br />
+                Naive Bayes assumes that all features are independent of each
+                other given the class label, allowing the model to calculate the
+                joint probability as the product of individual probabilities.
+                <br><br>
+                <span>Note</span> : The probabilities are derived from historical records for each disease, with the following sample sizes:<br><br>
+                <ul>
+                  <ul>Hypertension: <span>26,083</span> records</ul>
+                  <ul>Stroke: <span>40,910</span> records</ul>
+                  <ul>Diabetes: <span>100,000</span>  records</ul>
+                </ul>
+              </p>
+            </div>
           </div>
         </div>
       </div>

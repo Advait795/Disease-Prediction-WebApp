@@ -21,52 +21,59 @@ window.onload = function () {
 
     const featureCounts = JSON.parse(decodeURIComponent(url.get("featureCounts")))
 
-    console.log(featureCounts);
 
+
+
+    //disease prediction
+    const hypertensionPrediction = predictedClasses.Hypertension;
+    const strokePrediction = predictedClasses.Stroke;
+    const diabetesPrediction = predictedClasses.Diabetes;
+
+    //features counts
     const hypertensionFeatures = featureCounts.Hypertension;
-
-    console.log(hypertensionFeatures);
+    const strokeFeatures = featureCounts.Stroke;
+    const diabetesFeatures = featureCounts.Diabetes;
 
     let Pdisease = classCountOne / totalCount;
 
     const hypertension_features = {
-        age: 1,
-        sex: 2,
-        cp: 3,
-        trestbps: 4,
-        chol: 5,
-        fbs: 6,
-        restecg: 7,
-        thalach: 8,
-        exang: 9,
-        oldpeak: 10,
-        slope: 11,
-        ca: 12,
-        thal: 13,
+        Age: 1,
+        Sex: 2,
+        Chest_Pain: 3,
+        Trest_BPS: 4,
+        Cholesterol: 5,
+        Fasting_Blood_Sugar: 6,
+        Rest_ECG: 7,
+        Thalach: 8,
+        Exercise_induced_Angina: 9,
+        Oldpeak: 10,
+        ST_Segment_Slope: 11,
+        Cardiac_Arrhythmia: 12,
+        Thalassemia: 13,
     };
 
     stroke_features = {
-        sex: 1,
-        age: 2,
-        hypertension: 3,
-        heart_disease: 4,
-        ever_married: 5,
-        work_type: 6,
-        Residence_type: 7,
-        avg_glucose_level: 8,
-        bmi: 9,
-        smoking_status: 10,
+        Sex: 1,
+        Age: 2,
+        Hypertension: 3,
+        Heart_Disease: 4,
+        Marital_Status: 5,
+        Work_Stress_Level: 6,
+        Residence_Status: 7,
+        Average_Sugar: 8,
+        Body_Mass_Index: 9,
+        Smoking: 10,
     };
 
     diabetes_features = {
-        sex: 1,
-        age: 2,
-        hypertension: 3,
-        heart_disease: 4,
-        smoking_history: 5,
-        bmi: 6,
-        HbA1c_level: 7,
-        blood_glucose_level: 8,
+        Sex: 1,
+        Age: 2,
+        Hypertension: 3,
+        Heart_Disease: 4,
+        Smoking_History: 5,
+        Body_Mass_Index: 6,
+        Hemoglobin_A1C: 7,
+        Average_Sugar: 8,
     };
 
     const featureData = featuresPred;
@@ -75,13 +82,14 @@ window.onload = function () {
     // console.log(featuresKeys);
     let mappingKey = {};
     let mappingFeaturesCounts = {};
+    let prediction = "";
 
     if (disease == "Hypertension") {
+        prediction = hypertensionPrediction;
         for (let key in hypertension_features) {
             // console.log(key);
 
             value = hypertension_features[key];
-            x = hypertension_features[key]
 
             if (featureData[value] !== undefined) {
                 mappingKey[key] = featureData[value];
@@ -89,16 +97,20 @@ window.onload = function () {
             }
         }
     } else if (disease == "Stroke") {
+        prediction = strokePrediction;
         for (let key in stroke_features) {
             // console.log(key);
 
             value = stroke_features[key];
 
+
             if (featureData[value] !== undefined) {
                 mappingKey[key] = featureData[value];
+                mappingFeaturesCounts[key] = strokeFeatures[value];
             }
         }
     } else {
+        prediction = diabetesPrediction;
         for (let key in diabetes_features) {
             // console.log(key);
 
@@ -106,24 +118,29 @@ window.onload = function () {
 
             if (featureData[value] !== undefined) {
                 mappingKey[key] = featureData[value];
+                mappingFeaturesCounts[key] = diabetesFeatures[value];
             }
         }
     }
 
-    console.log(mappingFeaturesCounts);
+    console.log(hypertensionPrediction);
 
     // console.log("mapping key :" + Object.keys(mappingKey));
 
     const calculations = document.getElementById("cal");
     const collapsibleText = document.getElementById(`chart`);
+    const header = document.getElementById('head');
 
-    calculations.innerHTML = `<p>Naive Bayes formula: <br />
+    header.innerHTML = `<h2><span>${disease}</span> Test Report</h2>`
+
+    calculations.innerHTML = `<p><span>Naive Bayes formula</span>: <br />
         P(Disease|Symptoms) = P(Disease) * P(Symptoms|Disease) /
         P(Symptoms)<br/><br/>
 
-        P(Disease): ${classCountOne}/${totalCount} = ${Math.round(Pdisease * 100)}%<br/>
-        </p>
-        `
+        <span>P(Disease|Symptoms)</span> : <span>${prediction}%</span><br/><br/>
+
+        <span>P(Disease)</span>: ${classCountOne}/${totalCount} = <span>${Math.round(Pdisease * 100)}%</span><br/><br/>
+        </p>`;
 
     collapsibleText.innerHTML += `
         <div class="chart-container">
@@ -136,9 +153,9 @@ window.onload = function () {
     for (let symptom in mappingKey) {
         let probability = mappingKey[symptom];
         probabilities.push(probability);
-        calculations.innerHTML += `<p>P(Symtom: ${symptom} | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = ${Math.round(
+        calculations.innerHTML += `<p>P(Symtom: <span>${symptom}</span> | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = <span>${Math.round(
             probability
-        )}%</p>`;
+        )}%</span></p>`;
     }
 
     const labels = Object.keys(mappingKey).map(
@@ -147,6 +164,25 @@ window.onload = function () {
     const data = Object.values(mappingKey);
     const backgroundColor = generateColor(labels.length);
     const borderColor = generateColor(labels.length);
+
+
+    // const labels = [
+    //     "Age: 60%",
+    //     "Sex: 55%",
+    //     "Chest_Pain: 70%",
+    //     "Trest_BPS: 65%",
+    //     "Cholesterol: 58%",
+    //     "Fasting_Blood_Sugar: 62%",
+    //     "Rest_ECG: 68%",
+    //     "Thalach: 72%",
+    //     "Exercise_induced_Angina: 60%",
+    //     "Oldpeak: 55%",
+    //     "ST_Segment_Slope: 65%",
+    //     "Cardiac_Arrhythmia: 70%",
+    //     "Thalassemia: 58%",
+    // ];
+
+    // const data = [60, 55, 70, 65, 58, 62, 68, 72, 60, 55, 65, 70, 58];
 
     const polarData = {
         labels: labels,
@@ -240,7 +276,7 @@ document
             html2pdf()
                 .from(element)
                 .set({
-                    margin: 0.12,
+                    margin: 0.11,
                     filename: `${d}_report.pdf`,
                     image: { type: "png", quality: 0.98 },
                     html2canvas: { scale: 2 },
