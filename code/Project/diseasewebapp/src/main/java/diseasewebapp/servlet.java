@@ -252,7 +252,7 @@ public class servlet extends HttpServlet {
 
             }
 
-            nb.destroy();
+            // nb.destroy();
             mongoClient.close();
 
             featureCounts = nb.featureCounts();

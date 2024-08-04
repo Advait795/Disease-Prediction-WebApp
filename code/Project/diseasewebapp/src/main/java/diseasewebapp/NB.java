@@ -119,37 +119,37 @@ public class NB {
         this.featureTotals.clear();
         double featureProductProb = 1;
 
-        // categorising test data`
-        if (name == "Stroke") {
-            for (int i = 0; i < features.length; i++) {
-                if (features[i] == "") {
-                    continue;
-                } else if (i == 1 || i == 7 || i == 8) {
-                    features[i] = strokeCategory(features[i], i);
-                }
+        // // categorising test data`
+        // if (name == "Stroke") {
+        // for (int i = 0; i < features.length; i++) {
+        // if (features[i] == "") {
+        // continue;
+        // } else if (i == 1 || i == 7 || i == 8) {
+        // features[i] = strokeCategory(features[i], i);
+        // }
 
-            }
-        } else if (name == "Hypertension") {
-            for (int i = 0; i < features.length; i++) {
+        // }
+        // } else if (name == "Hypertension") {
+        // for (int i = 0; i < features.length; i++) {
 
-                if (features[i] == "") {
-                    continue;
-                } else if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
-                    features[i] = category(features[i], i);
+        // if (features[i] == "") {
+        // continue;
+        // } else if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
+        // features[i] = category(features[i], i);
 
-                }
-            }
-        } else if (name == "Diabetes") {
-            for (int i = 0; i < features.length; i++) {
+        // }
+        // }
+        // } else if (name == "Diabetes") {
+        // for (int i = 0; i < features.length; i++) {
 
-                if (features[i] == "") {
-                    continue;
-                } else if (i == 1 || i == 5 || i == 6 || i == 7) {
-                    features[i] = diabetesCategory(features[i], i);
+        // if (features[i] == "") {
+        // continue;
+        // } else if (i == 1 || i == 5 || i == 6 || i == 7) {
+        // features[i] = diabetesCategory(features[i], i);
 
-                }
-            }
-        }
+        // }
+        // }
+        // }
 
         featureKey.clear();
         featureKey(features.length);
