@@ -20,17 +20,17 @@
       <div class="wrapper">
         <div class="collapsible">
           <input type="checkbox" id="collapsible-head-1" />
-          <label for="collapsible-head-1">Hypertension Report</label>
+          <label for="collapsible-head-1" id="head-Hypertension"></label>
           <div class="collapsible-text" id="result-1"></div>
         </div>
         <div class="collapsible">
           <input type="checkbox" id="collapsible-head-2" />
-          <label for="collapsible-head-2">Stroke Report</label>
+          <label for="collapsible-head-2" id="head-Stroke"></label>
           <div class="collapsible-text" id="result-2"></div>
         </div>
         <div class="collapsible">
           <input type="checkbox" id="collapsible-head-3" />
-          <label for="collapsible-head-3">Diabetes Report</label>
+          <label for="collapsible-head-3" id="head-Diabetes"></label>
           <div class="collapsible-text" id="result-3"></div>
         </div>
       </div>
@@ -128,6 +128,10 @@
           const collapsibleText = document.getElementById(
             `result-${index + 1}`
           );
+
+          const header = document.getElementById(`head-${disease}`);
+
+          header.innerHTML = `${disease} Report : (${prediction}%)`;
 
           collapsibleText.innerHTML = `<h2>${
             disease.charAt(0).toUpperCase() + disease.slice(1)
