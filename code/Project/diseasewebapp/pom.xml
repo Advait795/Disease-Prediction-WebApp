@@ -61,12 +61,13 @@
       <version>4.7.1</version>
     </dependency>
 
-  
-    <dependency>
+
+    <!-- <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>
       <version>3.11.0</version>
-    </dependency>
+    </dependency> -->
+
   </dependencies>
 
   <distributionManagement>

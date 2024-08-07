@@ -31,6 +31,7 @@ public class servlet extends HttpServlet {
     Map<String, Integer> totalCount = new HashMap<>();
     Map<String, Double> ClassCountOne = new HashMap<>();
     MongoClient mongoClient;
+    String redirectUrl;
 
     @Override
     public void init() {
@@ -198,46 +199,112 @@ public class servlet extends HttpServlet {
 
             // Reatrieve from input
             String[] newExample = {
-                    request.getParameter("age"),
-                    request.getParameter("MF"),
-                    request.getParameter("cp"),
-                    request.getParameter("trestbps"),
-                    request.getParameter("cholesterol"),
-                    request.getParameter("fbs"),
-                    request.getParameter("restecg"),
-                    request.getParameter("thalach"),
-                    request.getParameter("exang"),
-                    request.getParameter("oldpeak"),
-                    request.getParameter("slope"),
-                    request.getParameter("ca"),
-                    request.getParameter("thal"),
-                    request.getParameter("hyper"), // stroke
-                    request.getParameter("heart"),
-                    request.getParameter("married"),
-                    request.getParameter("work_type"),
-                    request.getParameter("residence"),
-                    request.getParameter("glucose"),
-                    request.getParameter("bmi"),
-                    request.getParameter("smoking"),
-                    request.getParameter("smoking_history"), // diabetes
-                    request.getParameter("HbA1c_level")
+                    request.getParameter("age"), // 0
+                    request.getParameter("MF"), // 1
+                    request.getParameter("cp"), // 2
+                    request.getParameter("trestbps"), // 3
+                    request.getParameter("cholesterol"), // 4
+                    request.getParameter("fbs"), // 5
+                    request.getParameter("restecg"), // 6
+                    request.getParameter("thalach"), // 7
+                    request.getParameter("exang"), // 8
+                    request.getParameter("oldpeak"), // 9
+                    request.getParameter("slope"), // 10
+                    request.getParameter("ca"), // 11
+                    request.getParameter("thal"), // 12
+                    request.getParameter("hyper"), // stroke //13
+                    request.getParameter("heart"), // 14
+                    request.getParameter("married"), // 15
+                    request.getParameter("work_type"), // 16
+                    request.getParameter("residence"), // 17
+                    request.getParameter("glucose"), // 18
+                    request.getParameter("bmi"), // 19
+                    request.getParameter("smoking"), // 20
+                    request.getParameter("smoking_history"), // diabetes //21
+                    request.getParameter("HbA1c_level")// 22
             };
 
             Map<String, String> predictions = new HashMap<>();
             Map<String, Map<String, Double>> featuresPred = new HashMap<>();
+            Map<String, Map<String, Integer>> featuresInput = new HashMap<>();
             Map<String, Map<Integer, Integer>> featureCounts = new HashMap<>();
 
             String[] input = null;
+            int inputLen = 0;
+            int[] inputVal = null;
+
+            // List<String> HypertensionIP = new ArrayList<>();
 
             for (String d : diseases) {
                 if ("Hypertension".equals(d)) {
-                    input = Arrays.copyOfRange(newExample, 0, 13);
+                    // input = Arrays.copyOfRange(newExample, 0, 13);
+
+                    input = new String[] { newExample[0].split(",")[0], newExample[1].split(",")[0],
+                            newExample[2].split(",")[0], newExample[3].split(",")[0],
+                            newExample[4].split(",")[0],
+                            newExample[5].split(",")[0], newExample[6].split(",")[0], newExample[7].split(",")[0],
+                            newExample[8].split(",")[0], newExample[9].split(",")[0], newExample[10].split(",")[0],
+                            newExample[11].split(",")[0], newExample[12].split(",")[0] };
+                    inputLen = 13;
+
                 } else if ("Stroke".equals(d)) {
-                    input = new String[] { newExample[1], newExample[0], newExample[13], newExample[14], newExample[15],
-                            newExample[16], newExample[17], newExample[18], newExample[19], newExample[20] };
+                    input = new String[] { newExample[1].split(",")[0], newExample[0].split(",")[0],
+                            newExample[13].split(",")[0],
+                            newExample[14].split(",")[0], newExample[15].split(",")[0],
+                            newExample[16].split(",")[0], newExample[17].split(",")[0], newExample[18].split(",")[0],
+                            newExample[19].split(",")[0],
+                            newExample[20].split(",")[0] };
+                    inputVal = new int[] { 1, 0, 13, 14, 16, 15, 19, 17, 18, 20 };
+
                 } else if ("Diabetes".equals(d)) {
-                    input = new String[] { newExample[1], newExample[0], newExample[13], newExample[14], newExample[21],
-                            newExample[19], newExample[22], newExample[18] };
+                    input = new String[] { newExample[1].split(",")[0], newExample[0].split(",")[0],
+                            newExample[13].split(",")[0],
+                            newExample[14].split(",")[0], newExample[21].split(",")[0],
+                            newExample[19].split(",")[0], newExample[22].split(",")[0], newExample[18].split(",")[0] };
+                    inputVal = new int[] { 1, 0, 13, 14, 21, 19, 22, 18 };
+                }
+
+                if ("Hypertension".equals(d)) {
+                    for (int i = 0; i < inputLen; i++) {
+                        if (!input[i].split(",")[0].isEmpty()) {
+                            int x = i + 1;
+
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[i].split(",")[1], x);
+                        }
+                    }
+                } else if ("Stroke".equals(d)) {
+                    int x = 0;
+                    for (int i = 0; i < inputVal.length; i++) {
+                        x++;
+
+                        String value = newExample[inputVal[i]].split(",")[0];
+                        if (!value.isEmpty()) {
+
+                            System.out.println();
+                            System.out.println(
+                                    newExample[inputVal[i]].split(",")[0] + newExample[inputVal[i]].split(",")[0]);
+                            System.out.println(inputVal[i] + " inputVal[i]");
+                            System.out.println(x + " x");
+                            System.out.println();
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[inputVal[i]].split(",")[1], x);
+                        }
+                    }
+                } else if ("Diabetes".equals(d)) {
+                    int x = 0;
+                    for (int i = 0; i < inputVal.length; i++) {
+                        x++;
+                        String value = newExample[inputVal[i]].split(",")[0];
+                        if (!value.isEmpty()) {
+                            System.out.println(d);
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[inputVal[i]].split(",")[1], x);
+                        }
+                    }
                 }
 
                 // Predict Class
@@ -250,35 +317,47 @@ public class servlet extends HttpServlet {
                 predictions.put(d, predictedClass);
                 featuresPred.put(d, featurePredCopy);
 
+                featureCounts = nb.featureCounts();
+
+                // System.out.println(featureCounts);
+                System.out.println(featuresInput);
+
+                String predictedClassesJson = new Gson().toJson(predictions);
+                String featuresPredJson = new Gson().toJson(featuresPred);
+                String totalCountJson = new Gson().toJson(totalCount);
+                String classCountOne = new Gson().toJson(ClassCountOne);
+                String FeatureCounts = new Gson().toJson(featureCounts);
+                String FeaturesInputs = new Gson().toJson(featuresInput);
+
+                redirectUrl = "result.html?predictedClasses=" + URLEncoder.encode(predictedClassesJson, "UTF-8")
+                        +
+                        "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8") + "&totalCount="
+                        + URLEncoder.encode(totalCountJson, "UTF-8") + "&ClassCountOne="
+                        + URLEncoder.encode(classCountOne, "UTF-8") + "&featureCounts="
+                        + URLEncoder.encode(FeatureCounts, "UTF-8") + "&featureInput="
+                        + URLEncoder.encode(FeaturesInputs, "UTF-8");
+
+                // response.sendRedirect(redirectUrl);
+
+                // mongoClient.close();
+
             }
 
-            // nb.destroy();
-            mongoClient.close();
-
-            featureCounts = nb.featureCounts();
-
-            System.out.println(featureCounts);
-
-            String predictedClassesJson = new Gson().toJson(predictions);
-            String featuresPredJson = new Gson().toJson(featuresPred);
-            String totalCountJson = new Gson().toJson(totalCount);
-            String classCountOne = new Gson().toJson(ClassCountOne);
-            String FeatureCounts = new Gson().toJson(featureCounts);
-
-            String redirectUrl = "result.html?predictedClasses=" + URLEncoder.encode(predictedClassesJson, "UTF-8") +
-                    "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8") + "&totalCount="
-                    + URLEncoder.encode(totalCountJson, "UTF-8") + "&ClassCountOne="
-                    + URLEncoder.encode(classCountOne, "UTF-8") + "&featureCounts="
-                    + URLEncoder.encode(FeatureCounts, "UTF-8");
-            ;
             response.sendRedirect(redirectUrl);
 
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             e.printStackTrace();
         } finally {
             out.close();
         }
 
+    }
+
+    @Override
+    public void destroy() {
+        mongoClient.close();
     }
 
     @Override

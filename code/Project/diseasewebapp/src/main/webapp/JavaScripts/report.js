@@ -19,7 +19,8 @@ window.onload = function () {
     const totalCount = JSON.parse(decodeURIComponent(url.get("totalExamples")));
     const classCountOne = JSON.parse(decodeURIComponent(url.get("classCountOne")));
 
-    const featureCounts = JSON.parse(decodeURIComponent(url.get("featureCounts")))
+    const featureCounts = JSON.parse(decodeURIComponent(url.get("featureCounts")));
+    const featureInput = JSON.parse(decodeURIComponent(url.get("featureInput")));
 
 
 
@@ -36,45 +37,14 @@ window.onload = function () {
 
     let Pdisease = classCountOne / totalCount;
 
-    const hypertension_features = {
-        Age: 1,
-        Sex: 2,
-        Chest_Pain: 3,
-        Trest_BPS: 4,
-        Cholesterol: 5,
-        Fasting_Blood_Sugar: 6,
-        Rest_ECG: 7,
-        Thalach: 8,
-        Exercise_induced_Angina: 9,
-        Oldpeak: 10,
-        ST_Segment_Slope: 11,
-        Cardiac_Arrhythmia: 12,
-        Thalassemia: 13,
-    };
+    const hypertension_features = featureInput.Hypertension;
 
-    stroke_features = {
-        Sex: 1,
-        Age: 2,
-        Hypertension: 3,
-        Heart_Disease: 4,
-        Marital_Status: 5,
-        Work_Stress_Level: 6,
-        Residence_Status: 7,
-        Average_Sugar: 8,
-        Body_Mass_Index: 9,
-        Smoking: 10,
-    };
 
-    diabetes_features = {
-        Sex: 1,
-        Age: 2,
-        Hypertension: 3,
-        Heart_Disease: 4,
-        Smoking_History: 5,
-        Body_Mass_Index: 6,
-        Hemoglobin_A1C: 7,
-        Average_Sugar: 8,
-    };
+    stroke_features = featureInput.Stroke;
+
+
+    diabetes_features = featureInput.Diabetes;
+
 
     const featureData = featuresPred;
     const featuresKeys = Object.keys(featuresPred);
@@ -123,7 +93,7 @@ window.onload = function () {
         }
     }
 
-    console.log(hypertensionPrediction);
+    console.log(featureInput);
 
     // console.log("mapping key :" + Object.keys(mappingKey));
 
@@ -137,9 +107,9 @@ window.onload = function () {
         P(Disease|Symptoms) = P(Disease) * P(Symptoms|Disease) /
         P(Symptoms)<br/><br/>
 
-        <span>P(Disease|Symptoms)</span> : <span>${prediction}%</span><br/><br/>
+        <span>P(${disease}|Symptoms)</span> : <span>${prediction}%</span><br/><br/>
 
-        <span>P(Disease)</span>: ${classCountOne}/${totalCount} = <span>${Math.round(Pdisease * 100)}%</span><br/><br/>
+        <span>P(${disease})</span>: ${classCountOne}/${totalCount} = <span>${Math.round(Pdisease * 100)}%</span><br/><br/>
         </p>`;
 
     collapsibleText.innerHTML += `
@@ -153,7 +123,7 @@ window.onload = function () {
     for (let symptom in mappingKey) {
         let probability = mappingKey[symptom];
         probabilities.push(probability);
-        calculations.innerHTML += `<p>P(Symtom: <span>${symptom}</span> | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = <span>${Math.round(
+        calculations.innerHTML += `<p>P(<span>${symptom}</span> | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = <span>${Math.round(
             probability
         )}%</span></p>`;
     }

@@ -165,7 +165,7 @@ public class Main {
 
         // Prediction
         String[] examples = {
-                "26", "", "0",
+                "1, Below 19 years", "", "0",
                 "110", "206", "0",
                 "0", "", "1",
                 "1.2", "", "1",
@@ -187,7 +187,7 @@ public class Main {
 
                 String[] input = new String[13];
 
-                input[0] = (examples[0]); // age
+                input[0] = (examples[0].split(",")[0]); // age
                 input[1] = (examples[1]); // sex
                 input[2] = (examples[2]); // cp
                 input[3] = (examples[3]); // trestbps
@@ -203,7 +203,6 @@ public class Main {
 
                 String predictedClass = nb.predict(input, name);
                 System.out.println("Possiblity of having hypertension " + predictedClass + "%");
-                System.out.println();
 
                 // Map<String, Double> featurePred = nb.featuresPredictions();
                 // Map<Integer, Map<Integer, Double>> fetureTotals = nb.totalFeatureValues();

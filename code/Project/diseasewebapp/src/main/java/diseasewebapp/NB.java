@@ -57,6 +57,8 @@ public class NB {
         Map<String, Integer> labelCounts = classCounts.get(name);
         labelCounts.put(label, labelCounts.getOrDefault(label, 0) + 1);
 
+        // System.out.println(labelCounts.keySet());
+
         // db.name.updateOne({name:"training"},{$inc:{"label.featureCount.key.feature":1}})
         MongoCollection<Document> collection = database.getCollection(name);
 
@@ -119,46 +121,15 @@ public class NB {
         this.featureTotals.clear();
         double featureProductProb = 1;
 
-        // // categorising test data`
-        // if (name == "Stroke") {
-        // for (int i = 0; i < features.length; i++) {
-        // if (features[i] == "") {
-        // continue;
-        // } else if (i == 1 || i == 7 || i == 8) {
-        // features[i] = strokeCategory(features[i], i);
-        // }
-
-        // }
-        // } else if (name == "Hypertension") {
-        // for (int i = 0; i < features.length; i++) {
-
-        // if (features[i] == "") {
-        // continue;
-        // } else if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
-        // features[i] = category(features[i], i);
-
-        // }
-        // }
-        // } else if (name == "Diabetes") {
-        // for (int i = 0; i < features.length; i++) {
-
-        // if (features[i] == "") {
-        // continue;
-        // } else if (i == 1 || i == 5 || i == 6 || i == 7) {
-        // features[i] = diabetesCategory(features[i], i);
-
-        // }
-        // }
-        // }
-
         featureKey.clear();
         featureKey(features.length);
 
         Map<String, Integer> labels = classCounts.get(name);
 
+        // System.out.println(labels.keySet() + " Labels.keyset()");
+
         // Iterate through each calss label in classCounts
         for (String label : labels.keySet()) {
-
             // db.Hypertension.findOne({name:"training"}, {'1.classCount':true, _id:false});
             MongoCollection<Document> collection = database.getCollection(name);
 
@@ -218,6 +189,11 @@ public class NB {
                 Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
                 Integer Count = keyDoc.getInteger(feature);
 
+                // System.out.println(resultFeat);
+                // System.out.println(labelDoc);
+                // System.out.println(featureCountDoc);
+                // System.out.println(keyDoc);
+                // System.out.println(Count);
                 featureCounts.putIfAbsent(name, new HashMap<>());
                 Map<Integer, Integer> nestedMap = featureCounts.get(name);
                 nestedMap.put(key, Count);

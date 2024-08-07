@@ -48,51 +48,63 @@
         const predictedClasses = JSON.parse(
           decodeURIComponent(url.get("predictedClasses"))
         );
+        console.log(predictedClasses);
+
         const featuresPred = JSON.parse(
           decodeURIComponent(url.get("featuresPred"))
         );
+        console.log(featuresPred);
 
-        const hypertension_features = {
-          Age: 1,
-          Sex: 2,
-          Chest_Pain: 3,
-          Trest_BPS: 4,
-          Cholesterol: 5,
-          Fasting_Blood_Sugar: 6,
-          Rest_ECG: 7,
-          Thalach: 8,
-          Exercise_induced_Angina: 9,
-          Oldpeak: 10,
-          ST_Segment_Slope: 11,
-          Cardiac_Arrhythmia: 12,
-          Thalassemia: 13,
-        };
+        const featuresInput = JSON.parse(
+          decodeURIComponent(url.get("featureInput"))
+        );
+        console.log(featuresInput);
 
-        stroke_features = {
-          Sex: 1,
-          Age: 2,
-          Hypertension: 3,
-          Heart_Disease: 4,
-          Marital_Status: 5,
-          Work_Stress_Level: 6,
-          Residence_Status: 7,
-          Average_Sugar: 8,
-          Body_Mass_Index: 9,
-          Smoking: 10,
-        };
+        const hypertension_features = featuresInput.Hypertension;
+        //  {
+        //   Age: 1,
+        //   Sex: 2,
+        //   Chest_Pain: 3,
+        //   Trest_BPS: 4,
+        //   Cholesterol: 5,
+        //   Fasting_Blood_Sugar: 6,
+        //   Rest_ECG: 7,
+        //   Thalach: 8,
+        //   Exercise_induced_Angina: 9,
+        //   Oldpeak: 10,
+        //   ST_Segment_Slope: 11,
+        //   Cardiac_Arrhythmia: 12,
+        //   Thalassemia: 13,
+        // };
 
-        diabetes_features = {
-          Sex: 1,
-          Age: 2,
-          Hypertension: 3,
-          Heart_Disease: 4,
-          Smoking_History: 5,
-          Body_Mass_Index: 6,
-          Hemoglobin_A1C: 7,
-          Average_Sugar: 8,
-        };
+        stroke_features = featuresInput.Stroke;
+        // {
+        //   Sex: 1,
+        //   Age: 2,
+        //   Hypertension: 3,
+        //   Heart_Disease: 4,
+        //   Marital_Status: 5,
+        //   Work_Stress_Level: 6,
+        //   Residence_Status: 7,
+        //   Average_Sugar: 8,
+        //   Body_Mass_Index: 9,
+        //   Smoking: 10,
+        // };
+
+        diabetes_features = featuresInput.Diabetes;
+        // {
+        //   Sex: 1,
+        //   Age: 2,
+        //   Hypertension: 3,
+        //   Heart_Disease: 4,
+        //   Smoking_History: 5,
+        //   Body_Mass_Index: 6,
+        //   Hemoglobin_A1C: 7,
+        //   Average_Sugar: 8,
+        // };
 
         const diseases = Object.keys(predictedClasses);
+
         diseases.forEach((disease, index) => {
           const prediction = predictedClasses[disease];
           const featureData = featuresPred[disease];
@@ -265,7 +277,11 @@
           decodeURIComponent(url.get("featureCounts"))
         );
 
-        console.log(FeatureCounts);
+        const FeatureInput = JSON.parse(
+          decodeURIComponent(url.get("featureInput"))
+        );
+
+        // console.log(FeatureCounts);
 
         const diseasePrediction = JSON.stringify({
           [disease]: predictedClasses[disease],
@@ -273,6 +289,10 @@
 
         const diseaseFeatureCounts = JSON.stringify({
           [disease]: FeatureCounts[disease],
+        });
+
+        const diseaseFeatureInput = JSON.stringify({
+          [disease]: FeatureInput[disease],
         });
 
         const diseaseFeatures = JSON.stringify(featuresPred[disease]);
@@ -285,7 +305,8 @@
         &features=${encodeURIComponent(diseaseFeatures)}
         &totalExamples=${encodeURIComponent(diseaseTotalCount)}
         &classCountOne=${encodeURIComponent(diseaseClassCount)}
-        &featureCounts=${encodeURIComponent(diseaseFeatureCounts)}`;
+        &featureCounts=${encodeURIComponent(diseaseFeatureCounts)}
+        &featureInput=${encodeURIComponent(diseaseFeatureInput)}`;
       }
 
       function generateColor(count) {

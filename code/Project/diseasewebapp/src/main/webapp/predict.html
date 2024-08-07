@@ -17,10 +17,10 @@
               <!-- <input type="number" id="age" name="age" placeholder="ex.20" /> -->
               <select class="select" name="age">
                 <option value="">Select an Option</option>
-                <option value="1">Below 19 years</option>
-                <option value="2">Between 19 to 35 years</option>
-                <option value="3">Between 36 to 65 years</option>
-                <option value="4">Above 65 years</option>
+                <option value="1,Below 19 years">Below 19 years</option>
+                <option value="2,19 to 35 years">Between 19 to 35 years</option>
+                <option value="3,36 to 65 years">Between 36 to 65 years</option>
+                <option value="4,Above 65 years">Above 65 years</option>
               </select>
             </span>
           </div>
@@ -30,8 +30,8 @@
               <!-- <input type="number" name="sex" placeholder="ex. 1 for male" min="0" max="1"> -->
               <select class="select" name="MF">
                 <option value="">Select an Option</option>
-                <option value="1">Male</option>
-                <option value="0">Female</option>
+                <option value="1,Male">Male</option>
+                <option value="0,Female">Female</option>
               </select>
             </span>
           </div>
@@ -40,8 +40,8 @@
               <label for="marriage">Marital Status</label>
               <select class="select" name="married">
                 <option value="">Select an Option</option>
-                <option value="0">Unmarried</option>
-                <option value="1">Married</option>
+                <option value="0,Unmarried">Unmarried</option>
+                <option value="1,Married">Married</option>
               </select>
             </span>
           </div>
@@ -50,11 +50,13 @@
               <label for="work">Work Stress Level</label>
               <select class="select" name="work_type">
                 <option value="">Select an Option</option>
-                <option value="0">Very Low Stress</option>
-                <option value="1">Low Stress</option>
-                <option value="2">Modrated Stress</option>
-                <option value="3">High Stress</option>
-                <option value="4">Very High Stress</option>
+                <option value="0,Very Low-Work Stress">Very Low Stress</option>
+                <option value="1,Low -Work Stress">Low Stress</option>
+                <option value="2,Modrated -Work Stress">Modrated Stress</option>
+                <option value="3,High -Work Stress">High Stress</option>
+                <option value="4,Very High-Work Stress">
+                  Very High Stress
+                </option>
               </select>
             </span>
           </div>
@@ -63,8 +65,8 @@
               <label for="residence">Residence Status</label>
               <select class="select" name="residence">
                 <option value="">Select an Option</option>
-                <option value="0">Urban</option>
-                <option value="1">Rural</option>
+                <option value="0,Urban">Urban</option>
+                <option value="1,Rural">Rural</option>
               </select>
             </span>
           </div>
@@ -73,8 +75,8 @@
               <label for="smoking">Smoking</label>
               <select class="select" name="smoking">
                 <option value="">Select an Option</option>
-                <option value="0">Do not Smoke</option>
-                <option value="1">Do Smoke</option>
+                <option value="0,Don't Smoke">Do not Smoke</option>
+                <option value="1,Do Smoke">Do Smoke</option>
               </select>
             </span>
           </div>
@@ -83,11 +85,19 @@
               <label for="smoking_history">Smoking_history</label>
               <select class="select" name="smoking_history">
                 <option value="">Select an Option</option>
-                <option value="0">Non Smoker</option>
-                <option value="1">Occasional Smoker</option>
-                <option value="2">Light Smoker</option>
-                <option value="3">Regular Smoker</option>
-                <option value="4">Heavy Smoker</option>
+                <option value="0,Non Smoker-smokingHistory">Non Smoker</option>
+                <option value="1,Occasional Smoker-smokingHistory">
+                  Occasional Smoker
+                </option>
+                <option value="2,Light Smoker-smokingHistory">
+                  Light Smoker
+                </option>
+                <option value="3,Regular Smoker-smokingHistory">
+                  Regular Smoker
+                </option>
+                <option value="4,Heavy Smoker-smokingHistory">
+                  Heavy Smoker
+                </option>
               </select>
             </span>
           </div>
@@ -97,10 +107,10 @@
               <!-- <input type="number" name="cp" placeholder="Chest"> -->
               <select class="select" name="cp">
                 <option value="">Select an Option</option>
-                <option value="0">No Pain</option>
-                <option value="1">Mild Pain</option>
-                <option value="2">Moderate Pain</option>
-                <option value="3">Severe Pain</option>
+                <option value="0,No-ChetPain">No Pain</option>
+                <option value="1,Mild-ChetPain">Mild Pain</option>
+                <option value="2,Moderate-ChestPain">Moderate Pain</option>
+                <option value="3,Severe-ChestPain">Severe Pain</option>
               </select>
             </span>
           </div>
@@ -109,8 +119,8 @@
               <label for="hypertension">Hypertension</label>
               <select class="select" name="hyper">
                 <option value="">Select an Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+                <option value="0,No-Hypertension">No</option>
+                <option value="1,Yes-Hypertension">Yes</option>
               </select>
             </span>
           </div>
@@ -119,8 +129,8 @@
               <label for="heart">Heart Disease</label>
               <select class="select" name="heart">
                 <option value="">Select an Option</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
+                <option value="0,No-HeartDisease">No</option>
+                <option value="1,Yes-HeartDisease">Yes</option>
               </select>
             </span>
           </div>
@@ -130,10 +140,14 @@
               <!-- <input type="number" name="trestbps" placeholder="trestbps" /> -->
               <select class="select" name="trestbps">
                 <option value="">Select an Option</option>
-                <option value="1">Below 120</option>
-                <option value="2">Between 121 to 129</option>
-                <option value="3">Between 130 to 139</option>
-                <option value="4">Above 139</option>
+                <option value="1,Below 120-trestbps">Below 120</option>
+                <option value="2,121 to 129-trestbps">
+                  Between 121 to 129
+                </option>
+                <option value="3,130 to 139-trestbps">
+                  Between 130 to 139
+                </option>
+                <option value="4,Above 139-trestbps">Above 139</option>
               </select>
             </span>
           </div>
@@ -143,9 +157,11 @@
               <!-- <input type="number" name="cholesterol" placeholder="Chol" /> -->
               <select class="select" name="cholesterol">
                 <option value="">Select an Option</option>
-                <option value="1">Below 200</option>
-                <option value="2">Between 201 to 239</option>
-                <option value="3">Above 239</option>
+                <option value="1,Below 200-cholesterol">Below 200</option>
+                <option value="2,201 to 239-cholesterol">
+                  Between 201 to 239
+                </option>
+                <option value="3,Above 239-cholesterol">Above 239</option>
               </select>
             </span>
           </div>
@@ -155,8 +171,12 @@
               <!-- <input type="number" name="fbs" placeholder="fbs"> -->
               <select class="select" name="fbs">
                 <option value="">Select an Option</option>
-                <option value="0">Less than 100 mg/dL</option>
-                <option value="1">100 mg/dL (5.6 mmol/L) or higher</option>
+                <option value="0, Less 100 mg/dL-FBS">
+                  Less than 100 mg/dL
+                </option>
+                <option value="1,100 mg/dL-higher-FBS">
+                  100 mg/dL (5.6 mmol/L) or higher
+                </option>
               </select>
             </span>
           </div>
@@ -166,9 +186,11 @@
               <!-- <input type="number" name="restecg" placeholder="restecg"> -->
               <select class="select" name="restecg">
                 <option value="">Select an Option</option>
-                <option value="0">Normal</option>
-                <option value="1">Having ST-T Wave Abnormality</option>
-                <option value="2">
+                <option value="0,Normal-RestECG">Normal</option>
+                <option value="1,Abnormality-RestECG">
+                  Having ST-T Wave Abnormality
+                </option>
+                <option value="2,Definite Hypertrophy-RestECG">
                   Showing Probable or Definite Left Ventricular Hypertrophy
                 </option>
               </select>
@@ -180,9 +202,9 @@
               <!-- <input type="number" name="thalach" placeholder="thalach" /> -->
               <select class="select" name="thalach">
                 <option value="">Select an Option</option>
-                <option value="1">Below 100</option>
-                <option value="2">Between 101 to 150</option>
-                <option value="3">Above 150</option>
+                <option value="1,Below 100-Thalach">Below 100</option>
+                <option value="2,101 to 150-Thalach">Between 101 to 150</option>
+                <option value="3,Above 150-Thalach">Above 150</option>
               </select>
             </span>
           </div>
@@ -192,8 +214,12 @@
               <!-- <input type="number" name="exang" placeholder="exang"> -->
               <select class="select" name="exang">
                 <option value="">Select an Option</option>
-                <option value="0">Have NOT experienced</option>
-                <option value="1">Have experienced</option>
+                <option value="0,Not experienced-Exang">
+                  Have NOT experienced
+                </option>
+                <option value="1,Have experienced-Exang">
+                  Have experienced
+                </option>
               </select>
             </span>
           </div>
@@ -203,9 +229,9 @@
               <!-- <input type="double" name="oldpeak" placeholder="oldpeak" /> -->
               <select class="select" name="oldpeak">
                 <option value="">Select an Option</option>
-                <option value="1">Below 0.6</option>
-                <option value="2">Between 0.6 to 1.5</option>
-                <option value="3">Above 1.5</option>
+                <option value="1,Below 0.6-Oldpeak">Below 0.6</option>
+                <option value="2,0.6 to 1.5-Oldpeak">Between 0.6 to 1.5</option>
+                <option value="3,Above 1.5-Oldpeak">Above 1.5</option>
               </select>
             </span>
           </div>
@@ -215,9 +241,13 @@
               <!-- <input type="number" name="slope" placeholder="slope"> -->
               <select class="select" name="slope">
                 <option value="">Select an Option</option>
-                <option value="0">No Abnormality</option>
-                <option value="1">Moderate Abnormality</option>
-                <option value="2">Severe Abnormality</option>
+                <option value="0,No Abnormality-Slope">No Abnormality</option>
+                <option value="1,Moderate Abnormality-Slope">
+                  Moderate Abnormality
+                </option>
+                <option value="2,Severe Abnormality-Slope">
+                  Severe Abnormality
+                </option>
               </select>
             </span>
           </div>
@@ -226,11 +256,19 @@
               <label for="ca">Cardiac Arrhythmia</label>
               <select class="select" name="ca">
                 <option value="">Select an Option</option>
-                <option value="0">No Arrhythmia</option>
-                <option value="1">Occasional Premature Beats</option>
-                <option value="2">Mild Arrhythmia</option>
-                <option value="3">Moderate Arrhythmia</option>
-                <option value="4">Severe Arrhythmia</option>
+                <option value="0,No-CardiacArrhythmia">No Arrhythmia</option>
+                <option value="1,Occasional premature Beats-CardiacArrhythmia">
+                  Occasional Premature Beats
+                </option>
+                <option value="2,Mild-CardiacArrhythmia">
+                  Mild Arrhythmia
+                </option>
+                <option value="3,Moderate-CardiacArrhythmia">
+                  Moderate Arrhythmia
+                </option>
+                <option value="4,Severe-CardiacArrhythmia">
+                  Severe Arrhythmia
+                </option>
               </select>
             </span>
           </div>
@@ -239,10 +277,10 @@
               <label for="thal">Thalassemia</label>
               <select class="select" name="thal">
                 <option value="">Select an Option</option>
-                <option value="0">No Thalassemia</option>
-                <option value="1">Carrier</option>
-                <option value="2">Thalassemia Minor</option>
-                <option value="3">Thalassemia Major</option>
+                <option value="0,No-Thalassemia">No Thalassemia</option>
+                <option value="1,Carrier-Thalassemia">Carrier</option>
+                <option value="2,Minor-Thalassemia">Thalassemia Minor</option>
+                <option value="3,Major-Thalassemia">Thalassemia Major</option>
               </select>
             </span>
           </div>
@@ -251,21 +289,33 @@
               <label for="glucose">Average Sugar</label>
               <select class="select" name="glucose">
                 <option value="">Select an Option</option>
-                <option value="0">Below 70 mg/dL</option>
-                <option value="1">Between 70 mg/dL and 140 mg/dL</option>
-                <option value="2">Above 140 mg/dL</option>
+                <option value="1,less 70 mg/dL-Average Sugar">
+                  Below 70 mg/dL
+                </option>
+                <option value="2,70-140 mg/dL-Average Sugar">
+                  Between 70 mg/dL and 140 mg/dL
+                </option>
+                <option value="3,140-more mg/dL-Average Sugar">
+                  Above 140 mg/dL
+                </option>
               </select>
             </span>
           </div>
           <div class="input-box">
             <span class="details">
-              <label for="glucose">Body Mass Index (BMI)</label>
+              <label for="glucose">Body Mass Index -BMI</label>
               <select class="select" name="bmi">
                 <option value="">Select an Option</option>
-                <option value="0">Under Weight (less than 18.5)</option>
-                <option value="1">Normal Weight (18.5 to 24.9)</option>
-                <option value="2">Overweight (25 to 29.9)</option>
-                <option value="3">Obese (30 and above)</option>
+                <option value="1, less 18.5-BMI">
+                  Under Weight (less than 18.5)
+                </option>
+                <option value="2,18.5 to 24.9-BMI">
+                  Normal Weight (18.5 to 24.9)
+                </option>
+                <option value="3,25 to 29.9-BMI">
+                  Overweight (25 to 29.9)
+                </option>
+                <option value="4,30.0 or more-BMI">Obese (30 and above)</option>
               </select>
             </span>
           </div>
@@ -275,9 +325,11 @@
               <label for="HbA1c_level">Hemoglobin A1C</label>
               <select class="select" name="HbA1c_level">
                 <option value="">Select an Option</option>
-                <option value="0">Below 5.7%</option>
-                <option value="1">5.7% to 6.4%</option>
-                <option value="2">6.5% or higher</option>
+                <option value="1,less 5.7-HemoglobinA1C">Below 5.7%</option>
+                <option value="2,5.7 to 6.4-HemoglobinA1C">5.7% to 6.4%</option>
+                <option value="3,6.4 or more-HemoglobinA1C">
+                  6.5% or higher
+                </option>
               </select>
             </span>
           </div>
