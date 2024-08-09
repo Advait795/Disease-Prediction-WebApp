@@ -6,11 +6,11 @@ navToggle.addEventListener('click', () => {
 });
 
 const typedText = document.querySelector('.typed-text');
-const textArray = ['BTB', 'BTC', 'SAAS'];
+const textArray = ['Hypertension', 'Diabetes', 'Stroke'];
 let textIndex = 0;
 let charIndex = 0;
-let speed = 120;
-let backSpeed = 130;
+let speed = 100;
+let backSpeed = 110;
 let loop = true;
 
 function typeText() {

@@ -143,7 +143,7 @@
 
           const header = document.getElementById(`head-${disease}`);
 
-          header.innerHTML = `${disease} Report : (${prediction}%)`;
+          header.innerHTML = `<span>${disease}</span> Report : (${prediction}%)`;
 
           collapsibleText.innerHTML = `<h2>${
             disease.charAt(0).toUpperCase() + disease.slice(1)

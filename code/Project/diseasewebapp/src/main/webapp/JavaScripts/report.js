@@ -123,7 +123,7 @@ window.onload = function () {
     for (let symptom in mappingKey) {
         let probability = mappingKey[symptom];
         probabilities.push(probability);
-        calculations.innerHTML += `<p>P(<span>${symptom}</span> | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = <span>${Math.round(
+        calculations.innerHTML += `<p id="symp">P(<span>${symptom}</span> | Disease) : ${mappingFeaturesCounts[symptom]} / ${classCountOne}  = <span>${Math.round(
             probability
         )}%</span></p>`;
     }
