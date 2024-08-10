@@ -34,14 +34,14 @@ button::after {
   padding: 15px 20px;
   flex-direction: column;
   align-items: center;
-  width: fit-content;
+  width: 900px;
   height: fit-content;
   border-radius: 10px;
   border: 2px solid #fff;
-  background-color: #fff;
+  background-color: #000;
   margin-left: 8%;
   margin-top: 3%;
-  box-shadow: 8px 8px 15px #00df9a;
+  /* box-shadow: 5px 5px 15px #fff; */
 }
 .collapsible {
   /* min-width: fit-content;
@@ -58,17 +58,27 @@ button::after {
 .collapsible label {
   position: relative;
   font-weight: 600;
-  background: #000;
-  box-shadow: 0 5px 10px 0 #000;
+  background: #444;
+  /* box-shadow: 0 5px 10px 0 #000; */
   color: #fff;
   display: block;
   margin-bottom: 10px;
   cursor: pointer;
   padding: 15px;
+  border: 1px solid #fff;
   border-radius: 4px;
   z-index: 1;
 }
 
+.disclaimer {
+  color: #ff3333;
+  margin-top: 10px;
+}
+
+.disclaimer a {
+  font-weight: bold;
+  color: #1a90ff;
+}
 .collapsible label span {
   color: #00df9a;
 }
@@ -110,7 +120,7 @@ button::after {
   max-width: fit-content;
   padding-bottom: 10px;
   background: #ffffff;
-  box-shadow: 0 5px 10px 0 #000;
+  /* box-shadow: 0 5px 10px 0 #000; */
   opacity: 1;
   top: 0;
 }

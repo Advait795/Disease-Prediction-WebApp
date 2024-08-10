@@ -404,6 +404,14 @@ button::after {
   line-height: 1.5;
   margin-bottom: 20px;
 }
+#footer p a {
+  text-decoration: none;
+}
+
+#footer p span {
+  color: #00df9a;
+  font-weight: bold;
+}
 
 #footer .flex {
   justify-content: space-between;

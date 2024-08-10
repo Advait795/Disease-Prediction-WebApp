@@ -14,18 +14,20 @@ body {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-position: center;
+  /* background-position: center;
   background-size: cover;
-  /* background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg"); */
+  background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg"); */
   background-color: #444;
+  /* background: linear-gradient(to bottom, #fff, #444); */
 }
 .container {
   max-width: 700px;
   width: 100%;
+  height: auto;
   background: #000;
   padding: 25px 30px;
   border-radius: 5px;
-  box-shadow: 8px 8px 15px #00df9a;
+  /* box-shadow: 5px 5px 15px #fff; */
 }
 
 .container .title {
@@ -33,7 +35,7 @@ body {
   font-weight: bold;
   position: relative;
   margin-bottom: 12px;
-  color: fff;
+  color: #fff;
 }
 .container .title span {
   color: #00df9a;
@@ -62,48 +64,47 @@ form .user-details .input-box {
   width: calc(100% / 2 - 20px);
 }
 .input-box .details label {
-  margin-left: 8px;
+  margin-left: 5px;
 }
 .user-details .input-box .details {
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
 }
-.user-details .input-box input {
+.user-details .input-box select {
   height: 45px;
   width: 94%;
   outline: none;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   padding-left: 8px;
   font-size: 15px;
-  border-bottom-width: 4px;
+  border-bottom-width: 1px;
   transition: all 0.3s ease;
 }
 
-.select {
+.user-details .input-box .select {
   margin-left: 2px;
-  /* color: rgb(135, 135, 135); */
   color: #000;
   height: 45px;
   width: 94%;
   outline: none;
   border-radius: 5px;
-  border: 1px solid #00df9a;
+  /* border: 0.2px solid #00df9a; */
   padding-left: 8px;
   font-size: 15px;
   border-bottom-width: 4px;
   transition: all 0.3s ease;
 }
 
-.user-details .input-box input,
-select {
-  border-color: #00df9a;
+.select option {
+  color: #000;
 }
 
-.user-details .input-box input,
-select option {
-  color: #000;
+.select option:checked {
+  .select {
+    color: #00df9a;
+  }
 }
 
 form .button {
@@ -116,7 +117,7 @@ form .button input {
   width: 200px;
   outline: none;
   color: #fff;
-  border: 1px solid #00df9a;
+  border: 1px solid #fff;
   border-radius: 5px;
   font-size: 18px;
   margin-top: 10px;

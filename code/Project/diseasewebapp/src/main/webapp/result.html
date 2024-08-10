@@ -143,7 +143,7 @@
 
           const header = document.getElementById(`head-${disease}`);
 
-          header.innerHTML = `<span>${disease}</span> Report : (${prediction}%)`;
+          header.innerHTML = `<span>${disease}</span> Report : (${prediction}%)<br>`;
 
           collapsibleText.innerHTML = `<h2>${
             disease.charAt(0).toUpperCase() + disease.slice(1)
@@ -161,6 +161,12 @@
                           index + 1
                         }"></canvas>
                     </div>`;
+
+          const disclaimer = document.getElementById(`head-${disease}`);
+
+          if (prediction > 65) {
+            disclaimer.innerHTML += `<p class="disclaimer">"The predicted value is based on historical data and should not be considered a definitive diagnosis, please consult a qualified healthcare professional <a href="https://www.nhs.uk/">NHS</a>."</p>`;
+          }
 
           const labels = Object.keys(mappingKey).map(
             (key) => `${key}: ${Math.round(mappingKey[key])}%`
