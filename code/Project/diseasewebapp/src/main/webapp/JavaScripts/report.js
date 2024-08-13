@@ -246,7 +246,7 @@ document
             html2pdf()
                 .from(element)
                 .set({
-                    margin: 0.11,
+                    margin: 0.03,
                     filename: `${d}_report.pdf`,
                     image: { type: "png", quality: 0.98 },
                     html2canvas: { scale: 2 },

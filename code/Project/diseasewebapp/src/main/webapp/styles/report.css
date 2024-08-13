@@ -40,8 +40,8 @@ section {
 }
 
 .container {
-  padding: 7px;
-  border: 1px solid hsl(0, 0%, 1%);
+  padding: 3px;
+  /* border: 1px solid hsl(0, 0%, 1%); */
   max-width: 210mm;
   max-height: auto;
   display: flex;
@@ -51,8 +51,8 @@ section {
 }
 
 .box {
-  border: 1px solid #030303;
-  background-color: #ffffff;
+  /* border: 1px solid #030303; */
+  background-color: #fffffff7;
   height: auto;
 }
 
@@ -128,7 +128,7 @@ button {
   border: none;
   font-weight: bold;
   background-color: #00df9a;
-  color: #ffffff;
+  color: #ffffffdc;
   width: 200px;
   height: 35px;
   align-self: center;
@@ -136,7 +136,7 @@ button {
 }
 
 button:hover {
-  background-color: #fff;
+  background-color: #fffffff7;
   color: #00df9a;
   border: 1px solid #00df9a;
   transition: all 0.3s ease-in-out;
