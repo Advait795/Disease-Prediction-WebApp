@@ -265,6 +265,10 @@ button::after {
   text-decoration: underline;
 }
 
+.analytics-description span {
+  color: #00df9a;
+}
+
 .analytics-button {
   background-color: #000;
   color: #00df9a;

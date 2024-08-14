@@ -11,7 +11,7 @@ html {
 body {
   display: flex;
   height: 100vh;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding: 10px;
   /* background-position: center;
@@ -19,6 +19,25 @@ body {
   background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg"); */
   background-color: #444;
   /* background: linear-gradient(to bottom, #fff, #444); */
+}
+
+.describtion {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 550;
+  padding: 20px;
+  width: 35%;
+  align-self: self-start;
+  margin-top: 35px;
+  border-radius: 5px;
+  height: 578px;
+}
+
+.describtion h2 {
+  margin-bottom: 20px;
+}
+
+.describtion a {
+  color: #00df9a;
 }
 .container {
   max-width: 700px;
