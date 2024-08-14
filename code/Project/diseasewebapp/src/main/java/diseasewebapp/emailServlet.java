@@ -64,7 +64,9 @@ public class emailServlet extends HttpServlet {
                 + "<li><b>Risk Levels:</b> Indicating the probability of having certain conditions based on your data.</li>"
                 + "</ul>"
                 + "<h3><b>4. Benefits:</b></h3>"
-                + "<p>By using Naive Bayes, we can efficiently analyze complex health data and provide you with accurate risk assessments. This allows healthcare providers to identify high-risk individuals and implement targeted, personalized interventions for improved health outcomes.</p>"
+                + "<p>By using Naive Bayes, we can efficiently analyze complex health data and provide you with accurate risk assessments. This allows healthcare providers to identify high-risk individuals and implement targeted, personalized interventions for improved health outcomes.</br></p>"
+                +
+                "<p>The data used in our assessments comes from Kaggle datasets, which ensures that we leverage high-quality, diverse data to enhance the accuracy of our risk predictions.</p>"
                 + "<p>If you have any questions about our health risk assessment process or how Naive Bayes is used in our analysis, please feel free to reach out. We are here to support you and provide any additional information you may need.</p>"
                 + "<p>Thank you for choosing CareBioMed.</p>"
                 + "<p>Best regards,<br>CareBioMed Family</p>"
