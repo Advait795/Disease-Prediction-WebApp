@@ -42,3 +42,33 @@ function backspaceText() {
 }
 
 typeText();
+
+document.getElementById('newsletter-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    console.log(email);
+
+    fetch('./email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'email': email
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert("Thank you! We have sent information to your email.");
+            } else {
+                alert("Oops! Something went wrong. Please try again.");
+            }
+        })
+        .catch(error => {
+            alert("Oops! Something went wrong. Please try again.");
+        });
+});
+
+

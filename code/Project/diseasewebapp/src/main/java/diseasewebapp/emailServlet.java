@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class emailServlet extends HttpServlet {
     @Override
@@ -74,13 +75,15 @@ public class emailServlet extends HttpServlet {
 
         // create an instance of send email class
         sendEmail sender = new sendEmail();
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
         try {
-            sender.sendEmail(email, "Notoication from CareBioMed", body);
+            sender.sendEmail(email, "Notification from CareBioMed", body);
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("Email Sent Successfully");
+            out.println("{\"status\":\"success\",\"message\":\"Email Sent Successfully\"}");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error sending email: " + e.getMessage());
+            out.println("{\"status\":\"error\",\"message\":\"Error sending email: " + e.getMessage() + "\"}");
         }
 
     }
