@@ -8,28 +8,70 @@ html {
   font-family: "Poppins", sans-serif;
   color: #fff;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #444;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #444;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #444;
+}
+
 body {
   display: flex;
   height: 100vh;
   justify-content: space-around;
   align-items: center;
   padding: 10px;
-  /* background-position: center;
-  background-size: cover;
-  background-image: url("../images/top-view-arrangement-medical-desk-with-copy-space.jpg"); */
   background-color: #444;
-  /* background: linear-gradient(to bottom, #fff, #444); */
 }
 
 .describtion {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 550;
   padding: 20px;
   width: 35%;
   align-self: self-start;
   margin-top: 35px;
   border-radius: 5px;
-  height: 578px;
+  max-height: 578px;
+
+  ul {
+    margin-left: 5px;
+  }
+}
+
+.describtion .sub-describtion {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 450;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-self: self-start;
+  height: fit-content;
+  overflow-y: scroll;
+  max-height: 500px;
+
+  strong {
+    margin-bottom: 2px;
+  }
+}
+
+ul {
+  margin-left: 5px;
 }
 
 .describtion h2 {
