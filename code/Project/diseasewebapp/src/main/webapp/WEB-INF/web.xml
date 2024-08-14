@@ -2,7 +2,7 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-
+  <!-- First Servlet -->
   <servlet>
     <servlet-name>servlet</servlet-name>
     <servlet-class>diseasewebapp.servlet</servlet-class>
@@ -11,9 +11,17 @@
     <servlet-name>servlet</servlet-name>
     <url-pattern>/api</url-pattern>
   </servlet-mapping>
-
+  <!-- New email servlet -->
+  <servlet>
+    <servlet-name>emailServlet</servlet-name>
+    <servlet-class>diseasewebapp.emailServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>emailServlet</servlet-name>
+    <url-pattern>/email</url-pattern>
+  </servlet-mapping>
+  <!-- Welcome File -->
   <welcome-file-list>
     <welcome-file>welcome.html</welcome-file>
   </welcome-file-list>
-
 </web-app>

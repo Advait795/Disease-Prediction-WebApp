@@ -6,12 +6,13 @@ navToggle.addEventListener('click', () => {
 });
 
 const typedText = document.querySelector('.typed-text');
-const textArray = ['Hypertension', 'Diabetes', 'Stroke'];
+const textArray = ['Hypertension..', 'Diabetes..', 'Stroke..'];
 let textIndex = 0;
 let charIndex = 0;
 let speed = 100;
 let backSpeed = 110;
 let loop = true;
+let delay = 1500;
 
 function typeText() {
     if (charIndex < textArray[textIndex].length) {
@@ -19,7 +20,10 @@ function typeText() {
         charIndex++;
         setTimeout(typeText, speed);
     } else {
-        setTimeout(backspaceText, backSpeed);
+
+        setTimeout(() => {
+            setTimeout(backspaceText, backSpeed);
+        }, delay);
     }
 }
 
