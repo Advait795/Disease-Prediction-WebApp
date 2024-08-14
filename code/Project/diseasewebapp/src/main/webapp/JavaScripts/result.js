@@ -66,7 +66,13 @@ window.onload = function () {
 
     const diseases = Object.keys(predictedClasses);
 
-    diseases.forEach((disease, index) => {
+    const sortedDiseases = diseases.sort((a, b) => predictedClasses[b] - predictedClasses[a]);
+
+    console.log(sortedDiseases);
+
+    let c = 0;
+    sortedDiseases.forEach((disease, index) => {
+        console.log(disease);
         const prediction = predictedClasses[disease];
         const featureData = featuresPred[disease];
 
@@ -102,7 +108,11 @@ window.onload = function () {
             `result-${index + 1}`
         );
 
-        const header = document.getElementById(`head-${disease}`);
+        c++;
+
+        const header = document.getElementById(`head-${c}`);
+
+        console.log(`head-${c}`);
 
         header.innerHTML = `<span>${disease}</span> Report : (${prediction}%)<br>`;
 
@@ -120,7 +130,7 @@ window.onload = function () {
             }"></canvas>
                 </div>`;
 
-        const disclaimer = document.getElementById(`head-${disease}`);
+        const disclaimer = document.getElementById(`head-${c + 1}`);
 
         if (prediction > 65) {
             disclaimer.innerHTML += `<p class="disclaimer">"The predicted value is based on historical data and should not be considered a definitive diagnosis, please consult a qualified healthcare professional <a href="https://www.nhs.uk/">NHS</a>."</p>`;
