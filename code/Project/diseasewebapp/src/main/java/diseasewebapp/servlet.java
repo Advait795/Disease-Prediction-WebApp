@@ -1,3 +1,9 @@
+// author: Adwait Dalvi ad918
+// Servlet class is there to connect java backend to javascript frontend 
+//This class gose through the files and reads each line of file one after the other and the data gets stored in the database(only takes place once)
+//In the prediction part after the form submission the data travels as url servelet reads from url and sorts as per disease and sends for prediction in NB.java class
+//All the output comming form NB class again gets encoded in url and sends as a response to Predict class
+
 package diseasewebapp;
 
 import java.io.IOException;
@@ -26,7 +32,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class servlet extends HttpServlet {
     private NB nb;
-    // private Connection connect;
     private Map<Integer, Double> featurePred = new HashMap<>();
     Map<String, Integer> totalCount = new HashMap<>();
     Map<String, Double> ClassCountOne = new HashMap<>();
@@ -41,6 +46,7 @@ public class servlet extends HttpServlet {
         mongoClient = MongoClients.create(connectionString);
         MongoDatabase database = mongoClient.getDatabase("AllDisease");
 
+        // all the files
         String[] fileNames = {
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
                 "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
@@ -55,10 +61,12 @@ public class servlet extends HttpServlet {
         double classCountZero;
         double classCountOne;
 
-        nb = new NB();
+        nb = new NB();// creating NB object to access all the methods of NB.java
         int[] hyperclm = { 0, 3, 4, 7 };
         int[] stokeClm = { 1 };
         int[] diabeClm = { 1, 7 };
+
+        // for each file runs a loop
 
         for (String filename : fileNames) {
 
@@ -67,6 +75,8 @@ public class servlet extends HttpServlet {
             boolean isFirstRow = true;
 
             if (filename.contains("stroke")) {
+
+                // for each row in file data gets sorted as features and class
                 for (String[] row : data) {
                     if (isFirstRow) {
 
@@ -88,6 +98,8 @@ public class servlet extends HttpServlet {
                     nb.train(features, label, name);
 
                 }
+
+                // After training all the counts being stored in mongodb
 
                 totalExamples = nb.totalInstance(name);
                 totalCount.put(name, totalExamples);
@@ -190,6 +202,9 @@ public class servlet extends HttpServlet {
 
     }
 
+    // Here through servelet request and response method we recieve the form
+    // submission
+
     public void processrequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset-UTF-8");
         PrintWriter out = response.getWriter();
@@ -198,9 +213,7 @@ public class servlet extends HttpServlet {
 
             String[] diseases = { "Hypertension", "Stroke", "Diabetes" };
 
-            // System.out.println(request + " URL");
-
-            // Reatrieve from input
+            // Reatrieve values for url coming from form
             String[] newExample = {
                     request.getParameter("age"), // 0
                     request.getParameter("MF"), // 1
@@ -227,8 +240,7 @@ public class servlet extends HttpServlet {
                     request.getParameter("HbA1c_level")// 22
             };
 
-            // System.out.println(newExample[0] + " :age value");
-
+            // HASMAP are used to store values for which will be send for result.html
             Map<String, String> predictions = new HashMap<>();
             Map<String, Map<String, Double>> featuresPred = new HashMap<>();
             Map<String, Map<String, Integer>> featuresInput = new HashMap<>();
@@ -238,11 +250,12 @@ public class servlet extends HttpServlet {
             int inputLen = 0;
             int[] inputVal = null;
 
-            // List<String> HypertensionIP = new ArrayList<>();
+            // form submission sends feature category and value being selected in form
+            // together which then get split accordingly for prediction and other for charts
+            // label
 
             for (String d : diseases) {
                 if ("Hypertension".equals(d)) {
-                    // input = Arrays.copyOfRange(newExample, 0, 13);
 
                     input = new String[] { newExample[0].split(",")[0], newExample[1].split(",")[0],
                             newExample[2].split(",")[0], newExample[3].split(",")[0],
@@ -324,8 +337,7 @@ public class servlet extends HttpServlet {
 
                 featureCounts = nb.featureCounts();
 
-                // System.out.println(featureCounts);
-                // System.out.println(featuresInput);
+                // all the values to be send to result page are being encoded
 
                 String predictedClassesJson = new Gson().toJson(predictions);
                 String featuresPredJson = new Gson().toJson(featuresPred);
@@ -344,7 +356,6 @@ public class servlet extends HttpServlet {
 
             }
 
-            // response.sendRedirect(redirectUrl);
             response.setContentType("application/json");
             response.getWriter().write("{\"redirectUrl\":\"" + redirectUrl + "\"}");
 
