@@ -95,8 +95,6 @@ window.onload = function () {
 
     console.log(featureInput);
 
-    // console.log("mapping key :" + Object.keys(mappingKey));
-
     const calculations = document.getElementById("cal");
     const collapsibleText = document.getElementById(`chart`);
     const header = document.getElementById('head');
@@ -135,24 +133,6 @@ window.onload = function () {
     const backgroundColor = generateColor(labels.length);
     const borderColor = generateColor(labels.length);
 
-
-    // const labels = [
-    //     "Age: 60%",
-    //     "Sex: 55%",
-    //     "Chest_Pain: 70%",
-    //     "Trest_BPS: 65%",
-    //     "Cholesterol: 58%",
-    //     "Fasting_Blood_Sugar: 62%",
-    //     "Rest_ECG: 68%",
-    //     "Thalach: 72%",
-    //     "Exercise_induced_Angina: 60%",
-    //     "Oldpeak: 55%",
-    //     "ST_Segment_Slope: 65%",
-    //     "Cardiac_Arrhythmia: 70%",
-    //     "Thalassemia: 58%",
-    // ];
-
-    // const data = [60, 55, 70, 65, 58, 62, 68, 72, 60, 55, 65, 70, 58];
 
     const polarData = {
         labels: labels,

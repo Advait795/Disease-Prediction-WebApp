@@ -1,11 +1,11 @@
-const selectElements = document.querySelectorAll("select");
+const selectEle = document.querySelectorAll("select");
 
-selectElements.forEach((select) => {
+selectEle.forEach((select) => {
     select.addEventListener("change", () => {
-        const selectedOption = select.options[select.selectedIndex];
+        const selectedOp = select.options[select.selectedIndex];
 
-        if (selectedOption.value == "") {
-            selectedOption.style.color = "#000";
+        if (selectedOp.value == "") {
+            selectedOp.style.color = "#000";
             select.style.borderColor = "#000";
         } else {
             select.style.borderColor = "#00df9a";
@@ -13,45 +13,37 @@ selectElements.forEach((select) => {
     });
 });
 
-
-//loader code
-
-function loadHTML(url, targetElementId) {
+function loadhtml(url, targetEle) {
     fetch(url)
         .then(response => response.text())
         .then(html => {
-            document.getElementById(targetElementId).innerHTML = html;
+            document.getElementById(targetEle).innerHTML = html;
         })
         .catch(error => console.error('error loading html:', error));
 
 }
 
-//load loader.html
-loadHTML('loader.html', 'loader');
+loadhtml('loader.html', 'loader');
 
-//form submission handling
 document.getElementById('patient-details').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    var loader = document.getElementById('loader');
+    let loader = document.getElementById('loader');
     loader.style.display = 'block';
 
-    var form = document.getElementById('patient-details');
-    var formData = new FormData(form);
+    let form = document.getElementById('patient-details');
+    let formData = new FormData(form);
 
     console.log(...formData.entries());
 
+    let urlPar = new URLSearchParams();
 
-    // Convert FormData to URL parameters
-    var urlParams = new URLSearchParams();
     formData.forEach((value, key) => {
-        urlParams.append(key, value);
+        urlPar.append(key, value);
     });
+    let url = `./api?${urlPar.toString()}`;
 
-    // Create the complete URL with parameters
-    var url = `./api?${urlParams.toString()}`;
-
-    console.log(url); // Log the URL to debug
+    console.log(url);
 
     setTimeout(() => {
         fetch(url, {
@@ -60,7 +52,7 @@ document.getElementById('patient-details').addEventListener('submit', function (
             .then(response => response.json())
             .then(data => {
                 loader.style.display = 'none';
-                // window.location.href = 'result.html';
+
 
                 if (data.redirectUrl) {
                     window.location.href = data.redirectUrl;

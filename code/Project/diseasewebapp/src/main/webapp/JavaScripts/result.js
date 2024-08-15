@@ -24,47 +24,10 @@ window.onload = function () {
     console.log(featuresInput);
 
     const hypertension_features = featuresInput.Hypertension;
-    //  {
-    //   Age: 1,
-    //   Sex: 2,
-    //   Chest_Pain: 3,
-    //   Trest_BPS: 4,
-    //   Cholesterol: 5,
-    //   Fasting_Blood_Sugar: 6,
-    //   Rest_ECG: 7,
-    //   Thalach: 8,
-    //   Exercise_induced_Angina: 9,
-    //   Oldpeak: 10,
-    //   ST_Segment_Slope: 11,
-    //   Cardiac_Arrhythmia: 12,
-    //   Thalassemia: 13,
-    // };
 
     stroke_features = featuresInput.Stroke;
-    // {
-    //   Sex: 1,
-    //   Age: 2,
-    //   Hypertension: 3,
-    //   Heart_Disease: 4,
-    //   Marital_Status: 5,
-    //   Work_Stress_Level: 6,
-    //   Residence_Status: 7,
-    //   Average_Sugar: 8,
-    //   Body_Mass_Index: 9,
-    //   Smoking: 10,
-    // };
 
     diabetes_features = featuresInput.Diabetes;
-    // {
-    //   Sex: 1,
-    //   Age: 2,
-    //   Hypertension: 3,
-    //   Heart_Disease: 4,
-    //   Smoking_History: 5,
-    //   Body_Mass_Index: 6,
-    //   Hemoglobin_A1C: 7,
-    //   Average_Sugar: 8,
-    // };
 
     const diseases = Object.keys(predictedClasses);
 
@@ -257,7 +220,6 @@ function analyzeReport(disease) {
         decodeURIComponent(url.get("featureInput"))
     );
 
-    // console.log(FeatureCounts);
 
     const diseasePrediction = JSON.stringify({
         [disease]: predictedClasses[disease],

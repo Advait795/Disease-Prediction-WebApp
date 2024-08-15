@@ -3,6 +3,7 @@ package diseasewebapp;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -74,16 +75,16 @@ public class emailServlet extends HttpServlet {
                 + "</body></html>";
 
         // create an instance of send email class
-        sendEmail sender = new sendEmail();
+        sendEmail Emailsender = new sendEmail();
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
+        PrintWriter output = response.getWriter();
         try {
-            sender.sendEmail(email, "Notification from CareBioMed", body);
+            Emailsender.sendEmail(email, "Notification from CareBioMed", body);
             response.setStatus(HttpServletResponse.SC_OK);
-            out.println("{\"status\":\"success\",\"message\":\"Email Sent Successfully\"}");
+            output.println("{\"status\":\"success\",\"message\":\"Email Sent Successfully\"}");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println("{\"status\":\"error\",\"message\":\"Error sending email: " + e.getMessage() + "\"}");
+            output.println("{\"status\":\"error\",\"message\":\"Error sending email: " + e.getMessage() + "\"}");
         }
 
     }
