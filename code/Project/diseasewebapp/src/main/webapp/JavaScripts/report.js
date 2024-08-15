@@ -1,3 +1,7 @@
+/*
+    Author: Adwait Dalvi ad918
+    This JavaScript receives multiple values from result page which are used to create charts and other calculation details to be shown in report.
+*/
 
 let d = "";
 function clearUrl() {
@@ -6,6 +10,7 @@ function clearUrl() {
     window.history.replaceState(null, "", url);
 }
 
+//on page load retrives values from url
 window.onload = function () {
     const url = new URLSearchParams(window.location.search);
     const disease = url.get("disease");
@@ -23,7 +28,7 @@ window.onload = function () {
     const featureInput = JSON.parse(decodeURIComponent(url.get("featureInput")));
 
 
-
+    //stores values by means of disease names
 
     //disease prediction
     const hypertensionPrediction = predictedClasses.Hypertension;
@@ -49,7 +54,8 @@ window.onload = function () {
     const featureData = featuresPred;
     const featuresKeys = Object.keys(featuresPred);
 
-    // console.log(featuresKeys);
+    //creates mapping between the calculated values (feature prediction) and the values used as label on result page charts.
+
     let mappingKey = {};
     let mappingFeaturesCounts = {};
     let prediction = "";
@@ -93,8 +99,7 @@ window.onload = function () {
         }
     }
 
-    console.log(featureInput);
-
+    //generate report htmlm with calculation of probablity and charts
     const calculations = document.getElementById("cal");
     const collapsibleText = document.getElementById(`chart`);
     const header = document.getElementById('head');
@@ -125,6 +130,8 @@ window.onload = function () {
             probability
         )}%</span></p>`;
     }
+
+    //creating charts
 
     const labels = Object.keys(mappingKey).map(
         (key) => `${key}: ${Math.round(mappingKey[key])}%`
@@ -218,6 +225,8 @@ window.onload = function () {
     });
 };
 
+
+//genrating pdf from existing html structure
 document
     .getElementById("download-pdf")
     .addEventListener("click", function () {

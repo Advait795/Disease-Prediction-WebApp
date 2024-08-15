@@ -1,9 +1,16 @@
+/*
+    Author: Adwait Dalvi ad918
+    This javascript generates result tabs for each disease with its charts
+*/
+
+
 function clearUrl() {
     const url = new URL(window.location.href);
     url.search = "";
     window.history.replaceState(null, "", url);
 }
 
+//on page load parse through page url to extract data transfered
 window.onload = function () {
     const url = new URLSearchParams(window.location.search);
 
@@ -23,6 +30,8 @@ window.onload = function () {
     );
     console.log(featuresInput);
 
+
+    //storing data by means of disease
     const hypertension_features = featuresInput.Hypertension;
 
     stroke_features = featuresInput.Stroke;
@@ -35,12 +44,16 @@ window.onload = function () {
 
     console.log(sortedDiseases);
 
+
+    //for each disease 
+
     let c = 0;
     sortedDiseases.forEach((disease, index) => {
         console.log(disease);
         const prediction = predictedClasses[disease];
         const featureData = featuresPred[disease];
 
+        //do mapping of features prediction values and values selected in form
         let mappingKey = {};
 
         if (disease == "Hypertension") {
@@ -69,6 +82,8 @@ window.onload = function () {
             }
         }
 
+
+        //generating result collapsible tab for each disease
         const collapsibleText = document.getElementById(
             `result-${index + 1}`
         );
@@ -97,10 +112,12 @@ window.onload = function () {
 
         const disclaimer = document.getElementById(`head-${c}`);
 
+        //if predicted value in greater than 65 creates a disclaimer
         if (prediction > 65) {
             disclaimer.innerHTML += `<p class="disclaimer">"The predicted value is based on historical data and should not be considered a definitive diagnosis, please consult a qualified healthcare professional <a href="https://www.nhs.uk/">NHS</a>."</p>`;
         }
 
+        //generating charts using mapped values
         const labels = Object.keys(mappingKey).map(
             (key) => `${key}: ${Math.round(mappingKey[key])}%`
         );
@@ -196,6 +213,9 @@ window.onload = function () {
         });
     });
 };
+
+
+//Genrating url with all the nessesary data to create report after Analyze Report button in clicked
 
 function analyzeReport(disease) {
     const url = new URLSearchParams(window.location.search);

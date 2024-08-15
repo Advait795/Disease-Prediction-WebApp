@@ -70,7 +70,7 @@ public class servlet extends HttpServlet {
 
         for (String filename : fileNames) {
 
-            List<String[]> data = CSVReaderExample.readCSV(filename);
+            List<String[]> data = CSVReader.readCSV(filename);
 
             boolean isFirstRow = true;
 

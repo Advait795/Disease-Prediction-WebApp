@@ -44,7 +44,7 @@ public class Main {
         for (String filename : fileNames) {
 
             // Read data
-            List<String[]> data = CSVReaderExample.readCSV(filename);
+            List<String[]> data = CSVReader.readCSV(filename);
 
             boolean isFirstRow = true;
 

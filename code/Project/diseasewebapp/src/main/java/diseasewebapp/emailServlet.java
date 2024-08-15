@@ -1,3 +1,8 @@
+/*Author: Adwait Dalvi ad918
+ * When the user ask for information by providing emailId, email servlet creats all the features required for sendEmail Class  to send an email with all the information automatically.
+ * 
+ */
+
 package diseasewebapp;
 
 import jakarta.servlet.http.HttpServlet;
@@ -11,8 +16,10 @@ public class emailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // email add from form
+        // user email from webpage
         String email = request.getParameter("email");
+
+        // Static email body
         String body = "<html><body style='font-family: Arial, sans-serif; color: black;'>"
                 + "<p>Dear user,</p>"
                 + "<p>I hope this message finds you well.</p>"
@@ -76,9 +83,12 @@ public class emailServlet extends HttpServlet {
 
         // create an instance of send email class
         sendEmail Emailsender = new sendEmail();
+
+        // send an response
         response.setContentType("application/json");
         PrintWriter output = response.getWriter();
         try {
+            // send emailid, subject and body to sendEmail Class
             Emailsender.sendEmail(email, "Notification from CareBioMed", body);
             response.setStatus(HttpServletResponse.SC_OK);
             output.println("{\"status\":\"success\",\"message\":\"Email Sent Successfully\"}");

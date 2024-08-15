@@ -1,3 +1,7 @@
+/* Author: Adwait Dalvi ad918
+ * Reads csv Files line by line and splits by ','
+ */
+
 package diseasewebapp;
 
 import java.io.IOException;
@@ -6,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVReaderExample {
+public class CSVReader {
     public static List<String[]> readCSV(String fileName) {
         List<String[]> data = new ArrayList<>();
         try {
