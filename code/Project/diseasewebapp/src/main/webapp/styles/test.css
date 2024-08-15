@@ -1,0 +1,249 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+html {
+  scroll-behavior: smooth;
+  font-family: Arial, sans-serif;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+button {
+  border-radius: 5px;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:active {
+  transform: translateY(3px);
+}
+
+button::after {
+  transform: translate(-5px);
+}
+.container {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  /* background: url(../images/top-view-arrangement-medical-desk-with-copy-space.jpg) no-repeat center; */
+  background-color: #444;
+  background-size: cover;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.wrapper {
+  display: flex;
+  padding: 15px 20px;
+  flex-direction: column;
+  align-items: center;
+  width: 900px;
+  height: fit-content;
+  border-radius: 10px;
+  border: 2px solid #ffffffcf;
+  background-color: #ffffff97;
+  margin-left: 8%;
+  margin-top: 3%;
+  /* box-shadow: 5px 5px 15px #fff; */
+}
+.collapsible {
+  /* min-width: fit-content;
+    max-height: fit-content; */
+  /* background-color: #fff; */
+  overflow: hidden;
+  font-weight: 500;
+}
+
+.collapsible input {
+  display: none;
+}
+
+.collapsible label {
+  position: relative;
+  font-weight: 600;
+  background: #000;
+  /* box-shadow: 0 5px 10px 0 #000; */
+  color: #fff;
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 15px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.disclaimer {
+  color: #ff3333;
+  margin-top: 10px;
+}
+
+.disclaimer a {
+  font-weight: bold;
+  color: #1a90ff;
+}
+.collapsible label span {
+  color: #00df9a;
+}
+
+.collapsible label::after {
+  content: "";
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 18px;
+  height: 18px;
+  background: url() no-repeat 0 0;
+  content: "\f078";
+  font-family: "FontAwesome";
+  font-weight: 900;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+.collapsible input:checked ~ label::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.collapsible-text {
+  max-height: 1px;
+  border-radius: 4px;
+  line-height: 1.4;
+  position: relative;
+  top: -100%;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+  border: 1px solid #444;
+}
+
+.collapsible input:checked ~ .collapsible-text {
+  max-height: fit-content;
+  max-width: fit-content;
+  padding-bottom: 10px;
+  /* background: #ffffff; */
+  background-color: #ffffffe6;
+  /* box-shadow: 0 5px 10px 0 #000; */
+  opacity: 1;
+  top: 0;
+}
+
+.collapsible-text h2,
+h3 {
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding: 10px 10px 0;
+  color: #1c1c6b;
+}
+
+.chart-container {
+  display: flex;
+  align-items: center;
+}
+
+.chart-container canvas {
+  max-width: 450px;
+  padding: 15px 15px;
+}
+
+.header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: left;
+  color: #00df9a;
+  margin-top: 5px;
+  padding-left: 8%;
+  padding-top: 2%;
+  font-size: 20px;
+}
+
+.header span {
+  color: #ffffffe6;
+}
+
+.describtion {
+  width: 1050px;
+  font-size: 16px;
+  text-align: left;
+  padding: 15px 20px;
+  margin-left: 6.5%;
+  color: #fff;
+}
+.describtion a {
+  color: #00df9a;
+}
+
+#reportBtn-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#reportBtn-div button {
+  margin-right: 15px;
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+  background-color: #000;
+  border: bold 1px;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 584px) {
+  /* Adjust wrapper to fit smaller screens */
+  .wrapper {
+    width: 420px;
+    padding: 10px;
+  }
+
+  /* Collapsible text adjustments */
+  .collapsible label {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .collapsible-text h2,
+  h3 {
+    font-size: 16px;
+    padding: 8px 8px 0;
+  }
+
+  /* Chart container adjustments */
+  .chart-container {
+    flex-direction: column;
+    align-items: center;
+    width: 420px;
+    height: 500px;
+    overflow-y: auto;
+  }
+
+  .chart-container canvas {
+    max-width: 70%;
+    padding: 10px 5px;
+  }
+
+  /* Header adjustments */
+  .header {
+    font-size: 18px;
+    padding-left: 5%;
+    padding-top: 5px;
+  }
+
+  /* Description adjustments */
+  .describtion {
+    width: 90%;
+    margin-left: 5%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Report button container adjustments */
+  #reportBtn-div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reportBtn-div button {
+    width: 40%;
+    margin: 5px 0;
+    align-self: center;
+  }
+}
