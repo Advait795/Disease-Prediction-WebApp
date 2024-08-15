@@ -186,3 +186,58 @@ h3 {
   color: #fff;
   cursor: pointer;
 }
+
+@media (max-width: 584px) {
+  .wrapper {
+    width: 420px;
+    padding: 10px;
+  }
+
+  .collapsible label {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .collapsible-text h2,
+  h3 {
+    font-size: 16px;
+    padding: 8px 8px 0;
+  }
+
+  .chart-container {
+    flex-direction: column;
+    align-items: center;
+    width: 420px;
+    height: 500px;
+    overflow-y: auto;
+  }
+
+  .chart-container canvas {
+    max-width: 70%;
+    padding: 10px 5px;
+  }
+
+  .header {
+    font-size: 18px;
+    padding-left: 5%;
+    padding-top: 5px;
+  }
+
+  .describtion {
+    width: 90%;
+    margin-left: 5%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  #reportBtn-div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #reportBtn-div button {
+    width: 40%;
+    margin: 5px 0;
+    align-self: center;
+  }
+}

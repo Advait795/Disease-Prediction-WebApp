@@ -6,7 +6,7 @@ navToggle.addEventListener('click', () => {
 });
 
 const typedText = document.querySelector('.typed-text');
-const textArray = ['Hypertension..', 'Diabetes..', 'Stroke..'];
+const textArray = ['Hypertension.', 'Diabetes.', 'Stroke.'];
 let textIndex = 0;
 let charIndex = 0;
 let speed = 100;
