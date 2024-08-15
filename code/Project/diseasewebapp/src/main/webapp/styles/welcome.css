@@ -103,11 +103,28 @@ button::after {
   .nav-toggle {
     display: block;
   }
+
+  .nav-mobile {
+    width: 100%;
+  }
+
+  .nav-links-mobile {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 480px) {
   .nav-container {
     padding: 0 10px;
+  }
+
+  .nav-logo {
+    font-size: 24px;
+  }
+
+  .nav-links li {
+    margin-right: 10px;
   }
 }
 
@@ -193,6 +210,11 @@ button::after {
   .typed-text {
     font-size: 18px;
   }
+
+  .hero-button {
+    padding: 8px 16px;
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -207,11 +229,17 @@ button::after {
   .typed-text {
     font-size: 14px;
   }
+
+  .hero-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
 }
 
 .analytics {
   background-color: #ffff;
-  height: 100vh;
+  height: auto;
+  padding: 20px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -287,6 +315,10 @@ button::after {
   .analytics-description {
     font-size: 14px;
   }
+
+  .analytics-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -309,12 +341,14 @@ button::after {
   max-width: 1240px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 20px;
 }
+/* repeat(3, 1fr)
+  grid-column: 1 / 3;
+*/
 
 .newsletter-content {
-  grid-column: 1 / 3;
   margin-bottom: 20px;
 }
 
@@ -323,15 +357,15 @@ button::after {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
+/* grid-column: 2 / 4 */
 .newsletter-form {
-  grid-column: 2 / 4;
+  margin-top: 10px;
 }
 
 .newsletter-input {
   padding: 10px;
   border-radius: 10px;
-  width: 80%;
+  width: 60%;
   font-size: 18px;
   font-weight: bold;
   color: #333;
@@ -352,7 +386,6 @@ button::after {
   color: #00df9a;
   text-decoration: underline;
 }
-
 @media (max-width: 768px) {
   .newsletter-content h1 {
     font-size: 36px;
@@ -437,4 +470,32 @@ button::after {
 #footer li {
   padding: 10px;
   border-bottom: 1px solid #444;
+}
+
+@media (max-width: 768px) {
+  #footer h1 {
+    font-size: 36px;
+  }
+
+  #footer p {
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  #footer h1 {
+    font-size: 24px;
+  }
+
+  #footer p {
+    font-size: 12px;
+  }
+
+  #footer .flex {
+    flex-direction: column;
+  }
+
+  #footer .flex i {
+    font-size: 24px;
+    margin: 5px 0;
+  }
 }
