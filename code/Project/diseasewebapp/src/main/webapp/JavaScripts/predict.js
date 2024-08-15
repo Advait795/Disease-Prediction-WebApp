@@ -1,41 +1,3 @@
-document
-    .getElementById("patient-details")
-    .addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        validate();
-
-        if (validate()) {
-            this.submit();
-        }
-    });
-
-function validate() {
-    const allElements = document.getElementById("patient-details").elements;
-
-    let count = 0;
-
-    for (let x of allElements) {
-        if (x.tagName === "INPUT" && x.type === "number") {
-            if (!notEmpty(x.value)) {
-                count++;
-            }
-        }
-    }
-    if (count > 8) {
-        alert("please provide atleast 5 details.." + count);
-        window.location.reload();
-
-        return false;
-    }
-
-    return true;
-}
-
-function notEmpty(value) {
-    return value.trim() !== "";
-}
-
 const selectElements = document.querySelectorAll("select");
 
 selectElements.forEach((select) => {
@@ -50,3 +12,69 @@ selectElements.forEach((select) => {
         }
     });
 });
+
+
+//loader code
+
+function loadHTML(url, targetElementId) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById(targetElementId).innerHTML = html;
+        })
+        .catch(error => console.error('error loading html:', error));
+
+}
+
+//load loader.html
+loadHTML('loader.html', 'loader');
+
+//form submission handling
+document.getElementById('patient-details').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    var loader = document.getElementById('loader');
+    loader.style.display = 'block';
+
+    var form = document.getElementById('patient-details');
+    var formData = new FormData(form);
+
+    console.log(...formData.entries());
+
+
+    // Convert FormData to URL parameters
+    var urlParams = new URLSearchParams();
+    formData.forEach((value, key) => {
+        urlParams.append(key, value);
+    });
+
+    // Create the complete URL with parameters
+    var url = `./api?${urlParams.toString()}`;
+
+    console.log(url); // Log the URL to debug
+
+    setTimeout(() => {
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+                // window.location.href = 'result.html';
+
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    console.error('No redirect URL found.');
+                }
+
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                console.error('error:', error);
+
+            })
+
+    }, 3000);
+})
+

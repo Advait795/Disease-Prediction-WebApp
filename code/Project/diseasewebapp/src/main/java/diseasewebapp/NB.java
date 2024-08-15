@@ -152,14 +152,14 @@ public class NB {
 
             double classPriorProb = ClassCount / TotalExamples;
 
-            // System.out.println(
-            // "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
-            // + classPriorProb);
+            System.out.println(
+                    "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
+                            + classPriorProb);
 
-            // System.out.println(
-            // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
-            // totalExamples.get(name) + "="
-            // + classPriorProb);
+            System.out.println(
+                    "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
+                            totalExamples.get(name) + "="
+                            + classPriorProb);
             System.out.println();
 
             // calculate the product of conditional probablitites
@@ -189,11 +189,6 @@ public class NB {
                 Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
                 Integer Count = keyDoc.getInteger(feature);
 
-                // System.out.println(resultFeat);
-                // System.out.println(labelDoc);
-                // System.out.println(featureCountDoc);
-                // System.out.println(keyDoc);
-                // System.out.println(Count);
                 featureCounts.putIfAbsent(name, new HashMap<>());
                 Map<Integer, Integer> nestedMap = featureCounts.get(name);
                 nestedMap.put(key, Count);
@@ -216,9 +211,9 @@ public class NB {
                 Count += 1;
                 double featureProb = (Count) / ClassCount;
 
-                // System.out.println((Count + 1) + "/" + ClassCount);
-                // System.out.println("Probability of feature " + feature + " where class " +
-                // label + ": " + featureProb);
+                System.out.println((Count + 1) + "/" + ClassCount);
+                System.out.println("Probability of feature " + feature + " where class " +
+                        label + ": " + featureProb);
 
                 // Multiply all probabilities
                 // featureProductProb *= featureProb;
@@ -242,14 +237,14 @@ public class NB {
 
             }
 
-            // System.out.println("Feature Totals: " + featureTotals);
+            System.out.println("Feature Totals: " + featureTotals);
 
             // final probablity for class
             double classProb = Math.exp(logFeatureProductProb);
             // double classProb = (featureProductProb) * (classPriorProb);
 
-            // System.out.println(featureProductProb + " * " + classPriorProb + "=" +
-            // classProb);
+            System.out.println(featureProductProb + " * " + classPriorProb + "=" +
+                    classProb);
 
             if (Double.valueOf(label) == 0) {
                 zero_label = classProb;
@@ -263,10 +258,12 @@ public class NB {
         double zero_final = zero_label / total;
         double one_final = one_label / total;
 
-        // System.out.println();
-        // System.out.println("Total: " + zero_label + " + " + one_label + " = " +
-        // total);
-        // System.out.println();
+        System.out.println();
+        System.out.println("Total: " + zero_label + " + " + one_label + " = " +
+                total);
+        System.out.println();
+
+        System.out.println(Math.round((one_final * 100)) + "%");
 
         return String.valueOf(Math.round((one_final * 100)));
 

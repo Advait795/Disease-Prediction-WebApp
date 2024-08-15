@@ -6,6 +6,8 @@ function clearUrl() {
 
 window.onload = function () {
     const url = new URLSearchParams(window.location.search);
+
+    console.log(url);
     const predictedClasses = JSON.parse(
         decodeURIComponent(url.get("predictedClasses"))
     );
@@ -130,7 +132,7 @@ window.onload = function () {
             }"></canvas>
                 </div>`;
 
-        const disclaimer = document.getElementById(`head-${c + 1}`);
+        const disclaimer = document.getElementById(`head-${c}`);
 
         if (prediction > 65) {
             disclaimer.innerHTML += `<p class="disclaimer">"The predicted value is based on historical data and should not be considered a definitive diagnosis, please consult a qualified healthcare professional <a href="https://www.nhs.uk/">NHS</a>."</p>`;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles/prediction_style.css" />
+    <!-- <link rel="stylesheet" href="styles/loader.css" /> -->
     <title>Prediction</title>
   </head>
   <body>
@@ -31,7 +32,6 @@
             <ul>
               <li>Hypertension</li>
               <li>Heart Disease</li>
-              <li>Smoking History</li>
               <br />
             </ul>
           </li>
@@ -44,6 +44,8 @@
                 three months)
               </li>
               <li>Current Blood Glucose Level</li>
+              <li>Average Glucose Level</li>
+              <li>Smoking History</li>
               <br />
             </ul>
           </li>
@@ -70,7 +72,6 @@
               <li>Marital Status</li>
               <li>Work Type</li>
               <li>Residence Type</li>
-              <li>Average Glucose Level</li>
               <br />
             </ul>
           </li>
@@ -87,7 +88,8 @@
     <div class="container">
       <div class="title">Patient <span>Details</span></div>
 
-      <form id="patient-details" action="./api" method="POST">
+      <!-- action="./api" -->
+      <form id="patient-details">
         <div class="user-details">
           <div class="input-box">
             <span class="details">
@@ -401,7 +403,8 @@
         </div>
       </form>
     </div>
-  </body>
 
-  <script src="./JavaScripts/predict.js"></script>
+    <div id="loader" style="display: none"></div>
+    <script src="./JavaScripts/predict.js"></script>
+  </body>
 </html>

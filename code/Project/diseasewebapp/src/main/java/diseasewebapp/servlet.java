@@ -193,9 +193,12 @@ public class servlet extends HttpServlet {
     public void processrequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset-UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
 
             String[] diseases = { "Hypertension", "Stroke", "Diabetes" };
+
+            // System.out.println(request + " URL");
 
             // Reatrieve from input
             String[] newExample = {
@@ -223,6 +226,8 @@ public class servlet extends HttpServlet {
                     request.getParameter("smoking_history"), // diabetes //21
                     request.getParameter("HbA1c_level")// 22
             };
+
+            // System.out.println(newExample[0] + " :age value");
 
             Map<String, String> predictions = new HashMap<>();
             Map<String, Map<String, Double>> featuresPred = new HashMap<>();
@@ -320,7 +325,7 @@ public class servlet extends HttpServlet {
                 featureCounts = nb.featureCounts();
 
                 // System.out.println(featureCounts);
-                System.out.println(featuresInput);
+                // System.out.println(featuresInput);
 
                 String predictedClassesJson = new Gson().toJson(predictions);
                 String featuresPredJson = new Gson().toJson(featuresPred);
@@ -337,13 +342,11 @@ public class servlet extends HttpServlet {
                         + URLEncoder.encode(FeatureCounts, "UTF-8") + "&featureInput="
                         + URLEncoder.encode(FeaturesInputs, "UTF-8");
 
-                // response.sendRedirect(redirectUrl);
-
-                // mongoClient.close();
-
             }
 
-            response.sendRedirect(redirectUrl);
+            // response.sendRedirect(redirectUrl);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"redirectUrl\":\"" + redirectUrl + "\"}");
 
         } catch (
 
