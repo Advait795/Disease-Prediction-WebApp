@@ -148,7 +148,6 @@ button::after {
 
 @media (min-width: 600px) and (max-width: 900px) {
   .container {
-    padding: 10px;
     gap: 10px;
   }
 
@@ -170,7 +169,6 @@ button::after {
 /* Large devices (desktops, greater than 900px) */
 @media (min-width: 900px) {
   .container {
-    padding: 15px;
     gap: 15px;
   }
 
