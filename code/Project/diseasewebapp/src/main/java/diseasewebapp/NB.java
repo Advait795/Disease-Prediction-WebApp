@@ -80,11 +80,9 @@ public class NB {
 
         // creating querry for mongondb
         MongoCollection<Document> collection = database.getCollection(name);
-
         Bson filter = Filters.eq("name", "training");
 
         // calling categorising on fetures on basis of disease name
-
         if (name == "Stroke") {
             for (int i = 0; i < features.length; i++) {
                 if (i == 1 || i == 7 || i == 8) {

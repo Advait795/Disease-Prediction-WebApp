@@ -66,9 +66,45 @@ public class servlet extends HttpServlet {
         int[] stokeClm = { 1 };
         int[] diabeClm = { 1, 7 };
 
-        // for each file runs a loop
+        String[] disease = {
+                "Hypertension", "Stroke", "Diabetes"
+        };
 
-        for (String filename : fileNames) {
+        // checking totalInstace count are upto date
+        for (String n : disease) {
+
+            Bson Filter = Filters.eq("name", "training");
+            MongoCollection<Document> Collection = database.getCollection(n);
+
+            // db.Hypertension.findOne({name:"training"},{"TotalExamples": 1, _id:0})
+            Bson projection = new Document("TotalExamples", true).append("_id",
+                    false);
+
+            Document result = Collection.find(Filter).projection(projection).first();
+
+            // getting total Instance to check wether db needs to update or not
+            Integer TotalExamples = result.getInteger("TotalExamples");
+
+            if (TotalExamples != 26083 && n == "Hypertension") {
+                throw new IllegalStateException(
+                        "TotalExamples mismatch for Hypertension: expected 26083, found " +
+                                TotalExamples);
+            } else if (TotalExamples != 100000 && n == "Diabetes") {
+                throw new IllegalStateException(
+                        "TotalExamples mismatch for Diabetes: expected 100000, found " +
+                                TotalExamples);
+            } else if (TotalExamples != 40910 && n == "Stroke") {
+
+                throw new IllegalStateException(
+                        "TotalExamples mismatch for Hypertension: expected 40910, found " +
+                                TotalExamples);
+            }
+        }
+
+        // for each file runs a loop
+        for (
+
+        String filename : fileNames) {
 
             List<String[]> data = CSVReader.readCSV(filename);
 
