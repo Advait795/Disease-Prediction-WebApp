@@ -15,6 +15,8 @@ import java.util.*;
 
 import java.util.stream.*;
 
+import javax.sql.rowset.serial.SerialException;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -26,6 +28,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,201 +42,206 @@ public class servlet extends HttpServlet {
     String redirectUrl;
 
     @Override
-    public void init() {
+    public void init() throws ServletException {
 
-        // Connecting to the database
-        String connectionString = "mongodb://localhost:27017";
-        mongoClient = MongoClients.create(connectionString);
-        MongoDatabase database = mongoClient.getDatabase("AllDisease");
+        try {
+            // Connecting to the database
+            String connectionString = "mongodb://localhost:27017";
+            mongoClient = MongoClients.create(connectionString);
+            MongoDatabase database = mongoClient.getDatabase("AllDisease");
 
-        // all the files
-        String[] fileNames = {
-                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
-                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
-                "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
+            // all the files
+            String[] fileNames = {
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
 
-        };
+            };
 
-        String label;
-        String[] features;
-        String name = "";
-        int totalExamples = 0;
-        double classCountZero;
-        double classCountOne;
+            String label;
+            String[] features;
+            String name = "";
+            int totalExamples = 0;
+            double classCountZero;
+            double classCountOne;
 
-        nb = new NB();// creating NB object to access all the methods of NB.java
-        int[] hyperclm = { 0, 3, 4, 7 };
-        int[] stokeClm = { 1 };
-        int[] diabeClm = { 1, 7 };
+            nb = new NB();// creating NB object to access all the methods of NB.java
+            int[] hyperclm = { 0, 3, 4, 7 };
+            int[] stokeClm = { 1 };
+            int[] diabeClm = { 1, 7 };
 
-        String[] disease = {
-                "Hypertension", "Stroke", "Diabetes"
-        };
+            String[] disease = {
+                    "Hypertension", "Stroke", "Diabetes"
+            };
 
-        // checking totalInstace count are upto date
-        for (String n : disease) {
+            // checking totalInstace count are upto date
+            for (String n : disease) {
 
-            Bson Filter = Filters.eq("name", "training");
-            MongoCollection<Document> Collection = database.getCollection(n);
+                Bson Filter = Filters.eq("name", "training");
+                MongoCollection<Document> Collection = database.getCollection(n);
 
-            // db.Hypertension.findOne({name:"training"},{"TotalExamples": 1, _id:0})
-            Bson projection = new Document("TotalExamples", true).append("_id",
-                    false);
+                // db.Hypertension.findOne({name:"training"},{"TotalExamples": 1, _id:0})
+                Bson projection = new Document("TotalExamples", true).append("_id",
+                        false);
 
-            Document result = Collection.find(Filter).projection(projection).first();
+                Document result = Collection.find(Filter).projection(projection).first();
 
-            // getting total Instance to check wether db needs to update or not
-            Integer TotalExamples = result.getInteger("TotalExamples");
+                // getting total Instance to check wether db needs to update or not
+                Integer TotalExamples = result.getInteger("TotalExamples");
 
-            if (TotalExamples != 26083 && n == "Hypertension") {
-                throw new IllegalStateException(
-                        "TotalExamples mismatch for Hypertension: expected 26083, found " +
-                                TotalExamples);
-            } else if (TotalExamples != 100000 && n == "Diabetes") {
-                throw new IllegalStateException(
-                        "TotalExamples mismatch for Diabetes: expected 100000, found " +
-                                TotalExamples);
-            } else if (TotalExamples != 40910 && n == "Stroke") {
+                if (TotalExamples != 26083 && "Hypertension".equals(n)) {
+                    throw new ServletException(
+                            "TotalExamples mismatch for Hypertension: expected 26083, found " +
+                                    TotalExamples);
+                } else if (TotalExamples != 100000 && "Diabetes".equals(n)) {
+                    throw new ServletException(
+                            "TotalExamples mismatch for Diabetes: expected 100000, found " +
+                                    TotalExamples);
+                } else if (TotalExamples != 40910 && "Stroke".equals(n)) {
 
-                throw new IllegalStateException(
-                        "TotalExamples mismatch for Hypertension: expected 40910, found " +
-                                TotalExamples);
+                    throw new ServletException(
+                            "TotalExamples mismatch for Hypertension: expected 40910, found " +
+                                    TotalExamples);
+                }
             }
-        }
 
-        // for each file runs a loop
-        for (
+            // for each file runs a loop
+            for (
 
-        String filename : fileNames) {
+            String filename : fileNames) {
 
-            List<String[]> data = CSVReader.readCSV(filename);
+                List<String[]> data = CSVReader.readCSV(filename);
 
-            boolean isFirstRow = true;
+                boolean isFirstRow = true;
 
-            if (filename.contains("stroke")) {
+                if (filename.contains("stroke")) {
 
-                // for each row in file data gets sorted as features and class
-                for (String[] row : data) {
-                    if (isFirstRow) {
+                    // for each row in file data gets sorted as features and class
+                    for (String[] row : data) {
+                        if (isFirstRow) {
 
-                        isFirstRow = false;
-                        continue;
-                    }
-
-                    label = row[row.length - 1]; // Assuming the label is the last column
-                    features = new String[row.length - 1];
-                    System.arraycopy(row, 0, features, 0, row.length - 1);
-
-                    for (int x : stokeClm) {
-                        if (features[x].endsWith(".0")) {
-                            features[x] = features[x].substring(0, features[x].length() - 2);
+                            isFirstRow = false;
+                            continue;
                         }
-                    }
-                    name = "Stroke";
 
-                    nb.train(features, label, name);
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
 
-                }
-
-                // After training all the counts being stored in mongodb
-
-                totalExamples = nb.totalInstance(name);
-                totalCount.put(name, totalExamples);
-                classCountZero = nb.classCountZero(name, "0");
-                classCountOne = nb.classCountOne(name, "1");
-                ClassCountOne.put(name, classCountOne);
-
-                Bson filter = Filters.eq("name", "training");
-
-                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
-                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
-                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
-
-                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
-
-                MongoCollection<Document> collection = database.getCollection("Stroke");
-
-                collection.updateOne(filter, updateValue);
-
-            } else if (filename.contains("hypertension")) {
-                for (String[] row : data) {
-                    if (isFirstRow) {
-
-                        isFirstRow = false;
-                        continue;
-                    }
-
-                    label = row[row.length - 1]; // Assuming the label is the last column
-                    features = new String[row.length - 1];
-                    System.arraycopy(row, 0, features, 0, row.length - 1);
-
-                    for (int x : hyperclm) {
-                        if (features[x].endsWith(".0")) {
-                            features[x] = features[x].substring(0, features[x].length() - 2);
+                        for (int x : stokeClm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
                         }
-                    }
-                    name = "Hypertension";
+                        name = "Stroke";
 
-                    nb.train(features, label, name);
-                }
+                        nb.train(features, label, name);
 
-                totalExamples = nb.totalInstance(name);
-                totalCount.put(name, totalExamples);
-                classCountZero = nb.classCountZero(name, "0");
-                classCountOne = nb.classCountOne(name, "1");
-                ClassCountOne.put(name, classCountOne);
-
-                Bson filter = Filters.eq("name", "training");
-
-                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
-                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
-                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
-
-                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
-
-                MongoCollection<Document> collection = database.getCollection("Hypertension");
-
-                collection.updateOne(filter, updateValue);
-            } else {
-                for (String[] row : data) {
-                    if (isFirstRow) {
-
-                        isFirstRow = false;
-                        continue;
                     }
 
-                    label = row[row.length - 1]; // Assuming the label is the last column
-                    features = new String[row.length - 1];
-                    System.arraycopy(row, 0, features, 0, row.length - 1);
+                    // After training all the counts being stored in mongodb
 
-                    for (int x : diabeClm) {
-                        if (features[x].endsWith(".0")) {
-                            features[x] = features[x].substring(0, features[x].length() - 2);
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Stroke");
+
+                    collection.updateOne(filter, updateValue);
+
+                } else if (filename.contains("hypertension")) {
+                    for (String[] row : data) {
+                        if (isFirstRow) {
+
+                            isFirstRow = false;
+                            continue;
                         }
+
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
+
+                        for (int x : hyperclm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
+                        }
+                        name = "Hypertension";
+
+                        nb.train(features, label, name);
                     }
-                    name = "Diabetes";
 
-                    nb.train(features, label, name);
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Hypertension");
+
+                    collection.updateOne(filter, updateValue);
+                } else {
+                    for (String[] row : data) {
+                        if (isFirstRow) {
+
+                            isFirstRow = false;
+                            continue;
+                        }
+
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
+
+                        for (int x : diabeClm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
+                        }
+                        name = "Diabetes";
+
+                        nb.train(features, label, name);
+                    }
+
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Diabetes");
+
+                    collection.updateOne(filter, updateValue);
                 }
-
-                totalExamples = nb.totalInstance(name);
-                totalCount.put(name, totalExamples);
-                classCountZero = nb.classCountZero(name, "0");
-                classCountOne = nb.classCountOne(name, "1");
-                ClassCountOne.put(name, classCountOne);
-
-                Bson filter = Filters.eq("name", "training");
-
-                Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
-                Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
-                Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
-
-                Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
-
-                MongoCollection<Document> collection = database.getCollection("Diabetes");
-
-                collection.updateOne(filter, updateValue);
             }
+
+        } catch (Exception e) {
+            throw new ServletException("Error during servlet initialization", e);
         }
 
     }
@@ -308,7 +316,7 @@ public class servlet extends HttpServlet {
                             newExample[16].split(",")[0], newExample[17].split(",")[0], newExample[18].split(",")[0],
                             newExample[19].split(",")[0],
                             newExample[20].split(",")[0] };
-                    inputVal = new int[] { 1, 0, 13, 14, 16, 15, 19, 17, 18, 20 };
+                    inputVal = new int[] { 1, 0, 13, 14, 15, 16, 17, 18, 19, 20 };
 
                 } else if ("Diabetes".equals(d)) {
                     input = new String[] { newExample[1].split(",")[0], newExample[0].split(",")[0],

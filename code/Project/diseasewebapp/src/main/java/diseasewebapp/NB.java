@@ -197,6 +197,12 @@ public class NB {
                 Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
                 Integer Count = keyDoc.getInteger(feature);
 
+                System.out.println(resultFeat);
+                System.out.println(labelDoc);
+                System.out.println(featureCountDoc);
+                System.out.println(keyDoc);
+                System.out.println(Count);
+
                 // storing feature Counts in terms of disease name
                 featureCounts.putIfAbsent(name, new HashMap<>());
                 Map<Integer, Integer> nestedMap = featureCounts.get(name);
