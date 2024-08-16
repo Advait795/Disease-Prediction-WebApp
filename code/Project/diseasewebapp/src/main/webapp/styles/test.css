@@ -188,11 +188,13 @@ h3 {
 }
 
 @media (max-width: 584px) {
+  /* Adjust wrapper to fit smaller screens */
   .wrapper {
     width: 420px;
     padding: 10px;
   }
 
+  /* Collapsible text adjustments */
   .collapsible label {
     font-size: 14px;
     padding: 10px;
@@ -204,6 +206,7 @@ h3 {
     padding: 8px 8px 0;
   }
 
+  /* Chart container adjustments */
   .chart-container {
     flex-direction: column;
     align-items: center;
@@ -217,12 +220,14 @@ h3 {
     padding: 10px 5px;
   }
 
+  /* Header adjustments */
   .header {
     font-size: 18px;
     padding-left: 5%;
     padding-top: 5px;
   }
 
+  /* Description adjustments */
   .describtion {
     width: 90%;
     margin-left: 5%;
@@ -230,6 +235,7 @@ h3 {
     font-size: 14px;
   }
 
+  /* Report button container adjustments */
   #reportBtn-div {
     flex-direction: column;
     align-items: stretch;

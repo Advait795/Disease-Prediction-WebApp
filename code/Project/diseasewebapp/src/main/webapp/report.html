@@ -1,0 +1,57 @@
+<!-- Author: Adwait Dalvi ad918
+  This HTML Structure generates report structure, such that describtion download button and report.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/report.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>Disease Prediction Result</title>
+  </head>
+  <body>
+    <section>
+      <div class="container">
+        <div class="box">
+          <div class="header" id="head">
+          </div>
+          <div class="wrapper">
+            <div class="calc" id="cal"></div>
+            <div class="chart-div" id="chart"></div>
+            <div class="tip">
+              <p>
+                Note: <br />
+                <span>P(Disease|Symptoms)</span> : The chance of having the disease given that you're showing specific symptoms. <br>
+                <span>P(Disease)</span> : The chance of having the disease without considering any symptoms.<br />
+                <span>P(Symptoms|Disease)</span> : The chance of showing specific symptoms if you already have the disease.<br /><br />
+
+               <span>Naive Bayes Bias/Assumption</span> : <br />
+                Naive Bayes assumes that all features are independent of each
+                other given the class label, allowing the model to calculate the
+                joint probability as the product of individual probabilities.
+                <br><br>
+                <span>Note</span> : The probabilities are derived from historical records for each disease, with the following sample sizes:<br><br>
+                <ul>
+                  <ul>Hypertension: <span>26,083</span> records</ul>
+                  <ul>Stroke: <span>40,910</span> records</ul>
+                  <ul>Diabetes: <span>100,000</span>  records</ul>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="download-pdf">Download Report</button>
+    </section>
+
+    <script src="./JavaScripts/report.js"></script>
+  </body>
+</html>

@@ -1,104 +1,421 @@
+// author: Adwait Dalvi ad918
+// Servlet class is there to connect java backend to javascript frontend 
+//This class gose through the files and reads each line of file one after the other and the data gets stored in the database(only takes place once)
+//In the prediction part after the form submission the data travels as url servelet reads from url and sorts as per disease and sends for prediction in NB.java class
+//All the output comming form NB class again gets encoded in url and sends as a response to Predict class
+
 package diseasewebapp;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.util.*;
 
 import java.util.stream.*;
 
+import javax.sql.rowset.serial.SerialException;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import com.google.gson.Gson;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class servlet extends HttpServlet {
     private NB nb;
-    private Connection connect;
     private Map<Integer, Double> featurePred = new HashMap<>();
+    Map<String, Integer> totalCount = new HashMap<>();
+    Map<String, Double> ClassCountOne = new HashMap<>();
+    MongoClient mongoClient;
+    String redirectUrl;
 
     @Override
-    public void init() {
-        String filename = "C:\\Users\\ADWAIT\\Desktop\\Project\\Disease-Prediction-WebApp\\code\\Project\\diseasewebapp\\src\\main\\resources\\hypertension_data.csv";
-        nb = new NB();
-        int[] numclm = { 0, 3, 4, 7 };
+    public void init() throws ServletException {
 
-        List<String[]> data = CSVReaderExample.readCSV(filename);
+        try {
+            // Connecting to the database
+            String connectionString = "mongodb://localhost:27017";
+            mongoClient = MongoClients.create(connectionString);
+            MongoDatabase database = mongoClient.getDatabase("AllDisease");
 
-        boolean isFirstRow = true;
+            // all the files
+            String[] fileNames = {
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/hypertension_data.csv",
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/stroke_data.csv",
+                    "C:/Users/ADWAIT/Desktop/Project/Disease-Prediction-WebApp/code/Project/diseasewebapp/src/main/resources/diabetes_prediction_dataset.csv"
 
-        // train model
-        for (String[] row : data) {
-            if (isFirstRow) {
-                isFirstRow = false;
-                continue;
-            }
+            };
 
-            String label = row[row.length - 1];
-            String[] features = new String[row.length - 1];
-            System.arraycopy(row, 0, features, 0, row.length - 1);
+            String label;
+            String[] features;
+            String name = "";
+            int totalExamples = 0;
+            double classCountZero;
+            double classCountOne;
 
-            for (int x : numclm) {
-                if (features[x].endsWith(".0")) {
-                    features[x] = features[x].substring(0, features[x].length() - 2);
+            nb = new NB();// creating NB object to access all the methods of NB.java
+            int[] hyperclm = { 0, 3, 4, 7 };
+            int[] stokeClm = { 1 };
+            int[] diabeClm = { 1, 7 };
+
+            String[] disease = {
+                    "Hypertension", "Stroke", "Diabetes"
+            };
+
+            // checking totalInstace count are upto date
+            for (String n : disease) {
+
+                Bson Filter = Filters.eq("name", "training");
+                MongoCollection<Document> Collection = database.getCollection(n);
+
+                // db.Hypertension.findOne({name:"training"},{"TotalExamples": 1, _id:0})
+                Bson projection = new Document("TotalExamples", true).append("_id",
+                        false);
+
+                Document result = Collection.find(Filter).projection(projection).first();
+
+                // getting total Instance to check wether db needs to update or not
+                Integer TotalExamples = result.getInteger("TotalExamples");
+
+                if (TotalExamples != 26083 && "Hypertension".equals(n)) {
+                    throw new ServletException(
+                            "TotalExamples mismatch for Hypertension: expected 26083, found " +
+                                    TotalExamples);
+                } else if (TotalExamples != 100000 && "Diabetes".equals(n)) {
+                    throw new ServletException(
+                            "TotalExamples mismatch for Diabetes: expected 100000, found " +
+                                    TotalExamples);
+                } else if (TotalExamples != 40910 && "Stroke".equals(n)) {
+
+                    throw new ServletException(
+                            "TotalExamples mismatch for Hypertension: expected 40910, found " +
+                                    TotalExamples);
                 }
             }
 
-            nb.train(features, label);
+            // for each file runs a loop
+            for (
 
+            String filename : fileNames) {
+
+                List<String[]> data = CSVReader.readCSV(filename);
+
+                boolean isFirstRow = true;
+
+                if (filename.contains("stroke")) {
+
+                    // for each row in file data gets sorted as features and class
+                    for (String[] row : data) {
+                        if (isFirstRow) {
+
+                            isFirstRow = false;
+                            continue;
+                        }
+
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
+
+                        for (int x : stokeClm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
+                        }
+                        name = "Stroke";
+
+                        nb.train(features, label, name);
+
+                    }
+
+                    // After training all the counts being stored in mongodb
+
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Stroke");
+
+                    collection.updateOne(filter, updateValue);
+
+                } else if (filename.contains("hypertension")) {
+                    for (String[] row : data) {
+                        if (isFirstRow) {
+
+                            isFirstRow = false;
+                            continue;
+                        }
+
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
+
+                        for (int x : hyperclm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
+                        }
+                        name = "Hypertension";
+
+                        nb.train(features, label, name);
+                    }
+
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Hypertension");
+
+                    collection.updateOne(filter, updateValue);
+                } else {
+                    for (String[] row : data) {
+                        if (isFirstRow) {
+
+                            isFirstRow = false;
+                            continue;
+                        }
+
+                        label = row[row.length - 1]; // Assuming the label is the last column
+                        features = new String[row.length - 1];
+                        System.arraycopy(row, 0, features, 0, row.length - 1);
+
+                        for (int x : diabeClm) {
+                            if (features[x].endsWith(".0")) {
+                                features[x] = features[x].substring(0, features[x].length() - 2);
+                            }
+                        }
+                        name = "Diabetes";
+
+                        nb.train(features, label, name);
+                    }
+
+                    totalExamples = nb.totalInstance(name);
+                    totalCount.put(name, totalExamples);
+                    classCountZero = nb.classCountZero(name, "0");
+                    classCountOne = nb.classCountOne(name, "1");
+                    ClassCountOne.put(name, classCountOne);
+
+                    Bson filter = Filters.eq("name", "training");
+
+                    Bson updateTotalExamples = Updates.set("TotalExamples", totalExamples);
+                    Bson updateZeroClassCount = Updates.set("0.classCount", classCountZero);
+                    Bson updateOneClassCount = Updates.set("1.classCount", classCountOne);
+
+                    Bson updateValue = Updates.combine(updateOneClassCount, updateZeroClassCount, updateTotalExamples);
+
+                    MongoCollection<Document> collection = database.getCollection("Diabetes");
+
+                    collection.updateOne(filter, updateValue);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new ServletException("Error during servlet initialization", e);
         }
+
     }
+
+    // Here through servelet request and response method we recieve the form
+    // submission
 
     public void processrequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset-UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
-            // Reatrieve from input
+
+            String[] diseases = { "Hypertension", "Stroke", "Diabetes" };
+
+            // Reatrieve values for url coming from form
             String[] newExample = {
-                    request.getParameter("age"),
-                    request.getParameter("MF"),
-                    request.getParameter("cp"),
-                    request.getParameter("trestbps"),
-                    request.getParameter("cholesterol"),
-                    request.getParameter("fbs"),
-                    request.getParameter("restecg"),
-                    request.getParameter("thalach"),
-                    request.getParameter("exang"),
-                    request.getParameter("oldpeak"),
-                    request.getParameter("slope"),
-                    request.getParameter("ca"),
-                    request.getParameter("thal")
+                    request.getParameter("age"), // 0
+                    request.getParameter("MF"), // 1
+                    request.getParameter("cp"), // 2
+                    request.getParameter("trestbps"), // 3
+                    request.getParameter("cholesterol"), // 4
+                    request.getParameter("fbs"), // 5
+                    request.getParameter("restecg"), // 6
+                    request.getParameter("thalach"), // 7
+                    request.getParameter("exang"), // 8
+                    request.getParameter("oldpeak"), // 9
+                    request.getParameter("slope"), // 10
+                    request.getParameter("ca"), // 11
+                    request.getParameter("thal"), // 12
+                    request.getParameter("hyper"), // stroke //13
+                    request.getParameter("heart"), // 14
+                    request.getParameter("married"), // 15
+                    request.getParameter("work_type"), // 16
+                    request.getParameter("residence"), // 17
+                    request.getParameter("glucose"), // 18
+                    request.getParameter("bmi"), // 19
+                    request.getParameter("smoking"), // 20
+                    request.getParameter("smoking_history"), // diabetes //21
+                    request.getParameter("HbA1c_level")// 22
             };
 
-            // predict class
-            String predictedClass = nb.predict(newExample);
-            featurePred = nb.featuresPredictions();
+            // HASMAP are used to store values for which will be send for result.html
+            Map<String, String> predictions = new HashMap<>();
+            Map<String, Map<String, Double>> featuresPred = new HashMap<>();
+            Map<String, Map<String, Integer>> featuresInput = new HashMap<>();
+            Map<String, Map<Integer, Integer>> featureCounts = new HashMap<>();
 
-            // Connect to database
-            // connect = connectDB.getConnection();
+            String[] input = null;
+            int inputLen = 0;
+            int[] inputVal = null;
 
-            StringBuilder featurePredUrl = new StringBuilder();
+            // form submission sends feature category and value being selected in form
+            // together which then get split accordingly for prediction and other for charts
+            // label
 
-            if (!featurePred.isEmpty()) {
-                featurePredUrl.append(featurePred.entrySet().stream()
-                        .map(entry -> entry.getKey() + "=" + entry.getValue())
-                        .collect(Collectors.joining("&")));
+            for (String d : diseases) {
+                if ("Hypertension".equals(d)) {
+
+                    input = new String[] { newExample[0].split(",")[0], newExample[1].split(",")[0],
+                            newExample[2].split(",")[0], newExample[3].split(",")[0],
+                            newExample[4].split(",")[0],
+                            newExample[5].split(",")[0], newExample[6].split(",")[0], newExample[7].split(",")[0],
+                            newExample[8].split(",")[0], newExample[9].split(",")[0], newExample[10].split(",")[0],
+                            newExample[11].split(",")[0], newExample[12].split(",")[0] };
+                    inputLen = 13;
+
+                } else if ("Stroke".equals(d)) {
+                    input = new String[] { newExample[1].split(",")[0], newExample[0].split(",")[0],
+                            newExample[13].split(",")[0],
+                            newExample[14].split(",")[0], newExample[15].split(",")[0],
+                            newExample[16].split(",")[0], newExample[17].split(",")[0], newExample[18].split(",")[0],
+                            newExample[19].split(",")[0],
+                            newExample[20].split(",")[0] };
+                    inputVal = new int[] { 1, 0, 13, 14, 15, 16, 17, 18, 19, 20 };
+
+                } else if ("Diabetes".equals(d)) {
+                    input = new String[] { newExample[1].split(",")[0], newExample[0].split(",")[0],
+                            newExample[13].split(",")[0],
+                            newExample[14].split(",")[0], newExample[21].split(",")[0],
+                            newExample[19].split(",")[0], newExample[22].split(",")[0], newExample[18].split(",")[0] };
+                    inputVal = new int[] { 1, 0, 13, 14, 21, 19, 22, 18 };
+                }
+
+                if ("Hypertension".equals(d)) {
+                    for (int i = 0; i < inputLen; i++) {
+                        if (!input[i].split(",")[0].isEmpty()) {
+                            int x = i + 1;
+
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[i].split(",")[1], x);
+                        }
+                    }
+                } else if ("Stroke".equals(d)) {
+                    int x = 0;
+                    for (int i = 0; i < inputVal.length; i++) {
+                        x++;
+
+                        String value = newExample[inputVal[i]].split(",")[0];
+                        if (!value.isEmpty()) {
+
+                            System.out.println();
+                            System.out.println(
+                                    newExample[inputVal[i]].split(",")[0] + newExample[inputVal[i]].split(",")[0]);
+                            System.out.println(inputVal[i] + " inputVal[i]");
+                            System.out.println(x + " x");
+                            System.out.println();
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[inputVal[i]].split(",")[1], x);
+                        }
+                    }
+                } else if ("Diabetes".equals(d)) {
+                    int x = 0;
+                    for (int i = 0; i < inputVal.length; i++) {
+                        x++;
+                        String value = newExample[inputVal[i]].split(",")[0];
+                        if (!value.isEmpty()) {
+                            System.out.println(d);
+                            featuresInput.putIfAbsent(d, new HashMap<>());
+                            Map<String, Integer> nestMap = featuresInput.get(d);
+                            nestMap.put(newExample[inputVal[i]].split(",")[1], x);
+                        }
+                    }
+                }
+
+                // Predict Class
+                String predictedClass = nb.predict(input, d);
+                Map<String, Double> featurePred = nb.featuresPredictions();
+
+                // Create a new map and copy values from featurePred
+                Map<String, Double> featurePredCopy = new HashMap<>(featurePred);
+
+                predictions.put(d, predictedClass);
+                featuresPred.put(d, featurePredCopy);
+
+                featureCounts = nb.featureCounts();
+
+                // all the values to be send to result page are being encoded
+
+                String predictedClassesJson = new Gson().toJson(predictions);
+                String featuresPredJson = new Gson().toJson(featuresPred);
+                String totalCountJson = new Gson().toJson(totalCount);
+                String classCountOne = new Gson().toJson(ClassCountOne);
+                String FeatureCounts = new Gson().toJson(featureCounts);
+                String FeaturesInputs = new Gson().toJson(featuresInput);
+
+                redirectUrl = "result.html?predictedClasses=" + URLEncoder.encode(predictedClassesJson, "UTF-8")
+                        +
+                        "&featuresPred=" + URLEncoder.encode(featuresPredJson, "UTF-8") + "&totalCount="
+                        + URLEncoder.encode(totalCountJson, "UTF-8") + "&ClassCountOne="
+                        + URLEncoder.encode(classCountOne, "UTF-8") + "&featureCounts="
+                        + URLEncoder.encode(FeatureCounts, "UTF-8") + "&featureInput="
+                        + URLEncoder.encode(FeaturesInputs, "UTF-8");
+
             }
 
-            // response.sendRedirect( "result.html?predictedClass=" + predictedClass);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"redirectUrl\":\"" + redirectUrl + "\"}");
 
-            String redirectUrl = "result.html?predictedClass=" + predictedClass;
-            if (featurePredUrl.length() > 0) {
-                redirectUrl += "&" + featurePredUrl.toString();
-            }
-            response.sendRedirect(redirectUrl);
+        } catch (
 
-        } catch (Exception e) {
+        Exception e) {
             e.printStackTrace();
         } finally {
             out.close();
         }
 
+    }
+
+    @Override
+    public void destroy() {
+        mongoClient.close();
     }
 
     @Override

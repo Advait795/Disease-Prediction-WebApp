@@ -1,3 +1,11 @@
+/*
+Author: Adwait Dalvi ad918
+
+NB class delas with Naive Bayes computation. It is consist of 2 major methods train and predict.
+Train method recieves data from servlet class read from data files and stores into mongodb. 
+Predict method recieves input which is used to retrive data from mongodb, which is stored in trems of counts and further used for calculation.  
+
+*/
 package diseasewebapp;
 
 import java.util.ArrayList;
@@ -5,132 +13,166 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NB {
-    private Map<String, Integer> classCounts = new HashMap<>();
-    // private Map<String, Map<String, Integer>> featureCounts = new HashMap<>();
-    private Map<Map<Integer, String>, Map<String, Integer>> featureCounts = new HashMap<>();
-    private int totalExamples = 0;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
-    // categorising bins
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
+public class NB {
+
+    private int fCount = 0;
+    private List<Integer> featureKey = new ArrayList<>();
+    private HashMap<Integer, Double> featurePred = new HashMap<>();
+    private Map<Integer, Integer> featureTotals = new HashMap<>();
+    private Map<String, Integer> totalExamples = new HashMap<>();
+    private Map<String, Map<String, Integer>> classCounts = new HashMap<>();
+    private Map<String, Map<Integer, Integer>> featureCounts = new HashMap<>();
+
+    // categorising bins are used to categories continuous values
     private int[] categories = { 1, 2, 3, 4 };
-    private int[] age = { 19, 36, 66, 100 };
+    private int[] age = { 19, 36, 66, 200 };
     private int[] trestbps = { 121, 130, 140, 500 };
     private int[] chol = { 200, 240, 500 };
     private int[] thalach = { 100, 151, 500 };
     private double[] oldpeak = { 0.6, 1.6, 5.0 };
-    private int fCount = 0;
-    private HashMap<Integer, Double> featurePred = new HashMap<>();
-    private List<Integer> featureKey = new ArrayList<>();
+    private double[] avgGlucose = { 99, 125, 500 };
+    private double[] bmi = { 18.5, 25, 30, 200 };
+    private double[] HbA1c = { 5.7, 6.5, 10.0 };
 
-    public void train(String[] features, String label) {
+    // connect MongoDb
+    private MongoClient mongoClient;
+    private MongoDatabase database;
 
-        classCounts.put(label, classCounts.getOrDefault(label, 0) + 1);
-        // System.out.println("Updated classCounts: " + classCounts);
+    public NB() {
+        String connexctionsString = "mongodb://localhost:27017";
+        mongoClient = MongoClients.create(connexctionsString);
+        database = mongoClient.getDatabase("AllDisease");
 
-        for (int i = 0; i < features.length; i++) {
-            if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
-                features[i] = category(features[i], i);
+    }
+
+    // close sesssion
+    public void close() {
+        mongoClient.close();
+    }
+
+    /*
+     * train method here deals with sorting and storage of class count, feature
+     * count adn stores in terms of disease names.
+     * 
+     * MongoDb :
+     * Stores data in terms of documents and collections.
+     * In this case there are 3 collections with disease names and structure of
+     * nested documents which stores features and class counts
+     */
+    public void train(String[] features, String label, String name) {
+
+        /*
+         * storing class count (disease(eg:Hypertension) (label(eg: 0/1), count(eg:
+         * 10022)))
+         */
+        classCounts.putIfAbsent(name, new HashMap<>());
+        Map<String, Integer> labelCounts = classCounts.get(name);
+        labelCounts.put(label, labelCounts.getOrDefault(label, 0) + 1);
+
+        // creating querry for mongondb
+        MongoCollection<Document> collection = database.getCollection(name);
+        Bson filter = Filters.eq("name", "training");
+
+        // calling categorising on fetures on basis of disease name
+        if (name == "Stroke") {
+            for (int i = 0; i < features.length; i++) {
+                if (i == 1 || i == 7 || i == 8) {
+                    features[i] = strokeCategory(features[i], i);
+                }
+
+            }
+        } else if (name == "Hypertension") {
+            for (int i = 0; i < features.length; i++) {
+                if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
+                    features[i] = category(features[i], i);
+                }
+            }
+        } else if (name == "Diabetes") {
+            for (int i = 0; i < features.length; i++) {
+                if (i == 1 || i == 5 || i == 6 || i == 7) {
+                    features[i] = diabetesCategory(features[i], i);
+                }
             }
         }
 
         featureKey.clear();
         featureKey(features.length);
-        // System.out.println("Transformed features: " + String.join(", ", features));
 
+        // storing data into Database
         for (int i = 0; i < features.length; i++) {
             String feature = features[i];
             int key = featureKey.get(i);
 
-            Map<Integer, String> keyMap = new HashMap<>();
-            keyMap.put(key, feature);
+            Document update = new Document("$inc", new Document(label + ".featureCount." + key + "." + feature, 1));
 
-            featureCounts.putIfAbsent(keyMap, new HashMap<>());
-            Map<String, Integer> nestedMap = featureCounts.get(keyMap);
-            nestedMap.put(label, nestedMap.getOrDefault(label, 0) + 1);
+            // collection.updateOne(filter, update);
 
-            // System.out.println("Updated featureCounts for feature " + feature + " and
-            // label " + label + ": "
-            // + featureCounts.get(keyMap));
         }
 
-        // for (String feature : features) {
-        // featureCounts.putIfAbsent(feature, new HashMap<>());
-        // featureCounts.get(feature).put(label,
-        // featureCounts.get(feature).getOrDefault(label, 0) + 1);
-        // }
-
-        // System.out.println("Final featureCounts: " + featureCounts);
-
-        totalExamples++;
+        totalExamples.put(name, totalExamples.getOrDefault(name, 0) + 1);
 
     }
 
-    public String predict(String[] features) {
-        String bestClass = null;
-        double bestProb = Double.NEGATIVE_INFINITY;
-        double one_label = 0.0;
-        double zero_label = 0.0;
+    /*
+     * predict method deals with generating output through naive bayes,using data
+     * stored in database and input as reference to access the feature Counts from
+     * database.
+     */
+    public String predict(String[] features, String name) {
+        double one_label = 0;
+        double zero_label = 0;
         this.fCount = 0;
         this.featurePred.clear();
-
-        // categorising test data
-        for (int i = 0; i < features.length; i++) {
-
-            if (i == 0 || i == 3 || i == 4 || i == 7 || i == 9) {
-                if (features[i] == "") {
-                    continue;
-                }
-
-                features[i] = category(features[i], i);
-            }
-        }
+        this.featureTotals.clear();
+        double featureProductProb = 1;
 
         featureKey.clear();
         featureKey(features.length);
 
-        System.out.println(features.length);
-        System.out.println(featureKey.size());
+        Map<String, Integer> labels = classCounts.get(name);
 
         // Iterate through each calss label in classCounts
-        for (String label : classCounts.keySet()) {
+        for (String label : labels.keySet()) {
 
-            // calculate the prior probablitites
-            double classPriorProb = (double) classCounts.get(label) / totalExamples;
+            // accessing data in database by generating querries according to features
+            MongoCollection<Document> collection = database.getCollection(name);
+
+            Bson filter = Filters.eq("name", "training");
+
+            Bson projection = new Document(label + ".classCount", true).append("TotalExamples", true).append("_id",
+                    false);
+
+            Document result = collection.find(filter).projection(projection).first();
+
+            Document classCountDocument = (result).get(label, Document.class);
+            Double ClassCount = classCountDocument.getDouble("classCount");
+
+            Integer TotalExamples = result.getInteger("TotalExamples");
+
+            double classPriorProb = ClassCount / TotalExamples;
+
+            // System.out.println(
+            // "Class Prior Prob: " + label + ": " + ClassCount + "/" + TotalExamples + "= "
+            // + classPriorProb);
+
+            // System.out.println(
+            // "ClassPriorProb: " + classCounts.get(name).get(label) + " / " +
+            // totalExamples.get(name) + "="
+            // + classPriorProb);
+            // System.out.println();
 
             // calculate the product of conditional probablitites
-            double featureProductProb = 1.0;
 
-            // for (String feature : features) {
-            // int count = 0;
-
-            // if (feature == "") {
-            // if (label.trim().equals("1")) {
-            // fCount++;
-            // }
-
-            // continue;
-            // }
-
-            // if (featureCounts.containsKey(feature) &&
-            // featureCounts.get(feature).containsKey(label)) {
-            // count = featureCounts.get(feature).get(label);
-            // }
-
-            // double featureProb = (count + 1.0) / (classCounts.get(label));
-            // System.out.println("Probablity of feature " + feature + " where class " +
-            // label + ": " + featureProb);
-
-            // // multipling all probablities
-            // featureProductProb *= featureProb;
-
-            // if (label.trim().equals("1")) {
-
-            // fCount++;
-            // featurePred.put(fCount, featureProb);
-
-            // }
-
-            // }
+            double logFeatureProductProb = Math.log(classPriorProb);
 
             for (int i = 0; i < features.length; i++) {
                 String feature = features[i];
@@ -144,63 +186,147 @@ public class NB {
                     continue;
                 }
 
-                // Create the key map for the outer map
-                Map<Integer, String> keyMap = new HashMap<>();
-                keyMap.put(key, feature);
+                String projectionField = String.format("%s.featureCount.%s.%s", label, key, feature);
 
-                // Check if featureCounts contains the keyMap and label
-                if (featureCounts.containsKey(keyMap) && featureCounts.get(keyMap).containsKey(label)) {
-                    count = featureCounts.get(keyMap).get(label);
-                }
+                Bson projectionFeat = new Document(projectionField, true).append("_id", false);
 
-                double featureProb = (count + 1.0) / classCounts.get(label);
-                System.out.println("Probability of feature " + feature + " where class " +
-                        label + ": " + featureProb);
+                Document resultFeat = collection.find(filter).projection(projectionFeat).first();
 
-                // Multiply all probabilities
-                featureProductProb *= featureProb;
+                Document labelDoc = resultFeat.get(label, Document.class);
+                Document featureCountDoc = labelDoc.get("featureCount", Document.class);
+                Document keyDoc = featureCountDoc.get(String.valueOf(key), Document.class);
+                Integer Count = keyDoc.getInteger(feature);
+
+                System.out.println(resultFeat);
+                System.out.println(labelDoc);
+                System.out.println(featureCountDoc);
+                System.out.println(keyDoc);
+                System.out.println(Count);
+
+                // storing feature Counts in terms of disease name
+                featureCounts.putIfAbsent(name, new HashMap<>());
+                Map<Integer, Integer> nestedMap = featureCounts.get(name);
+                nestedMap.put(key, Count);
+
+                Count += 1;
+                double featureProb = (Count) / ClassCount;
+
+                // System.out.println((Count + 1) + "/" + ClassCount);
+                // System.out.println("Probability of feature " + feature + " where class " +
+                // label + ": " + featureProb);
+
+                // Add all probabilities
+                logFeatureProductProb += Math.log(featureProb);
 
                 if (label.trim().equals("1")) {
                     fCount++;
-                    featurePred.put(fCount, featureProb);
+                    featureTotals.put(fCount, count);
+                    featurePred.put(fCount, (featureProb * 100));
                 }
+
+                Bson filterTest = Filters.eq("name", "testing");
+
+                Document update = new Document("$set", new Document(label + ".featurePred." + key, featureProb));
+
+                collection.updateOne(filterTest, update);
+
             }
 
-            // final probablity for class
-            double classProb = classPriorProb * featureProductProb;
-            System.out.println();
-            System.out.println("Probablity of class " + label + " for given equation is:" + classProb);
-            System.out.println();
+            // System.out.println("Feature Totals: " + featureTotals);
 
-            if (Integer.valueOf(label) == 0) {
+            // final probablity for class
+            double classProb = Math.exp(logFeatureProductProb);
+
+            // System.out.println(featureProductProb + " * " + classPriorProb + "=" +
+            // classProb);
+
+            // class probablities get stored by means of label
+            if (Double.valueOf(label) == 0) {
                 zero_label = classProb;
             } else {
                 one_label = classProb;
             }
 
-            if (classProb > bestProb) {
-                bestProb = classProb;
-                bestClass = label;
-            }
-
         }
 
-        // System.out.println(featurePred);
-
+        /* normalizing values by adding and the subtracting by the total */
         double total = zero_label + one_label;
-        double zero_final = (double) zero_label / total;
-        double one_final = (double) one_label / total;
+        double zero_final = zero_label / total;
+        double one_final = one_label / total;
 
-        System.out.println("zero label: " + zero_label);
-        System.out.println();
-        System.out.println("one lable: " + one_label);
+        // System.out.println();
+        // System.out.println("Total: " + zero_label + " + " + one_label + " = " +
+        // total);
+        // System.out.println();
 
-        System.out.println();
-        System.out.println("0 label final value: " + zero_final);
-        System.out.println("1 label final value " + one_final);
-        System.out.println();
+        // System.out.println(Math.round((one_final * 100)) + "%");
 
-        return String.valueOf(Math.round(one_final * 100));
+        return String.valueOf(Math.round((one_final * 100)));
+
+    }
+
+    public void destroy() {
+        mongoClient.close();
+    }
+
+    // categorising methods
+    public String diabetesCategory(String value, int y) {
+        if (y == 1) {
+            for (int i = 0; i < age.length; i++) {
+
+                if (Integer.valueOf(value) < age[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        } else if (y == 5) {
+            for (int i = 0; i < bmi.length; i++) {
+
+                if (Double.valueOf(value) < bmi[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        } else if (y == 6) {
+            for (int i = 0; i < HbA1c.length; i++) {
+
+                if (Double.valueOf(value) < HbA1c[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        } else {
+            for (int i = 0; i < avgGlucose.length; i++) {
+
+                if (Double.valueOf(value) < avgGlucose[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        }
+        return value;
+    }
+
+    public String strokeCategory(String value, int x) {
+        if (x == 1) {
+            for (int i = 0; i < age.length; i++) {
+
+                if (Integer.valueOf(value) < age[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        } else if (x == 7) {
+            for (int i = 0; i < avgGlucose.length; i++) {
+
+                if (Double.valueOf(value) < avgGlucose[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        } else if (x == 8) {
+            for (int i = 0; i < bmi.length; i++) {
+
+                if (Double.valueOf(value) < bmi[i]) {
+                    return String.valueOf(categories[i]);
+                }
+            }
+        }
+        return value;
     }
 
     public String category(String value, int x) {
@@ -244,22 +370,45 @@ public class NB {
         return String.valueOf(2);
     }
 
+    @SuppressWarnings("rawtypes")
     public Map featuresPredictions() {
         return featurePred;
     }
 
-    public Map finalFeaturePred(HashMap value) {
-
-        return null;
+    // Total feature values
+    public Map totalFeatureValues() {
+        return featureTotals;
     }
 
+    // accessing class count by means of name and label for zero
+    public double classCountZero(String name, String label) {
+
+        return classCounts.get(name).get(label);
+    }
+
+    // accessing class count by means of name and label for one
+    public double classCountOne(String name, String label) {
+
+        return classCounts.get(name).get(label);
+    }
+
+    // feature key for unique key values
     public List<Integer> featureKey(int value) {
 
-        for (int i = 0; i < value; i++) {
+        for (int i = 1; i <= value; i++) {
             featureKey.add(i);
         }
 
         return featureKey;
     }
 
+    // Accessing total Counts of instance for each disease
+    public Integer totalInstance(String name) {
+        return totalExamples.get(name);
+    }
+
+    // total feature Counts
+    public Map featureCounts() {
+        return featureCounts;
+    }
 }
